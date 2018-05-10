@@ -6,3 +6,4 @@
 
 - <a href="./note/openGL-learn.md" target="_blank">openGL ES 学习笔记</a>
 
+- <a href="./note/openGL-es.md" target="_blank">openGL ES 的一些官方资源</a>
