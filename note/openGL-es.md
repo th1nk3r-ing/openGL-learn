@@ -1,9 +1,9 @@
-# <font color=#0099ff> **openGL ES** </font> 
+# <font color=#0099ff> **openGL ES** </font>
 > `@think3r`  2018-05-10 22:4:56
 
 官方 github 地址:  [https://github.com/KhronosGroup](https://github.com/KhronosGroup)
 
-## <font color=#009A000> 0x00 EGL </font> 
+## <font color=#009A000> 0x00 EGL </font>
 
 - [官网](https://www.khronos.org/registry/EGL/)
 

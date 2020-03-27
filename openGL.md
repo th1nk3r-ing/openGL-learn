@@ -1,4 +1,4 @@
-# <font color=#0099ff> **OpenGL 学习** </font> 
+# <font color=#0099ff> **OpenGL 学习** </font>
 
 > `@think3r` 
 > 1. [知乎 :  如何理解 OpenGL 中着色器、渲染管线、光栅化等概念？](https://www.zhihu.com/question/29163054/answer/296309838)  
@@ -17,11 +17,11 @@
 
 <!-- /TOC -->
 
-## <font color=#009A000> 0x00 openGL, openMax, openCV </font> 
+## <font color=#009A000> 0x00 openGL, openMax, openCV </font>
 
 - openaGL 是用来做图形的，openCV 是用来做视觉的; 实际上，openCV 是一个算法库，集成了很多视觉算法; 而 openGL 更像是一个 api，和 openMax 等一样。
 
-### <font color=#FF4500> openGL -- Open Graphics Library </font> 
+### <font color=#FF4500> openGL -- Open Graphics Library </font>
 
 > [OpenGL是什么?](https://www.zhihu.com/question/51867884)
 
@@ -41,7 +41,7 @@
 - 另外 OpenGL 只是关注于怎么调用接口实现绘画。为了使用 OpenGL，还得初始化一个 OpenGL 环境。这个环境需要 CGL、WGL、GLX 这些库里的接口来建立。这几个库分别对应 苹果系统、Windows、还有 Linux 的 X-Window，**没有实现跨平台** 。这也是为什么存在 glut（已经不更新了，代替者 freeglut，不支持 macOS）、glfw 这些“半”跨平台的框架帮助你轻松地在各平台下使用 OpenGL。
     - glut 是基本的窗口界面，是独立于 gl 和 glu 的，如果不喜欢用 glut 可以用 MFC 和 Win32 窗口等代替，但是 glut 是跨平台的，这就保证了我们编出的程序是跨平台的，如果用 MFC 或者 Win32 只能在 windows 操作系统上使用。选择 OpenGL 的一个很大原因就是因为它的跨平台性，所以我们可以尽量的使用 glut 库。
 
-### <font color=#FF4500> 有关 Andoid, openGL openEGL, openGL ES 等概念的区分</font> 
+### <font color=#FF4500> 有关 Andoid, openGL openEGL, openGL ES 等概念的区分</font>
 
 - 在嵌入式设备上、手机还有浏览器里的 OpenGL 实现使用的是 OpenGL ES 的说明书。浏览器的 WebGL 是对 OpenGL ES 的 js 封装。建立环境用的是 EGL 库。
     - 既然 OpenGL ES 只是一组函数接口，那么如何使用呢？ 我们肯定首先要去实现这些函数接口，而android 提供了两种类型的实现：软件实现，硬件实现。
@@ -76,7 +76,7 @@
     - web 端的是 webgl;
     - opengl es 是 opengl 的 subset， 没有 glu， glut 库。 针对手机做了优化等
 
-### <font color=#FF4500> openMax </font> 
+### <font color=#FF4500> openMax </font>
 
 - openMax 开放多媒体加速层（英语：Open Media Acceleration，缩写为 OpenMAX, OMAX），一个不需要授权、跨平台的软件抽象层，以 C 语言实现的软件接口，用来处理多媒体。它是由 Khronos Group 提出的标准，也由他们来维持，目标在于创造一个统一的接口，加速大量多媒体资料的处理。
 
@@ -115,7 +115,7 @@
 
 - 可以看到，图形渲染管线非常复杂，它包含很多可配置的部分。然而，对于大多数场合，我们只需要配置顶点和片段着色器就行了。几何着色器是可选的，通常使用它默认的着色器就行了。**在 OpenGL 中，我们必须定义至少一个顶点着色器和一个片段着色器（因为 GPU 中没有默认的顶点/片段着色器）**。 出于这个原因，刚开始学习现代 OpenGL 的时候可能会非常困难，因为在你能够渲染自己的第一个三角形之前已经需要了解一大堆知识了。
 
-## <font color=#009A000> Shaders </font> 
+## <font color=#009A000> Shaders </font>
 
 - Shaders 在现代 OpenGL 中是个很重要的概念。应用程序离不开它，除非你理解了，否则这些代码也没有任何意义。Shaders 是一段 GLSL 小程序，运行在 GPU 上而非 CPU。它们使用 OpenGL Shading Language (GLSL) 语言编写，看上去像 C 或 C++，但却是另外一种不同的语言。使用 shader 就像你写个普通程序一样：写代码，编译，最后链接在一起才生成最终的程序。
 - **Shaders 并不是个很好的名字，因为它不仅仅只做着色。只要记得它们是个用不同的语言写的，运行在显卡上的小程序就行。**
@@ -129,7 +129,7 @@
         - 在一个简单的场景，也是刚刚说到的长方形。这个长方形所覆盖到的每一个像素，都会调用一次 fragment shader。
         - 片段着色器的责任是计算灯光，以及更重要的是计算出每个像素的最终颜色。 
 
-## <font color=#009A000> openGL  </font> 
+## <font color=#009A000> openGL  </font>
 
 - openGL 是一个 **状态机** , 尤其是如果你使用固定功能的管线.
     - 可以设置它的各种状态,  然后让这些状态一直生效, 知道再次修改他们.
@@ -150,7 +150,7 @@
 - 既然OpenGL ES只是一组函数接口，那么如何使用呢？我们肯定首先要去实现这些函数接口，而android提供了两种类型的实现：软件实现，硬件实现。
 
 
-## <font color=#009A000> 0x00 windows 下, openGL 显示 YUV 图像 </font> 
+## <font color=#009A000> 0x00 windows 下, openGL 显示 YUV 图像 </font>
 
 > [最简单的视音频播放示例5：OpenGL播放RGB/YUV](https://blog.csdn.net/leixiaohua1020/article/details/40333583)
 

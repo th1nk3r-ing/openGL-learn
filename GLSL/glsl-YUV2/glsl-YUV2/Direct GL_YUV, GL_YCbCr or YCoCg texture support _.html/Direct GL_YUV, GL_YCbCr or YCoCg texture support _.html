@@ -1,0 +1,2446 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0110)https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support -->
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en" id="vbulletin_html"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	
+<meta id="e_vb_meta_bburl" name="vb_meta_bburl" content="https://www.opengl.org/discussion_boards">
+<!--<base href="https://www.opengl.org/discussion_boards/">--><base href="."><!--[if IE]></base><![endif]-->
+<meta name="generator" content="vBulletin 4.2.3">
+<meta http-equiv="X-UA-Compatible" content="IE=9">
+
+	<link rel="Shortcut Icon" href="https://www.opengl.org/discussion_boards/assets/images/favicon.ico" type="image/x-icon">
+
+
+
+
+
+
+
+
+	
+		<script type="text/javascript" async="" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/analytics.js.&#19979;&#36733;"></script><script type="text/javascript" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/yuiloader-dom-event.js.&#19979;&#36733;"></script>
+	
+
+<script type="text/javascript">
+<!--
+	if (typeof YAHOO === 'undefined') // Load ALL YUI Local
+	{
+		document.write('<script type="text/javascript" src="clientscript/yui/yuiloader-dom-event/yuiloader-dom-event.js?v=423"><\/script>');
+		document.write('<script type="text/javascript" src="clientscript/yui/connection/connection-min.js?v=423"><\/script>');
+		var yuipath = 'clientscript/yui';
+		var yuicombopath = '';
+		var remoteyui = false;
+	}
+	else	// Load Rest of YUI remotely (where possible)
+	{
+		var yuipath = 'https://ajax.googleapis.com/ajax/libs/yui/2.9.0/build';
+		var yuicombopath = '';
+		var remoteyui = true;
+		if (!yuicombopath)
+		{
+			document.write('<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/yui/2.9.0/build/connection/connection-min.js?v=423"><\/script>');
+		}
+	}
+	var SESSIONURL = "";
+	var SECURITYTOKEN = "guest";
+	var IMGDIR_MISC = "images/misc";
+	var IMGDIR_BUTTON = "images/buttons";
+	var vb_disable_ajax = parseInt("0", 10);
+	var SIMPLEVERSION = "423";
+	var BBURL = "https://www.opengl.org/discussion_boards";
+	var LOGGEDIN = 0 > 0 ? true : false;
+	var THIS_SCRIPT = "showthread";
+	var RELPATH = "showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support";
+	var PATHS = {
+		forum : "",
+		cms   : "",
+		blog  : ""
+	};
+	var AJAXBASEURL = "https://www.opengl.org/discussion_boards/";
+// -->
+</script><script type="text/javascript" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/connection-min.js.&#19979;&#36733;"></script>
+<script type="text/javascript" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/vbulletin-core.js.&#19979;&#36733;"></script>
+
+
+
+	<link rel="alternate" type="application/rss+xml" title="OpenGL Discussion and Help Forums RSS Feed" href="https://www.opengl.org/discussion_boards/external.php?type=RSS2">
+	
+		<link rel="alternate" type="application/rss+xml" title="OpenGL Discussion and Help Forums - Suggestions for the next release of OpenGL - RSS Feed" href="https://www.opengl.org/discussion_boards/external.php?type=RSS2&amp;forumids=11">
+	
+
+
+
+	<link rel="stylesheet" type="text/css" href="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/css.php">
+
+	<!--[if lt IE 8]>
+	<link rel="stylesheet" type="text/css" href="css.php?styleid=1&amp;langid=1&amp;d=1464788253&amp;td=ltr&amp;sheet=popupmenu-ie.css,vbulletin-ie.css,vbulletin-chrome-ie.css,vbulletin-formcontrols-ie.css,editor-ie.css" />
+	<![endif]-->
+
+
+<script async="" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/js"></script>
+<script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-1759693-2');</script>
+
+	<meta name="keywords" content="format, opengl, support, texture, graphics, recents, cards, yannoo, technical, problem, understand, exposed, exist, mysterious, chipset, integrate, decades, graphic, loose, add/mul, ycbcr, video, digital, gl_ycbcr, gl_yuv, ycocg, standardised, standard, color, convert, systematicaly, direct, upgraded, matrix, videos">
+	<meta name="description" content="Why  OPENGL haven&#39;t a standardised texture support for standard TV digital video format such as YUV or YCbCr in 4:2:2 or 4:1:1 format ??? 
+ 
+In first view, we have to use a color matrix for this    
+=&gt;  why this haven&#39;t to be upgraded since a long time  ??? 
+ 
+Alls videos are made with a sort of YUV format, so we have to systematicaly convert it from YUV to RGB before send it to an OPENGL texture =&gt; it&#39;s a lot of loose time for nothing ... 
+ 
+Alls recents graphics cards seem have a support for">
+
+	<title> Direct GL_YUV, GL_YCbCr or YCoCg texture support ?</title>
+	<link rel="canonical" href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support">
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+		<link rel="stylesheet" type="text/css" href="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/css(1).php">
+	
+	<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="css.php?styleid=1&amp;langid=1&amp;d=1464788253&amp;td=ltr&amp;sheet=toolsmenu-ie.css,postlist-ie.css,showthread-ie.css,postbit-ie.css,poll-ie.css" /><![endif]-->
+<link rel="stylesheet" type="text/css" href="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/css(2).php">
+
+<style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}.fb_link img{border:none}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_reset .fb_dialog_legacy{overflow:visible}.fb_dialog_advanced{padding:10px;border-radius:8px}.fb_dialog_content{background:#fff;color:#333}.fb_dialog_close_icon{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{top:5px;left:5px;right:auto}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent}.fb_dialog_close_icon:active{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent}.fb_dialog_loader{background-color:#f6f7f9;border:1px solid #606060;font-size:24px;padding:20px}.fb_dialog_top_left,.fb_dialog_top_right,.fb_dialog_bottom_left,.fb_dialog_bottom_right{height:10px;width:10px;overflow:hidden;position:absolute}.fb_dialog_top_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 0;left:-10px;top:-10px}.fb_dialog_top_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -10px;right:-10px;top:-10px}.fb_dialog_bottom_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -20px;bottom:-10px;left:-10px}.fb_dialog_bottom_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -30px;right:-10px;bottom:-10px}.fb_dialog_vert_left,.fb_dialog_vert_right,.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{position:absolute;background:#525252;filter:alpha(opacity=70);opacity:.7}.fb_dialog_vert_left,.fb_dialog_vert_right{width:10px;height:100%}.fb_dialog_vert_left{margin-left:-10px}.fb_dialog_vert_right{right:0;margin-right:-10px}.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{width:100%;height:10px}.fb_dialog_horiz_top{margin-top:-10px}.fb_dialog_horiz_bottom{bottom:0;margin-bottom:-10px}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:14px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{-webkit-transform:none;height:100%;margin:0;overflow:visible;position:absolute;top:-10000px;left:0;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{width:auto;height:auto;min-height:initial;min-width:initial;background:none}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{color:#fff;display:block;padding-top:20px;clear:both;font-size:18px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .45);position:absolute;bottom:0;left:0;right:0;top:0;width:100%;min-height:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_content .dialog_header{-webkit-box-shadow:white 0 1px 1px -1px inset;background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#738ABA), to(#2C4987));border-bottom:1px solid;border-color:#1d4088;color:#fff;font:14px Helvetica, sans-serif;font-weight:bold;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{-webkit-font-smoothing:subpixel-antialiased;height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:12px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:12px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#4966A6), color-stop(.5, #355492), to(#2A4887));border:1px solid #29487d;-webkit-background-clip:padding-box;-webkit-border-radius:3px;-webkit-box-shadow:rgba(0, 0, 0, .117188) 0 1px 1px inset, rgba(255, 255, 255, .167969) 0 1px 0;display:inline-block;margin-top:3px;max-width:85px;line-height:18px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{border:none;background:none;color:#fff;font:12px Helvetica, sans-serif;font-weight:bold;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:16px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #555;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f6f7f9;border:1px solid #555;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-repeat:no-repeat;background-position:50% 50%;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_hide_iframes iframe{position:relative;left:-10000px}.fb_iframe_widget_loader{position:relative;display:inline-block}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}.fb_iframe_widget_loader iframe{min-height:32px;z-index:2;zoom:1}.fb_iframe_widget_loader .FB_Loader{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat;height:32px;width:32px;margin-left:-16px;position:absolute;left:50%;z-index:4}
+.fb_customer_chat_bounce_in{animation-duration:250ms;animation-name:fb_bounce_in}.fb_customer_chat_bounce_out{animation-duration:250ms;animation-name:fb_fade_out}.fb_invisible_flow{display:inherit;height:0;overflow-x:hidden;width:0}.fb_mobile_overlay_active{background-color:#fff;height:100%;overflow:hidden;position:fixed;visibility:hidden;width:100%}@keyframes fb_fade_out{from{opacity:1}to{opacity:0}}@keyframes fb_bounce_in{0%{opacity:0;transform:scale(.8, .8);transform-origin:100% 100%}10%{opacity:.1}20%{opacity:.2}30%{opacity:.3}40%{opacity:.4}50%{opacity:.5}60%{opacity:.6}70%{opacity:.7}80%{opacity:.8;transform:scale(1.03, 1.03)}90{opacity:.9}100%{opacity:1;transform:scale(1, 1)}}</style><link type="text/css" rel="stylesheet" href="chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/content.css"></head>
+
+<body>
+
+<div id="masthead">
+<a href="http://khronos.org/"><img src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/khronos_group_masthead.png" width="287" height="20" alt="Part of the Khronos Group" title="Part of the Khronos Group"></a>
+</div>
+
+<div id="header-frame">
+<div id="ogl_header">
+<div id="ogl_branding">
+<a href="https://www.opengl.org/"><img src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/opengl_logo.jpg" alt="OpenGL.org" title="The Industry&#39;s Foundation for High Performance Graphics" height="97" width="220"></a>
+<div>
+<h1>The Industry's Foundation for High Performance Graphics</h1>
+<h4>from games to virtual reality, mobile phones to supercomputers</h4>
+</div>
+</div>
+<div id="nav" class="clearfix">
+
+<ul id="navlist" class="clearfix">
+
+<li style="display:none"><a href="http://www.opengl.org/">Home</a></li>
+
+<li><a href="https://www.opengl.org/documentation/">Documentation</a>
+<ul>
+   <li><a href="https://www.opengl.org/documentation/current_version/">About OpenGL 4.5</a></li>
+   <li><a href="https://www.opengl.org/documentation/glsl/">OpenGL Shading Language</a></li>
+   <li><a href="https://www.opengl.org/documentation/extensions/">About OpenGL Extensions</a></li>
+   <li><a href="https://khronos.org/registry/OpenGL/index_gl.php">OpenGL Registry</a></li>
+   <li><a href="https://www.khronos.org/bugzilla/enter_bug.cgi?product=OpenGL">Spec Feedback</a></li>
+   <li><a href="https://www.opengl.org/sdk/docs/man/">OpenGL 4 Reference Pages</a></li>
+   <li><a href="https://www.opengl.org/sdk/docs/man3/">OpenGL 3.3 Reference Pages</a></li>
+   <li><a href="https://www.opengl.org/sdk/docs/man2/">OpenGL 2.1 Reference Pages</a></li>
+   <li><a href="https://www.opengl.org/documentation/implementations/">OS/Platform Implementations</a></li>
+   <li><a href="https://www.khronos.org/developers/books/">OpenGL Books</a></li>
+</ul>
+</li>
+
+<li><a href="https://www.opengl.org/resources/">Coding Resources</a>
+<ul>
+    <li><a href="https://www.opengl.org/sdk/">OpenGL SDK</a></li>
+    <li><a href="https://www.khronos.org/opengl/wiki/Getting_Started">Getting Started</a></li>
+    <li><a href="https://khronos.org/registry/OpenGL/index_gl.php">OpenGL Registry</a></li>
+    <li><a href="https://www.khronos.org/opengl/wiki/FAQ">FAQ</a></li>
+    <li><a href="https://www.opengl.org/resources/libraries/">GLUT &amp; Utility Libraries</a></li>
+    <li><a href="https://www.khronos.org/opengl/wiki/Language_bindings">Programming Language Bindings</a></li>
+    <li><a href="https://www.khronos.org/opengl/wiki/Code_Resources">Sample Code &amp; Tutorials</a></li>
+    <li><a href="https://www.opengl.org/resources/benchmarks/">Benchmarks</a></li>
+    <li><a href="https://www.opengl.org/community/newsgroups/">Mailing Lists &amp; News Groups</a></li>
+    <li><a href="http://stackoverflow.com/questions/tagged/opengl">OpenGL StackOverflow</a></li>
+    <li><a href="https://www.opengl.org/archives/">Archived Resources</a></li>
+</ul>
+</li>
+    <li><a href="https://www.khronos.org/opengl/wiki/">Wiki</a></li>
+    <li><a href="https://www.opengl.org/discussion_boards/">Forums</a></li>
+    <li id="about"><a href="https://www.opengl.org/about/">About OpenGL</a>
+    <ul>
+        <li><a href="https://www.khronos.org/about/contact">Contact Us</a></li>
+        <li><a href="https://www.khronos.org/legal/trademarks/">OpenGL logo</a></li>
+        <li><a href="https://www.khronos.org/jobs/">Jobs</a></li>
+    </ul>
+</li>
+</ul>
+</div>
+
+</div>
+</div>
+
+
+<div class="above_body"> <!-- closing tag is in template navbar -->
+<div id="header" class="floatcontainer doc_header">
+	
+	<div id="toplinks" class="toplinks">
+		
+			<ul class="nouser">
+			
+				<li><a rel="help" href="https://www.opengl.org/discussion_boards/faq.php">Help</a></li>
+				<li>
+			<script type="text/javascript" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/vbulletin_md5.js.&#19979;&#36733;"></script>
+			<form id="navbar_loginform" action="https://www.opengl.org/discussion_boards/login.php?do=login" method="post" onsubmit="md5hash(vb_login_password, vb_login_md5password, vb_login_md5password_utf, 1)">
+				<fieldset id="logindetails" class="logindetails">
+					<div>
+						<div>
+					<input type="text" class="textbox default-value" name="vb_login_username" id="navbar_username" size="10" accesskey="u" tabindex="101" value="User Name">
+					<input type="password" class="textbox" tabindex="102" name="vb_login_password" id="navbar_password" size="10" style="display: none;">
+					<input type="text" class="textbox default-value" tabindex="102" name="vb_login_password_hint" id="navbar_password_hint" size="10" value="Password" style="display: inline;">
+					<input type="submit" class="loginbutton" tabindex="104" value="Log in" title="Enter your username and password in the boxes provided to login, or click the &#39;register&#39; button to create a profile for yourself." accesskey="s">
+						</div>
+					</div>
+				</fieldset>
+				<div id="remember" class="remember">
+					<label for="cb_cookieuser_navbar"><input type="checkbox" name="cookieuser" value="1" id="cb_cookieuser_navbar" class="cb_cookieuser_navbar" accesskey="c" tabindex="103"> Remember Me?</label>
+				</div>
+
+				<input type="hidden" name="s" value="">
+				<input type="hidden" name="securitytoken" value="guest">
+				<input type="hidden" name="do" value="login">
+				<input type="hidden" name="vb_login_md5password">
+				<input type="hidden" name="vb_login_md5password_utf">
+			</form>
+			<script type="text/javascript">
+			YAHOO.util.Dom.setStyle('navbar_password_hint', "display", "inline");
+			YAHOO.util.Dom.setStyle('navbar_password', "display", "none");
+			vB_XHTML_Ready.subscribe(function()
+			{
+			//
+				YAHOO.util.Event.on('navbar_username', "focus", navbar_username_focus);
+				YAHOO.util.Event.on('navbar_username', "blur", navbar_username_blur);
+				YAHOO.util.Event.on('navbar_password_hint', "focus", navbar_password_hint);
+				YAHOO.util.Event.on('navbar_password', "blur", navbar_password);
+			});
+			
+			function navbar_username_focus(e)
+			{
+			//
+				var textbox = YAHOO.util.Event.getTarget(e);
+				if (textbox.value == 'User Name')
+				{
+				//
+					textbox.value='';
+					textbox.style.color='#000000';
+				}
+			}
+
+			function navbar_username_blur(e)
+			{
+			//
+				var textbox = YAHOO.util.Event.getTarget(e);
+				if (textbox.value == '')
+				{
+				//
+					textbox.value='User Name';
+					textbox.style.color='#777777';
+				}
+			}
+			
+			function navbar_password_hint(e)
+			{
+			//
+				var textbox = YAHOO.util.Event.getTarget(e);
+				
+				YAHOO.util.Dom.setStyle('navbar_password_hint', "display", "none");
+				YAHOO.util.Dom.setStyle('navbar_password', "display", "inline");
+				YAHOO.util.Dom.get('navbar_password').focus();
+			}
+
+			function navbar_password(e)
+			{
+			//
+				var textbox = YAHOO.util.Event.getTarget(e);
+				
+				if (textbox.value == '')
+				{
+					YAHOO.util.Dom.setStyle('navbar_password_hint', "display", "inline");
+					YAHOO.util.Dom.setStyle('navbar_password', "display", "none");
+				}
+			}
+			</script>
+				</li>
+				
+			</ul>
+		
+	</div>
+	<div class="ad_global_header">
+		 
+		 
+	</div>
+	<hr>
+</div>
+<div id="navbar" class="navbar">
+	<ul id="navtabs" class="navtabs floatcontainer">
+		
+		
+	
+		<li id="vbtab_whatsnew">
+			<a class="navtab" href="https://www.opengl.org/discussion_boards/activity.php">What's New?</a>
+		</li>
+		
+		
+
+	
+		<li class="selected" id="vbtab_forum">
+			<a class="navtab" href="https://www.opengl.org/discussion_boards/forum.php">Forum</a>
+		</li>
+		
+		
+			<ul class="floatcontainer">
+				
+					
+						
+							<li id="vbflink_faq"><a href="https://www.opengl.org/discussion_boards/faq.php">FAQ</a></li>
+						
+					
+				
+					
+						
+							<li id="vbflink_calendar"><a href="https://www.opengl.org/discussion_boards/calendar.php">Calendar</a></li>
+						
+					
+				
+					
+						<li class="popupmenu" id="vbmenu_actions">
+							<a href="javascript://" class="popupctrl" id="yui-gen1">Forum Actions</a>
+							<ul class="popupbody" id="yui-gen0">
+								
+									<li id="vbalink_mfr"><a href="https://www.opengl.org/discussion_boards/forumdisplay.php?do=markread&amp;markreadhash=guest">Mark Forums Read</a></li>
+								
+							</ul>
+						</li>
+					
+				
+					
+						<li class="popupmenu" id="vbmenu_qlinks">
+							<a href="javascript://" class="popupctrl" id="yui-gen3">Quick Links</a>
+							<ul class="popupbody" id="yui-gen2">
+								
+									<li id="vbqlink_leaders"><a href="https://www.opengl.org/discussion_boards/showgroups.php">View Site Leaders</a></li>
+								
+							</ul>
+						</li>
+					
+				
+			</ul>
+		
+
+	
+		<li id="tab_ntyx_200">
+			<a class="navtab" href="http://www.khronos.org/message_boards/">Khronos Forums</a>
+		</li>
+		
+		
+
+	
+		<li id="tab_njm3_787">
+			<a class="navtab" href="http://www.opengl.org/wiki/Getting_Started">OpenGL: Getting Started</a>
+		</li>
+		
+		
+
+		
+	</ul>
+	
+		<div id="globalsearch" class="globalsearch">
+			<form action="https://www.opengl.org/discussion_boards/search.php?do=process" method="post" id="navbar_search" class="navbar_search">
+				
+				<input type="hidden" name="securitytoken" value="guest">
+				<input type="hidden" name="do" value="process">
+				<span class="textboxcontainer"><span><input type="text" value="" name="query" class="textbox" tabindex="99"></span></span>
+				<span class="buttoncontainer"><span><input type="image" class="searchbutton" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/search.png" name="submit" onclick="document.getElementById(&#39;navbar_search&#39;).submit;" tabindex="100"></span></span>
+			</form>
+			<ul class="navbar_advanced_search">
+				<li><a href="https://www.opengl.org/discussion_boards/search.php" accesskey="4">Advanced Search</a></li>
+				
+			</ul>
+		</div>
+	
+</div>
+</div><!-- closing div for above_body -->
+
+<div class="body_wrapper">
+<div id="breadcrumb" class="breadcrumb">
+	<ul class="floatcontainer">
+		<li class="navbithome"><a href="https://www.opengl.org/discussion_boards/index.php" accesskey="1"><img src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/navbit-home.png" alt="Home" title="Home"></a></li>
+		
+	<li class="navbit"><a href="https://www.opengl.org/discussion_boards/forum.php">Forum</a></li>
+
+	<li class="navbit"><a href="https://www.opengl.org/discussion_boards/forumdisplay.php/3-OpenGL-Developers-Forum">OpenGL Developers Forum</a></li>
+
+	<li class="navbit"><a href="https://www.opengl.org/discussion_boards/forumdisplay.php/11-Suggestions-for-the-next-release-of-OpenGL">Suggestions for the next release of OpenGL</a></li>
+
+		
+	<li class="navbit lastnavbit"><span> Direct GL_YUV, GL_YCbCr or YCoCg texture support ?</span></li>
+
+	</ul>
+	<hr>
+</div>
+
+ 
+<div id="adplacement">
+
+<script type="text/javascript"><!--//<![CDATA[
+   var m3_u = (location.protocol=='https:'?'https://beta.opengl.org/ads/www/delivery/ajs.php':'http://beta.opengl.org/ads/www/delivery/ajs.php');
+   var m3_r = Math.floor(Math.random()*99999999999);
+   if (!document.MAX_used) document.MAX_used = ',';
+   document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+   document.write ("?what=width:728");
+   document.write ('&amp;cb=' + m3_r);
+   if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+   document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+   document.write ("&amp;loc=" + escape(window.location));
+   if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+   if (document.context) document.write ("&context=" + escape(document.context));
+   if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+   document.write ("'><\/scr"+"ipt>");
+//]]>--></script><script type="text/javascript" src="https://beta.opengl.org/ads/www/delivery/ajs.php?what=width:728&amp;cb=36856458908&amp;charset=windows-1252&amp;loc=https%3A//www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support&amp;referer=https%3A//www.google.com/"></script>
+
+</div>
+
+
+
+	<form action="https://www.opengl.org/discussion_boards/profile.php?do=dismissnotice" method="post" id="notices" class="notices">
+		<input type="hidden" name="do" value="dismissnotice">
+		<input type="hidden" name="s" value="">
+		<input type="hidden" name="securitytoken" value="guest">
+		<input type="hidden" id="dismiss_notice_hidden" name="dismiss_noticeid" value="">
+		<input type="hidden" name="url" value="">
+		<ol>
+			<li class="restore" id="navbar_notice_1">
+	
+	First time visitors, please read our  <a href="https://www.opengl.org/discussion_boards/faq.php" target="_blank"><b>FAQ</b></a> and our <a href="https://www.opengl.org/discussion_boards/showthread.php/176139-Forum-Posting-Guidelines"><strong>Forum Rules and Guidelines</strong></a>. You must <a href="https://www.opengl.org/discussion_boards/register.php" target="_blank"><b>register</b></a>
+		before you can post.
+</li>
+		</ol>
+	</form>
+
+
+
+
+
+	<div id="above_postlist" class="above_postlist">
+		
+		<div id="pagination_top" class="pagination_top">
+		
+			<form action="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support/page3" method="get" class="pagination popupmenu nohovermenu" id="yui-gen4">
+<input type="hidden" name="t" value="169186">
+	
+		<span><a href="javascript://" class="popupctrl" id="yui-gen6">Page 1 of 7</a></span>
+		
+		
+		
+		<span class="selected"><a href="javascript://" title="Results 1 to 10 of 66">1</a></span><span><a href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support/page2" title="Show results 11 to 20 of 66">2</a></span><span><a href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support/page3" title="Show results 21 to 30 of 66">3</a></span>
+		
+		<span class="separator">...</span>
+		
+		
+		<span class="prev_next"><a rel="next" href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support/page2" title="Next Page - Results 11 to 20 of 66"><img src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/next-right.png" alt="Next" title="Next"></a></span>
+		
+		
+		<span class="first_last"><a href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support/page7" title="Last Page - Results 61 to 66 of 66">Last<img src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/last-right.png" alt="Last" title="Last"></a></span>
+		
+	
+	<ul class="popupbody" id="yui-gen5">
+		<li class="formsubmit jumptopage"><label>Jump to page: <input type="text" name="page" size="4"></label> <input type="submit" class="button" value="Go"></li>
+	</ul>
+</form>
+		
+			<div id="postpagestats_above" class="postpagestats">
+				Results 1 to 10 of 66
+			</div>
+		</div>
+	</div>
+	<div id="pagetitle" class="pagetitle">
+		<h1>
+			Thread: <span class="threadtitle"><a href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support" title="Reload this Page">Direct GL_YUV, GL_YCbCr or YCoCg texture support ?</a></span>
+		</h1>
+		
+			
+<span id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div></div></div></span>
+<script type="text/javascript" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/sdk.js.&#19979;&#36733;"></script>
+
+<fb:like href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support" font="tahoma" layout="standard" show_faces="false" width="300" action="like" colorscheme="light" data-share="true"></fb:like>
+		
+	</div>
+	<div id="thread_controls" class="thread_controls toolsmenu">
+		<div>
+		<ul id="postlist_popups" class="postlist_popups popupgroup">
+			
+			
+			<li class="popupmenu" id="threadtools">
+				<h6><a class="popupctrl" href="javascript://" id="yui-gen8">Thread Tools</a></h6>
+				<ul class="popupbody" id="yui-gen7">
+					<li><a href="https://www.opengl.org/discussion_boards/printthread.php?t=169186&amp;pp=10&amp;page=1" accesskey="3" rel="nofollow">Show Printable Version</a></li>
+					
+						<li><a href="https://www.opengl.org/discussion_boards/sendmessage.php?do=sendtofriend&amp;t=169186" rel="nofollow">Email this Page…</a></li>
+					
+					<li>
+						
+					</li>
+					
+				</ul>
+			</li>
+
+			
+
+			
+
+			
+
+			
+
+			
+			</ul>
+		</div>
+	</div>
+
+<div id="postlist" class="postlist restrain">
+	
+
+	
+		<ol id="posts" class="posts" start="1">
+			
+<li class="postbitlegacy postbitim postcontainer old" id="post_1191880">
+<!-- see bottom of postbit.css for .userinfo .popupmenu styles -->
+
+	<div class="posthead">
+			<span class="postdate old">
+				
+					<span class="date">11-16-2009,&nbsp;<span class="time">03:44 PM</span></span>
+				
+			</span>
+			<span class="nodecontrols">
+				
+					<a name="post1191880" href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support?p=1191880&amp;viewfull=1#post1191880" class="postcounter">#1</a><a id="postcount1191880" name="1"></a>
+				
+				
+				
+			</span>
+	</div>
+	<div class="postdetails">
+		<div class="userinfo">
+			<div class="username_container">
+			
+				<div class="popupmenu memberaction" id="yui-gen9">
+	<a class="username offline popupctrl" href="https://www.opengl.org/discussion_boards/member.php/18359-Yann-LE-PETITCORPS" title="Yann LE PETITCORPS is offline" id="yui-gen11"><strong>Yann LE PETITCORPS</strong></a>
+	<ul class="popupbody memberaction_body" id="yui-gen10">
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/member.php/18359-Yann-LE-PETITCORPS" class="siteicon_profile">
+				View Profile
+			</a>
+		</li>
+		
+		<li class="right">
+			<a href="https://www.opengl.org/discussion_boards/search.php?do=finduser&amp;userid=18359&amp;contenttype=vBForum_Post&amp;showposts=1" class="siteicon_forum" rel="nofollow">
+				View Forum Posts
+			</a>
+		</li>
+		
+		
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/private.php?do=newpm&amp;u=18359" class="siteicon_message" rel="nofollow">
+				Private Message
+			</a>
+		</li>
+		
+		
+		
+		
+		
+		
+		
+
+		
+
+		
+		
+	</ul>
+</div>
+				<img class="inlineimg onlinestatus" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/user-offline.png" alt="Yann LE PETITCORPS is offline" border="0" title="Yann LE PETITCORPS is offline">
+
+			
+			</div>
+			<span class="usertitle">
+				Junior Member
+			</span>
+			
+				<span class="rank">Regular Contributor</span>
+			
+			
+			
+			 
+			
+				<hr>
+				<dl class="userinfo_extra">
+					<dt>Join Date</dt> <dd>Nov 2009</dd>
+					<dt>Location</dt> <dd>French</dd>
+					
+					<dt>Posts</dt> <dd>117</dd>	
+					
+				</dl>
+				
+				
+				<div class="imlinks">
+					    
+				</div>
+			
+		</div>
+		<div class="postbody">
+			<div class="postrow has_after_content">
+				
+				
+				<h2 class="title icon">
+					Direct GL_YUV, GL_YCbCr or YCoCg texture support ?
+				</h2>
+				
+
+
+						
+							
+							
+						
+						
+				<div class="content">
+					<div id="post_message_1191880">
+						<blockquote class="postcontent restore ">
+							Why  OPENGL haven't a standardised texture support for standard TV digital video format such as YUV or YCbCr in 4:2:2 or 4:1:1 format ???<br>
+<br>
+In first view, we have to use a color matrix for this   <br>
+=&gt;  why this haven't to be upgraded since a long time  ???<br>
+<br>
+Alls videos are made with a sort of YUV format, so we have to systematicaly convert it from YUV to RGB before send it to an OPENGL texture =&gt; it's a lot of loose time for nothing ...<br>
+<br>
+Alls recents graphics cards seem have a support for YUV format, so this can't be a technical problem ... and only some add/mul aren't really hard to integrate into a graphic chipset or the API : )<br>
+<br>
+It's really mysterious for me to understand why this haven't yet already exposed into the OpenGL API (because this format exist since a lot of decades ...)<br>
+<br>
+<br>
+@+<br>
+Yannoo
+						</blockquote>
+					</div>
+
+					
+				</div>
+			</div>
+			
+			<div class="after_content">
+				
+				
+				
+					 
+				
+				
+					<blockquote class="signature restore"><div class="signaturecontainer">@+<br>
+Yannoo</div></blockquote>
+				
+				
+			</div>
+			
+			<div class="cleardiv"></div>
+		</div>
+	</div>
+		<div class="postfoot">
+			<!-- <div class="postfoot_container"> -->
+			<div class="textcontrols floatcontainer">
+				<span class="postcontrols">
+					<img style="display:none" id="progress_1191880" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/progress.gif" alt="">
+					
+					
+					
+					
+				</span>
+				<span class="postlinking">
+					
+						
+					
+
+					
+					
+					
+					
+
+					
+					
+
+					
+					
+					
+					
+					
+				</span>
+			<!-- </div> -->
+			</div>
+		</div>
+	<hr>
+</li>
+
+<li class="postbitlegacy postbitim postcontainer old" id="post_1191881">
+<!-- see bottom of postbit.css for .userinfo .popupmenu styles -->
+
+	<div class="posthead">
+			<span class="postdate old">
+				
+					<span class="date">11-16-2009,&nbsp;<span class="time">04:02 PM</span></span>
+				
+			</span>
+			<span class="nodecontrols">
+				
+					<a name="post1191881" href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support?p=1191881&amp;viewfull=1#post1191881" class="postcounter">#2</a><a id="postcount1191881" name="2"></a>
+				
+				
+				
+			</span>
+	</div>
+	<div class="postdetails">
+		<div class="userinfo">
+			<div class="username_container">
+			
+				<div class="popupmenu memberaction" id="yui-gen12">
+	<a class="username offline popupctrl" href="https://www.opengl.org/discussion_boards/member.php/18359-Yann-LE-PETITCORPS" title="Yann LE PETITCORPS is offline" id="yui-gen14"><strong>Yann LE PETITCORPS</strong></a>
+	<ul class="popupbody memberaction_body" id="yui-gen13">
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/member.php/18359-Yann-LE-PETITCORPS" class="siteicon_profile">
+				View Profile
+			</a>
+		</li>
+		
+		<li class="right">
+			<a href="https://www.opengl.org/discussion_boards/search.php?do=finduser&amp;userid=18359&amp;contenttype=vBForum_Post&amp;showposts=1" class="siteicon_forum" rel="nofollow">
+				View Forum Posts
+			</a>
+		</li>
+		
+		
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/private.php?do=newpm&amp;u=18359" class="siteicon_message" rel="nofollow">
+				Private Message
+			</a>
+		</li>
+		
+		
+		
+		
+		
+		
+		
+
+		
+
+		
+		
+	</ul>
+</div>
+				<img class="inlineimg onlinestatus" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/user-offline.png" alt="Yann LE PETITCORPS is offline" border="0" title="Yann LE PETITCORPS is offline">
+
+			
+			</div>
+			<span class="usertitle">
+				Junior Member
+			</span>
+			
+				<span class="rank">Regular Contributor</span>
+			
+			
+			
+			 
+			
+				<hr>
+				<dl class="userinfo_extra">
+					<dt>Join Date</dt> <dd>Nov 2009</dd>
+					<dt>Location</dt> <dd>French</dd>
+					
+					<dt>Posts</dt> <dd>117</dd>	
+					
+				</dl>
+				
+				
+				<div class="imlinks">
+					    
+				</div>
+			
+		</div>
+		<div class="postbody">
+			<div class="postrow has_after_content">
+				
+				
+				<h2 class="title icon">
+					Re: Direct GL_YUV, GL_YCbCr or YCoCg texture suppo
+				</h2>
+				
+
+
+						
+						
+				<div class="content">
+					<div id="post_message_1191881">
+						<blockquote class="postcontent restore ">
+							It is the same thing with some hypotetics GL_MPEG1, GL_MPEG2 and/or a relatively  new  GL_MPEG4 supports for video texturing too <img src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/smile.png" border="0" alt="" title="Smile" class="inlineimg"><br>
+<br>
+This work already very fine and in real-time with avicodec that decode MPEG1/MPEG2/MPEG4 streams that I can easily put into OPENGL textures  ...<br>
+<br>
+So ... =&gt;  WHY ???<br>
+<br>
+<br>
+@+<br>
+Yannoo  
+						</blockquote>
+					</div>
+
+					
+				</div>
+			</div>
+			
+			<div class="after_content">
+				
+				
+				
+				
+					<blockquote class="signature restore"><div class="signaturecontainer">@+<br>
+Yannoo</div></blockquote>
+				
+				
+			</div>
+			
+			<div class="cleardiv"></div>
+		</div>
+	</div>
+		<div class="postfoot">
+			<!-- <div class="postfoot_container"> -->
+			<div class="textcontrols floatcontainer">
+				<span class="postcontrols">
+					<img style="display:none" id="progress_1191881" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/progress.gif" alt="">
+					
+					
+					
+					
+				</span>
+				<span class="postlinking">
+					
+						
+					
+
+					
+					
+					
+					
+
+					
+					
+
+					
+					
+					
+					
+					
+				</span>
+			<!-- </div> -->
+			</div>
+		</div>
+	<hr>
+</li>
+
+<li class="postbitlegacy postbitim postcontainer old" id="post_1191882">
+<!-- see bottom of postbit.css for .userinfo .popupmenu styles -->
+
+	<div class="posthead">
+			<span class="postdate old">
+				
+					<span class="date">11-16-2009,&nbsp;<span class="time">04:29 PM</span></span>
+				
+			</span>
+			<span class="nodecontrols">
+				
+					<a name="post1191882" href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support?p=1191882&amp;viewfull=1#post1191882" class="postcounter">#3</a><a id="postcount1191882" name="3"></a>
+				
+				
+				
+			</span>
+	</div>
+	<div class="postdetails">
+		<div class="userinfo">
+			<div class="username_container">
+			
+				<div class="popupmenu memberaction" id="yui-gen15">
+	<a class="username offline popupctrl" href="https://www.opengl.org/discussion_boards/member.php/18359-Yann-LE-PETITCORPS" title="Yann LE PETITCORPS is offline" id="yui-gen17"><strong>Yann LE PETITCORPS</strong></a>
+	<ul class="popupbody memberaction_body" id="yui-gen16">
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/member.php/18359-Yann-LE-PETITCORPS" class="siteicon_profile">
+				View Profile
+			</a>
+		</li>
+		
+		<li class="right">
+			<a href="https://www.opengl.org/discussion_boards/search.php?do=finduser&amp;userid=18359&amp;contenttype=vBForum_Post&amp;showposts=1" class="siteicon_forum" rel="nofollow">
+				View Forum Posts
+			</a>
+		</li>
+		
+		
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/private.php?do=newpm&amp;u=18359" class="siteicon_message" rel="nofollow">
+				Private Message
+			</a>
+		</li>
+		
+		
+		
+		
+		
+		
+		
+
+		
+
+		
+		
+	</ul>
+</div>
+				<img class="inlineimg onlinestatus" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/user-offline.png" alt="Yann LE PETITCORPS is offline" border="0" title="Yann LE PETITCORPS is offline">
+
+			
+			</div>
+			<span class="usertitle">
+				Junior Member
+			</span>
+			
+				<span class="rank">Regular Contributor</span>
+			
+			
+			
+			 
+			
+				<hr>
+				<dl class="userinfo_extra">
+					<dt>Join Date</dt> <dd>Nov 2009</dd>
+					<dt>Location</dt> <dd>French</dd>
+					
+					<dt>Posts</dt> <dd>117</dd>	
+					
+				</dl>
+				
+				
+				<div class="imlinks">
+					    
+				</div>
+			
+		</div>
+		<div class="postbody">
+			<div class="postrow has_after_content">
+				
+				
+				<h2 class="title icon">
+					Re: Direct GL_YUV, GL_YCbCr or YCoCg texture suppo
+				</h2>
+				
+
+
+						
+						
+				<div class="content">
+					<div id="post_message_1191882">
+						<blockquote class="postcontent restore ">
+							I think that the Mesa extension YCBCR_422_MESA is something like I want and that Apple have make a similar (but really slow from what I have can read) extension in the past ...<br>
+<br>
+I test if this is exposed into my various PCs, EEEPC or Macintoshs that have alls  differents graphics cards and drivers ...<br>
+<br>
+<br>
+@+<br>
+Yannoo
+						</blockquote>
+					</div>
+
+					
+				</div>
+			</div>
+			
+			<div class="after_content">
+				
+				
+				
+				
+					<blockquote class="signature restore"><div class="signaturecontainer">@+<br>
+Yannoo</div></blockquote>
+				
+				
+			</div>
+			
+			<div class="cleardiv"></div>
+		</div>
+	</div>
+		<div class="postfoot">
+			<!-- <div class="postfoot_container"> -->
+			<div class="textcontrols floatcontainer">
+				<span class="postcontrols">
+					<img style="display:none" id="progress_1191882" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/progress.gif" alt="">
+					
+					
+					
+					
+				</span>
+				<span class="postlinking">
+					
+						
+					
+
+					
+					
+					
+					
+
+					
+					
+
+					
+					
+					
+					
+					
+				</span>
+			<!-- </div> -->
+			</div>
+		</div>
+	<hr>
+</li>
+
+<li class="postbitlegacy postbitim postcontainer old" id="post_1191885">
+<!-- see bottom of postbit.css for .userinfo .popupmenu styles -->
+
+	<div class="posthead">
+			<span class="postdate old">
+				
+					<span class="date">11-16-2009,&nbsp;<span class="time">05:40 PM</span></span>
+				
+			</span>
+			<span class="nodecontrols">
+				
+					<a name="post1191885" href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support?p=1191885&amp;viewfull=1#post1191885" class="postcounter">#4</a><a id="postcount1191885" name="4"></a>
+				
+				
+				
+			</span>
+	</div>
+	<div class="postdetails">
+		<div class="userinfo">
+			<div class="username_container">
+			
+				<div class="popupmenu memberaction" id="yui-gen18">
+	<a class="username offline popupctrl" href="https://www.opengl.org/discussion_boards/member.php/11598-Dark-Photon" title="Dark Photon is offline" id="yui-gen20"><strong>Dark Photon</strong></a>
+	<ul class="popupbody memberaction_body" id="yui-gen19">
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/member.php/11598-Dark-Photon" class="siteicon_profile">
+				View Profile
+			</a>
+		</li>
+		
+		<li class="right">
+			<a href="https://www.opengl.org/discussion_boards/search.php?do=finduser&amp;userid=11598&amp;contenttype=vBForum_Post&amp;showposts=1" class="siteicon_forum" rel="nofollow">
+				View Forum Posts
+			</a>
+		</li>
+		
+		
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/private.php?do=newpm&amp;u=11598" class="siteicon_message" rel="nofollow">
+				Private Message
+			</a>
+		</li>
+		
+		
+		
+		
+		
+		
+		
+
+		
+
+		
+		
+	</ul>
+</div>
+				<img class="inlineimg onlinestatus" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/user-offline.png" alt="Dark Photon is offline" border="0" title="Dark Photon is offline">
+
+			
+			</div>
+			<span class="usertitle">
+				Senior Member
+			</span>
+			
+				<span class="rank">OpenGL Guru</span>
+			
+			
+			
+			
+			<a class="postuseravatar" href="https://www.opengl.org/discussion_boards/member.php/11598-Dark-Photon" title="Dark Photon is offline">
+				<img src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/avatar11598_2.gif" alt="Dark Photon&#39;s Avatar" title="Dark Photon&#39;s Avatar">
+			</a>
+			 
+			
+				<hr>
+				<dl class="userinfo_extra">
+					<dt>Join Date</dt> <dd>Oct 2004</dd>
+					<dt>Location</dt> <dd>Druidia</dd>
+					
+					<dt>Posts</dt> <dd>4,376</dd>	
+					
+				</dl>
+				
+				
+				<div class="imlinks">
+					    
+				</div>
+			
+		</div>
+		<div class="postbody">
+			<div class="postrow">
+				
+				
+				<h2 class="title icon">
+					Re: Direct GL_YUV, GL_YCbCr or YCoCg texture support ?
+				</h2>
+				
+
+
+						
+						
+				<div class="content">
+					<div id="post_message_1191885">
+						<blockquote class="postcontent restore ">
+							<div class="bbcode_container">
+	<div class="bbcode_quote">
+		<div class="quote_container">
+			<div class="bbcode_quote_container"></div>
+			
+				<div class="bbcode_postedby">
+					<img src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/quote_icon.png" alt="Quote" title="Quote"> Originally Posted by <strong>Yann LE PETITCORPS</strong>
+					
+				</div>
+				<div class="message">Why  OPENGL haven't a standardised texture support for standard TV digital video format such as YUV or YCbCr in 4:2:2 or 4:1:1 format ???<br>
+<br>
+...<br>
+<br>
+It's really mysterious for me to understand why this haven't yet already exposed into the OpenGL API (because this format exist since a lot of decades ...)</div>
+			
+		</div>
+	</div>
+</div>OpenGL is a 2D/3D graphics rendering API, not a video processing API.  Is that to say you can't do video processing using OpenGL?  No.  But it's to say that there aren't custom APIs geared around it.<br>
+<br>
+I suggest you check out APIs such as the X.Org Xv library, which already has built-in support for playback with these video formats, with GPU acceleration when available, and APIs such as NVidia's VDPAU, which provides GPU-assisted decode and playback of even very compute-intensive formats like h.264.
+						</blockquote>
+					</div>
+
+					
+				</div>
+			</div>
+			
+			<div class="cleardiv"></div>
+		</div>
+	</div>
+		<div class="postfoot">
+			<!-- <div class="postfoot_container"> -->
+			<div class="textcontrols floatcontainer">
+				<span class="postcontrols">
+					<img style="display:none" id="progress_1191885" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/progress.gif" alt="">
+					
+					
+					
+					
+				</span>
+				<span class="postlinking">
+					
+						
+					
+
+					
+					
+					
+					
+
+					
+					
+
+					
+					
+					
+					
+					
+				</span>
+			<!-- </div> -->
+			</div>
+		</div>
+	<hr>
+</li>
+
+<li class="postbitlegacy postbitim postcontainer old" id="post_1191891">
+<!-- see bottom of postbit.css for .userinfo .popupmenu styles -->
+
+	<div class="posthead">
+			<span class="postdate old">
+				
+					<span class="date">11-16-2009,&nbsp;<span class="time">06:54 PM</span></span>
+				
+			</span>
+			<span class="nodecontrols">
+				
+					<a name="post1191891" href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support?p=1191891&amp;viewfull=1#post1191891" class="postcounter">#5</a><a id="postcount1191891" name="5"></a>
+				
+				
+				
+			</span>
+	</div>
+	<div class="postdetails">
+		<div class="userinfo">
+			<div class="username_container">
+			
+				<div class="popupmenu memberaction" id="yui-gen21">
+	<a class="username offline popupctrl" href="https://www.opengl.org/discussion_boards/member.php/8894-feelgood" title="feelgood is offline" id="yui-gen23"><strong>feelgood</strong></a>
+	<ul class="popupbody memberaction_body" id="yui-gen22">
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/member.php/8894-feelgood" class="siteicon_profile">
+				View Profile
+			</a>
+		</li>
+		
+		<li class="right">
+			<a href="https://www.opengl.org/discussion_boards/search.php?do=finduser&amp;userid=8894&amp;contenttype=vBForum_Post&amp;showposts=1" class="siteicon_forum" rel="nofollow">
+				View Forum Posts
+			</a>
+		</li>
+		
+		
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/private.php?do=newpm&amp;u=8894" class="siteicon_message" rel="nofollow">
+				Private Message
+			</a>
+		</li>
+		
+		
+		
+		
+		
+		
+		
+
+		
+
+		
+		
+	</ul>
+</div>
+				<img class="inlineimg onlinestatus" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/user-offline.png" alt="feelgood is offline" border="0" title="feelgood is offline">
+
+			
+			</div>
+			<span class="usertitle">
+				Junior Member
+			</span>
+			
+				<span class="rank">Newbie</span>
+			
+			
+			
+			 
+			
+				<hr>
+				<dl class="userinfo_extra">
+					<dt>Join Date</dt> <dd>Sep 2003</dd>
+					
+					
+					<dt>Posts</dt> <dd>9</dd>	
+					
+				</dl>
+				
+				
+				<div class="imlinks">
+					    
+				</div>
+			
+		</div>
+		<div class="postbody">
+			<div class="postrow">
+				
+				
+				<h2 class="title icon">
+					Re: Direct GL_YUV, GL_YCbCr or YCoCg texture suppo
+				</h2>
+				
+
+
+						
+						
+				<div class="content">
+					<div id="post_message_1191891">
+						<blockquote class="postcontent restore ">
+							A number of vendors (i.e. Apple, ...) have had support for rendering YCbCr 4:2:2 formats through the OpenGL API. For example on Mac OS X (going all the way back to 10.2.x) you have support for GL_APPLE_ycbcr_422 which allows one to read, store and optionally process texture data in (signed, unsigned) YCbCr 4:2:2. Considering that consumer HW has had direct (texture) support for 4:2:2 for quite some time the performance cost of this particular extension is effectively nonexistent. <br>
+<br>
+Snow Leopard gives you more control over the server side conversion from YCbCr into RGB by way of GL_APPLE_rgb_422. The latter extension allows one to generate their own (client side) conversion from YCbCr into RGB via the programmable pipeline or through another method.  <br>
+<br>
+If you need support for other YCbCr formats (i.e. 4:2:0, 4:4:4, ...) you are much better off using the existing (L, A, RGB) texture path and the programmable pipeline to accomplish this.
+						</blockquote>
+					</div>
+
+					
+				</div>
+			</div>
+			
+			<div class="cleardiv"></div>
+		</div>
+	</div>
+		<div class="postfoot">
+			<!-- <div class="postfoot_container"> -->
+			<div class="textcontrols floatcontainer">
+				<span class="postcontrols">
+					<img style="display:none" id="progress_1191891" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/progress.gif" alt="">
+					
+					
+					
+					
+				</span>
+				<span class="postlinking">
+					
+						
+					
+
+					
+					
+					
+					
+
+					
+					
+
+					
+					
+					
+					
+					
+				</span>
+			<!-- </div> -->
+			</div>
+		</div>
+	<hr>
+</li>
+
+<li class="postbitlegacy postbitim postcontainer old" id="post_1191900">
+<!-- see bottom of postbit.css for .userinfo .popupmenu styles -->
+
+	<div class="posthead">
+			<span class="postdate old">
+				
+					<span class="date">11-17-2009,&nbsp;<span class="time">01:23 AM</span></span>
+				
+			</span>
+			<span class="nodecontrols">
+				
+					<a name="post1191900" href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support?p=1191900&amp;viewfull=1#post1191900" class="postcounter">#6</a><a id="postcount1191900" name="6"></a>
+				
+				
+				
+			</span>
+	</div>
+	<div class="postdetails">
+		<div class="userinfo">
+			<div class="username_container">
+			
+				<div class="popupmenu memberaction" id="yui-gen24">
+	<a class="username offline popupctrl" href="https://www.opengl.org/discussion_boards/member.php/7917-yooyo" title="yooyo is offline" id="yui-gen26"><strong>yooyo</strong></a>
+	<ul class="popupbody memberaction_body" id="yui-gen25">
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/member.php/7917-yooyo" class="siteicon_profile">
+				View Profile
+			</a>
+		</li>
+		
+		<li class="right">
+			<a href="https://www.opengl.org/discussion_boards/search.php?do=finduser&amp;userid=7917&amp;contenttype=vBForum_Post&amp;showposts=1" class="siteicon_forum" rel="nofollow">
+				View Forum Posts
+			</a>
+		</li>
+		
+		
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/private.php?do=newpm&amp;u=7917" class="siteicon_message" rel="nofollow">
+				Private Message
+			</a>
+		</li>
+		
+		
+		
+		
+		
+		<li class="left">
+			<a href="http://www.centroid3d.com/" class="siteicon_homepage">
+				Visit Homepage
+			</a>
+		</li>
+		
+		
+		
+
+		
+
+		
+		
+	</ul>
+</div>
+				<img class="inlineimg onlinestatus" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/user-offline.png" alt="yooyo is offline" border="0" title="yooyo is offline">
+
+			
+			</div>
+			<span class="usertitle">
+				Advanced Member
+			</span>
+			
+				<span class="rank">Frequent Contributor</span>
+			
+			
+			
+			
+			<a class="postuseravatar" href="https://www.opengl.org/discussion_boards/member.php/7917-yooyo" title="yooyo is offline">
+				<img src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/avatar7917_2.gif" alt="yooyo&#39;s Avatar" title="yooyo&#39;s Avatar">
+			</a>
+			 
+			
+				<hr>
+				<dl class="userinfo_extra">
+					<dt>Join Date</dt> <dd>Apr 2003</dd>
+					<dt>Location</dt> <dd>Belgrade, Serbia</dd>
+					
+					<dt>Posts</dt> <dd>872</dd>	
+					
+				</dl>
+				
+				
+				<div class="imlinks">
+					    
+				</div>
+			
+		</div>
+		<div class="postbody">
+			<div class="postrow has_after_content">
+				
+				
+				<h2 class="title icon">
+					Re: Direct GL_YUV, GL_YCbCr or YCoCg texture suppo
+				</h2>
+				
+
+
+						
+						
+				<div class="content">
+					<div id="post_message_1191900">
+						<blockquote class="postcontent restore ">
+							YUV422, 411, 420 and all sort of it is easy to implement via shaders, and render targets. For example to perform YUV422 to RGB you need:<br>
+1. RGBA texture contains YUV422 samples<br>
+2. FBO with RGB target texture bound<br>
+3. draw screen aligned textured quad with appropriate fragment shader<br>
+In shader you need to resolve sampling (422 in this case), collect YUV samples, convert to RGB (using conversion matrix provided by app) and write RGB pixels.<br>
+<br>
+Then just use RGB version of texture.<br>
+<br>
+In above example I choose RGBA texture to store YUV422 samples. YUV422 format looks like:<br>
+<div class="bbcode_container">
+                <div class="bbcode_description">Code :</div>
+                <div class="bbcode_code" style="height:48px;"><div class="" style="font-family:monospace;"><pre style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">Y0 U Y1 V  Y0 U Y1 V  Y0 U Y1 V... and it perfectly fits in
+R  G B  A  R  G B  A  R  G B  A</pre></div></div>
+</div>So.. for a given YUV422 @ width x height, create width/2 x height RGBA texture and just fill raw YUV422 data. Also create target RGB texture width x height and bind it to FBO.<br>
+<br>
+In shader (depending on even/odd gl_FragCoord.x coordinate) choose Y0 U V or Y1 U V and perform YUV to RGB conversion.<br>
+<br>
+Other format and samplings is easy job to do.
+						</blockquote>
+					</div>
+
+					
+				</div>
+			</div>
+			
+			<div class="after_content">
+				
+				
+				
+				
+					<blockquote class="signature restore"><div class="signaturecontainer"><a href="http://www.centroid3d.com/" target="_blank" rel="nofollow">http://www.centroid3d.com</a></div></blockquote>
+				
+				
+			</div>
+			
+			<div class="cleardiv"></div>
+		</div>
+	</div>
+		<div class="postfoot">
+			<!-- <div class="postfoot_container"> -->
+			<div class="textcontrols floatcontainer">
+				<span class="postcontrols">
+					<img style="display:none" id="progress_1191900" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/progress.gif" alt="">
+					
+					
+					
+					
+				</span>
+				<span class="postlinking">
+					
+						
+					
+
+					
+					
+					
+					
+
+					
+					
+
+					
+					
+					
+					
+					
+				</span>
+			<!-- </div> -->
+			</div>
+		</div>
+	<hr>
+</li>
+
+<li class="postbitlegacy postbitim postcontainer old" id="post_1191901">
+<!-- see bottom of postbit.css for .userinfo .popupmenu styles -->
+
+	<div class="posthead">
+			<span class="postdate old">
+				
+					<span class="date">11-17-2009,&nbsp;<span class="time">01:26 AM</span></span>
+				
+			</span>
+			<span class="nodecontrols">
+				
+					<a name="post1191901" href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support?p=1191901&amp;viewfull=1#post1191901" class="postcounter">#7</a><a id="postcount1191901" name="7"></a>
+				
+				
+				
+			</span>
+	</div>
+	<div class="postdetails">
+		<div class="userinfo">
+			<div class="username_container">
+			
+				<div class="popupmenu memberaction" id="yui-gen27">
+	<a class="username offline popupctrl" href="https://www.opengl.org/discussion_boards/member.php/11141-Groovounet" title="Groovounet is offline" id="yui-gen29"><strong>Groovounet</strong></a>
+	<ul class="popupbody memberaction_body" id="yui-gen28">
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/member.php/11141-Groovounet" class="siteicon_profile">
+				View Profile
+			</a>
+		</li>
+		
+		<li class="right">
+			<a href="https://www.opengl.org/discussion_boards/search.php?do=finduser&amp;userid=11141&amp;contenttype=vBForum_Post&amp;showposts=1" class="siteicon_forum" rel="nofollow">
+				View Forum Posts
+			</a>
+		</li>
+		
+		
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/private.php?do=newpm&amp;u=11141" class="siteicon_message" rel="nofollow">
+				Private Message
+			</a>
+		</li>
+		
+		
+		
+		
+		
+		<li class="left">
+			<a href="http://www.g-truc.net/" class="siteicon_homepage">
+				Visit Homepage
+			</a>
+		</li>
+		
+		
+		
+
+		
+
+		
+		
+	</ul>
+</div>
+				<img class="inlineimg onlinestatus" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/user-offline.png" alt="Groovounet is offline" border="0" title="Groovounet is offline">
+
+			
+			</div>
+			<span class="usertitle">
+				Super Moderator
+			</span>
+			
+				<span class="rank">Frequent Contributor</span>
+			
+			
+			
+			
+			<a class="postuseravatar" href="https://www.opengl.org/discussion_boards/member.php/11141-Groovounet" title="Groovounet is offline">
+				<img src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/avatar11141_2.gif" alt="Groovounet&#39;s Avatar" title="Groovounet&#39;s Avatar">
+			</a>
+			 
+			
+				<hr>
+				<dl class="userinfo_extra">
+					<dt>Join Date</dt> <dd>Jul 2004</dd>
+					
+					
+					<dt>Posts</dt> <dd>937</dd>	
+					
+				</dl>
+				
+				
+				<div class="imlinks">
+					    
+				</div>
+			
+		</div>
+		<div class="postbody">
+			<div class="postrow has_after_content">
+				
+				
+				<h2 class="title icon">
+					Re: Direct GL_YUV, GL_YCbCr or YCoCg texture suppo
+				</h2>
+				
+
+
+						
+						
+				<div class="content">
+					<div id="post_message_1191901">
+						<blockquote class="postcontent restore ">
+							I first thought: Great idea! And then I realize that you can store the YUV texture into several textures and decode them within a shader.<br>
+<br>
+Maybe a dedicated format could be more efficient on the GPU side but I get the limitation will be on the image streaming.
+						</blockquote>
+					</div>
+
+					
+				</div>
+			</div>
+			
+			<div class="after_content">
+				
+				
+				
+				
+					<blockquote class="signature restore"><div class="signaturecontainer"><a href="http://www.g-truc.net/" target="_blank" rel="nofollow">G-Truc Creation</a> - <a href="http://glm.g-truc.net/" target="_blank" rel="nofollow">GLM</a> - <a href="http://samples.g-truc.net/" target="_blank" rel="nofollow">OpenGL Samples Pack</a> - <a href="http://www.openglinsights.com/" target="_blank" rel="nofollow">OpenGL Insights</a></div></blockquote>
+				
+				
+			</div>
+			
+			<div class="cleardiv"></div>
+		</div>
+	</div>
+		<div class="postfoot">
+			<!-- <div class="postfoot_container"> -->
+			<div class="textcontrols floatcontainer">
+				<span class="postcontrols">
+					<img style="display:none" id="progress_1191901" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/progress.gif" alt="">
+					
+					
+					
+					
+				</span>
+				<span class="postlinking">
+					
+						
+					
+
+					
+					
+					
+					
+
+					
+					
+
+					
+					
+					
+					
+					
+				</span>
+			<!-- </div> -->
+			</div>
+		</div>
+	<hr>
+</li>
+
+<li class="postbitlegacy postbitim postcontainer old" id="post_1191902">
+<!-- see bottom of postbit.css for .userinfo .popupmenu styles -->
+
+	<div class="posthead">
+			<span class="postdate old">
+				
+					<span class="date">11-17-2009,&nbsp;<span class="time">01:38 AM</span></span>
+				
+			</span>
+			<span class="nodecontrols">
+				
+					<a name="post1191902" href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support?p=1191902&amp;viewfull=1#post1191902" class="postcounter">#8</a><a id="postcount1191902" name="8"></a>
+				
+				
+				
+			</span>
+	</div>
+	<div class="postdetails">
+		<div class="userinfo">
+			<div class="username_container">
+			
+				<div class="popupmenu memberaction" id="yui-gen30">
+	<a class="username offline popupctrl" href="https://www.opengl.org/discussion_boards/member.php/9334-mfort" title="mfort is offline" id="yui-gen32"><strong>mfort</strong></a>
+	<ul class="popupbody memberaction_body" id="yui-gen31">
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/member.php/9334-mfort" class="siteicon_profile">
+				View Profile
+			</a>
+		</li>
+		
+		<li class="right">
+			<a href="https://www.opengl.org/discussion_boards/search.php?do=finduser&amp;userid=9334&amp;contenttype=vBForum_Post&amp;showposts=1" class="siteicon_forum" rel="nofollow">
+				View Forum Posts
+			</a>
+		</li>
+		
+		
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/private.php?do=newpm&amp;u=9334" class="siteicon_message" rel="nofollow">
+				Private Message
+			</a>
+		</li>
+		
+		
+		
+		
+		
+		<li class="left">
+			<a href="http://www.chyronhego.com/" class="siteicon_homepage">
+				Visit Homepage
+			</a>
+		</li>
+		
+		
+		
+
+		
+
+		
+		
+	</ul>
+</div>
+				<img class="inlineimg onlinestatus" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/user-offline.png" alt="mfort is offline" border="0" title="mfort is offline">
+
+			
+			</div>
+			<span class="usertitle">
+				Member
+			</span>
+			
+				<span class="rank">Regular Contributor</span>
+			
+			
+			
+			 
+			
+				<hr>
+				<dl class="userinfo_extra">
+					<dt>Join Date</dt> <dd>Nov 2003</dd>
+					<dt>Location</dt> <dd>Czech Republic</dd>
+					
+					<dt>Posts</dt> <dd>317</dd>	
+					
+				</dl>
+				
+				
+				<div class="imlinks">
+					    
+				</div>
+			
+		</div>
+		<div class="postbody">
+			<div class="postrow">
+				
+				
+				<h2 class="title icon">
+					Re: Direct GL_YUV, GL_YCbCr or YCoCg texture suppo
+				</h2>
+				
+
+
+						
+						
+				<div class="content">
+					<div id="post_message_1191902">
+						<blockquote class="postcontent restore ">
+							I am pretty against the idea to have YUV support in OpenGL.<br>
+I can understand that in 2.x era. But not today with all the shader functionality.<br>
+<br>
+The problem with YCrCb 422 &amp; co. is that there are so many combinations or memory format. (CrYCbY, YCrYCb,....)<br>
+<br>
+There are several color matrices to convert to RGB (CCIR601, CCIR709, FullRange).<br>
+<br>
+Then you can do have several ways to upscale from 422 to 444. Using simple upscale or linear filtered upscale or more sophisticated upscaling.<br>
+<br>
+Then you have 8, 10, 12 bits per channel. <br>
+<br>
+Hardwiring all this into driver is pretty agains the idea to have few fixed func. features and more programmable features.<br>
+<br>
+I'd more understand to make some utility library to handle all this.
+						</blockquote>
+					</div>
+
+					
+				</div>
+			</div>
+			
+			<div class="cleardiv"></div>
+		</div>
+	</div>
+		<div class="postfoot">
+			<!-- <div class="postfoot_container"> -->
+			<div class="textcontrols floatcontainer">
+				<span class="postcontrols">
+					<img style="display:none" id="progress_1191902" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/progress.gif" alt="">
+					
+					
+					
+					
+				</span>
+				<span class="postlinking">
+					
+						
+					
+
+					
+					
+					
+					
+
+					
+					
+
+					
+					
+					
+					
+					
+				</span>
+			<!-- </div> -->
+			</div>
+		</div>
+	<hr>
+</li>
+
+<li class="postbitlegacy postbitim postcontainer old" id="post_1191914">
+<!-- see bottom of postbit.css for .userinfo .popupmenu styles -->
+
+	<div class="posthead">
+			<span class="postdate old">
+				
+					<span class="date">11-17-2009,&nbsp;<span class="time">08:36 AM</span></span>
+				
+			</span>
+			<span class="nodecontrols">
+				
+					<a name="post1191914" href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support?p=1191914&amp;viewfull=1#post1191914" class="postcounter">#9</a><a id="postcount1191914" name="9"></a>
+				
+				
+				
+			</span>
+	</div>
+	<div class="postdetails">
+		<div class="userinfo">
+			<div class="username_container">
+			
+				<div class="popupmenu memberaction" id="yui-gen33">
+	<a class="username offline popupctrl" href="https://www.opengl.org/discussion_boards/member.php/9779-Eosie" title="Eosie is offline" id="yui-gen35"><strong>Eosie</strong></a>
+	<ul class="popupbody memberaction_body" id="yui-gen34">
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/member.php/9779-Eosie" class="siteicon_profile">
+				View Profile
+			</a>
+		</li>
+		
+		<li class="right">
+			<a href="https://www.opengl.org/discussion_boards/search.php?do=finduser&amp;userid=9779&amp;contenttype=vBForum_Post&amp;showposts=1" class="siteicon_forum" rel="nofollow">
+				View Forum Posts
+			</a>
+		</li>
+		
+		
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/private.php?do=newpm&amp;u=9779" class="siteicon_message" rel="nofollow">
+				Private Message
+			</a>
+		</li>
+		
+		
+		
+		
+		
+		
+		
+
+		
+
+		
+		
+	</ul>
+</div>
+				<img class="inlineimg onlinestatus" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/user-offline.png" alt="Eosie is offline" border="0" title="Eosie is offline">
+
+			
+			</div>
+			<span class="usertitle">
+				Junior Member
+			</span>
+			
+				<span class="rank">Regular Contributor</span>
+			
+			
+			
+			 
+			
+				<hr>
+				<dl class="userinfo_extra">
+					<dt>Join Date</dt> <dd>Jan 2004</dd>
+					<dt>Location</dt> <dd>Czech Republic, EU</dd>
+					
+					<dt>Posts</dt> <dd>190</dd>	
+					
+				</dl>
+				
+				
+				<div class="imlinks">
+					    
+				</div>
+			
+		</div>
+		<div class="postbody">
+			<div class="postrow has_after_content">
+				
+				
+				<h2 class="title icon">
+					Re: Direct GL_YUV, GL_YCbCr or YCoCg texture suppo
+				</h2>
+				
+
+
+						
+						
+				<div class="content">
+					<div id="post_message_1191914">
+						<blockquote class="postcontent restore ">
+							If hardware supports it directly, there is no reason for it not to be included in the API. It's in Apple's implementation and Mesa, so it probably should be standardized. It's worth noting that Xv uses 3D hardware these days anyway.
+						</blockquote>
+					</div>
+
+					
+				</div>
+			</div>
+			
+			<div class="after_content">
+				
+				
+				
+				
+					<blockquote class="signature restore"><div class="signaturecontainer"><i>(usually just hobbyist) OpenGL driver developer<br>
+</i></div></blockquote>
+				
+				
+			</div>
+			
+			<div class="cleardiv"></div>
+		</div>
+	</div>
+		<div class="postfoot">
+			<!-- <div class="postfoot_container"> -->
+			<div class="textcontrols floatcontainer">
+				<span class="postcontrols">
+					<img style="display:none" id="progress_1191914" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/progress.gif" alt="">
+					
+					
+					
+					
+				</span>
+				<span class="postlinking">
+					
+						
+					
+
+					
+					
+					
+					
+
+					
+					
+
+					
+					
+					
+					
+					
+				</span>
+			<!-- </div> -->
+			</div>
+		</div>
+	<hr>
+</li>
+
+<li class="postbitlegacy postbitim postcontainer old" id="post_1191915">
+<!-- see bottom of postbit.css for .userinfo .popupmenu styles -->
+
+	<div class="posthead">
+			<span class="postdate old">
+				
+					<span class="date">11-17-2009,&nbsp;<span class="time">09:41 AM</span></span>
+				
+			</span>
+			<span class="nodecontrols">
+				
+					<a name="post1191915" href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support?p=1191915&amp;viewfull=1#post1191915" class="postcounter">#10</a><a id="postcount1191915" name="10"></a>
+				
+				
+				
+			</span>
+	</div>
+	<div class="postdetails">
+		<div class="userinfo">
+			<div class="username_container">
+			
+				<div class="popupmenu memberaction" id="yui-gen36">
+	<a class="username offline popupctrl" href="https://www.opengl.org/discussion_boards/member.php/11141-Groovounet" title="Groovounet is offline" id="yui-gen38"><strong>Groovounet</strong></a>
+	<ul class="popupbody memberaction_body" id="yui-gen37">
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/member.php/11141-Groovounet" class="siteicon_profile">
+				View Profile
+			</a>
+		</li>
+		
+		<li class="right">
+			<a href="https://www.opengl.org/discussion_boards/search.php?do=finduser&amp;userid=11141&amp;contenttype=vBForum_Post&amp;showposts=1" class="siteicon_forum" rel="nofollow">
+				View Forum Posts
+			</a>
+		</li>
+		
+		
+		<li class="left">
+			<a href="https://www.opengl.org/discussion_boards/private.php?do=newpm&amp;u=11141" class="siteicon_message" rel="nofollow">
+				Private Message
+			</a>
+		</li>
+		
+		
+		
+		
+		
+		<li class="left">
+			<a href="http://www.g-truc.net/" class="siteicon_homepage">
+				Visit Homepage
+			</a>
+		</li>
+		
+		
+		
+
+		
+
+		
+		
+	</ul>
+</div>
+				<img class="inlineimg onlinestatus" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/user-offline.png" alt="Groovounet is offline" border="0" title="Groovounet is offline">
+
+			
+			</div>
+			<span class="usertitle">
+				Super Moderator
+			</span>
+			
+				<span class="rank">Frequent Contributor</span>
+			
+			
+			
+			
+			<a class="postuseravatar" href="https://www.opengl.org/discussion_boards/member.php/11141-Groovounet" title="Groovounet is offline">
+				<img src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/avatar11141_2.gif" alt="Groovounet&#39;s Avatar" title="Groovounet&#39;s Avatar">
+			</a>
+			 
+			
+				<hr>
+				<dl class="userinfo_extra">
+					<dt>Join Date</dt> <dd>Jul 2004</dd>
+					
+					
+					<dt>Posts</dt> <dd>937</dd>	
+					
+				</dl>
+				
+				
+				<div class="imlinks">
+					    
+				</div>
+			
+		</div>
+		<div class="postbody">
+			<div class="postrow has_after_content">
+				
+				
+				<h2 class="title icon">
+					Re: Direct GL_YUV, GL_YCbCr or YCoCg texture suppo
+				</h2>
+				
+
+
+						
+						
+							
+						
+				<div class="content">
+					<div id="post_message_1191915">
+						<blockquote class="postcontent restore ">
+							The video decoder is a separed component from the GPU for some company. I don't know about ATI or nVidia but even if it's on the same chip it doesn't means that the video decoded is really integrated with the rest of the chip. "It lives by it's own".
+						</blockquote>
+					</div>
+
+					
+				</div>
+			</div>
+			
+			<div class="after_content">
+				
+				
+				
+				
+					<blockquote class="signature restore"><div class="signaturecontainer"><a href="http://www.g-truc.net/" target="_blank" rel="nofollow">G-Truc Creation</a> - <a href="http://glm.g-truc.net/" target="_blank" rel="nofollow">GLM</a> - <a href="http://samples.g-truc.net/" target="_blank" rel="nofollow">OpenGL Samples Pack</a> - <a href="http://www.openglinsights.com/" target="_blank" rel="nofollow">OpenGL Insights</a></div></blockquote>
+				
+				
+			</div>
+			
+			<div class="cleardiv"></div>
+		</div>
+	</div>
+		<div class="postfoot">
+			<!-- <div class="postfoot_container"> -->
+			<div class="textcontrols floatcontainer">
+				<span class="postcontrols">
+					<img style="display:none" id="progress_1191915" src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/progress.gif" alt="">
+					
+					
+					
+					
+				</span>
+				<span class="postlinking">
+					
+						
+					
+
+					
+					
+					
+					
+
+					
+					
+
+					
+					
+					
+					
+					
+				</span>
+			<!-- </div> -->
+			</div>
+		</div>
+	<hr>
+</li>
+
+		</ol>
+		<div class="separator"></div>
+		<div class="postlistfoot">
+			
+		</div>
+
+	
+
+</div>
+
+<div id="below_postlist" class="noinlinemod below_postlist">
+	
+	<div id="pagination_bottom" class="pagination_bottom">
+	
+		<form action="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support/page3" method="get" class="pagination popupmenu nohovermenu" id="yui-gen39">
+<input type="hidden" name="t" value="169186">
+	
+		<span><a href="javascript://" class="popupctrl" id="yui-gen41">Page 1 of 7</a></span>
+		
+		
+		
+		<span class="selected"><a href="javascript://" title="Results 1 to 10 of 66">1</a></span><span><a href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support/page2" title="Show results 11 to 20 of 66">2</a></span><span><a href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support/page3" title="Show results 21 to 30 of 66">3</a></span>
+		
+		<span class="separator">...</span>
+		
+		
+		<span class="prev_next"><a rel="next" href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support/page2" title="Next Page - Results 11 to 20 of 66"><img src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/next-right.png" alt="Next" title="Next"></a></span>
+		
+		
+		<span class="first_last"><a href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support/page7" title="Last Page - Results 61 to 66 of 66">Last<img src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/last-right.png" alt="Last" title="Last"></a></span>
+		
+	
+	<ul class="popupbody" id="yui-gen40">
+		<li class="formsubmit jumptopage"><label>Jump to page: <input type="text" name="page" size="4"></label> <input type="submit" class="button" value="Go"></li>
+	</ul>
+</form>
+	
+		<div class="clear"></div>
+<div class="navpopupmenu popupmenu nohovermenu" id="showthread_navpopup">
+	
+		<span class="shade">Quick Navigation</span>
+		<a href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support" class="popupctrl" id="yui-gen43"><span class="ctrlcontainer">Suggestions for the next release of OpenGL</span></a>
+		<a href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support#top" class="textcontrol" onclick="document.location.hash=&#39;top&#39;;return false;">Top</a>
+	
+	<ul class="navpopupbody popupbody" id="yui-gen42">
+		
+		<li class="optionlabel">Site Areas</li>
+		<li><a href="https://www.opengl.org/discussion_boards/usercp.php">Settings</a></li>
+		<li><a href="https://www.opengl.org/discussion_boards/private.php">Private Messages</a></li>
+		<li><a href="https://www.opengl.org/discussion_boards/subscription.php">Subscriptions</a></li>
+		<li><a href="https://www.opengl.org/discussion_boards/online.php">Who's Online</a></li>
+		<li><a href="https://www.opengl.org/discussion_boards/search.php">Search Forums</a></li>
+		<li><a href="https://www.opengl.org/discussion_boards/forum.php">Forums Home</a></li>
+		
+			<li class="optionlabel">Forums</li>
+			
+		
+			
+				<li><a href="https://www.opengl.org/discussion_boards/forumdisplay.php/3-OpenGL-Developers-Forum">OpenGL Developers Forum</a>
+					<ol class="d1">
+						
+		
+			
+				<li><a href="https://www.opengl.org/discussion_boards/forumdisplay.php/16-Items-of-Importance-to-the-OpenGL-Community">Items of Importance to the OpenGL Community</a></li>
+			
+		
+			
+				<li><a href="https://www.opengl.org/discussion_boards/forumdisplay.php/5-User-Hardware-Software-Gaming-Help">User Hardware, Software, &amp; Gaming Help</a></li>
+			
+		
+			
+				<li><a href="https://www.opengl.org/discussion_boards/forumdisplay.php/10-Math-and-Algorithms">Math and Algorithms</a></li>
+			
+		
+			
+				<li><a href="https://www.opengl.org/discussion_boards/forumdisplay.php/6-OpenGL-coding-beginners">OpenGL coding: beginners</a></li>
+			
+		
+			
+				<li><a href="https://www.opengl.org/discussion_boards/forumdisplay.php/7-OpenGL-coding-advanced">OpenGL coding: advanced</a></li>
+			
+		
+			
+				<li><a href="https://www.opengl.org/discussion_boards/forumdisplay.php/15-OpenGL-Shading-Language">OpenGL Shading Language</a></li>
+			
+		
+			
+				<li><a href="https://www.opengl.org/discussion_boards/forumdisplay.php/13-OpenGL-under-Windows">OpenGL under Windows</a></li>
+			
+		
+			
+				<li><a href="https://www.opengl.org/discussion_boards/forumdisplay.php/8-OpenGL-on-Linux">OpenGL on Linux</a></li>
+			
+		
+			
+				<li><a href="https://www.opengl.org/discussion_boards/forumdisplay.php/9-OpenGL-on-Macintosh">OpenGL on Macintosh</a></li>
+			
+		
+			
+				<li><a href="https://www.opengl.org/discussion_boards/forumdisplay.php/14-OpenGL-Toolkits-%28e-g-GLUT-GLFW-GLM%29">OpenGL Toolkits (e.g. GLUT, GLFW, GLM)</a></li>
+			
+		
+			
+				<li><a href="https://www.opengl.org/discussion_boards/forumdisplay.php/17-OpenGL-drivers">OpenGL drivers</a></li>
+			
+		
+			
+				<li><a href="https://www.opengl.org/discussion_boards/forumdisplay.php/12-High-level-APIs-%28e-g-Inventor-Performer-Optimizer%29">High-level APIs (e.g. Inventor, Performer, Optimizer)</a></li>
+			
+		
+			
+				<li><a href="https://www.opengl.org/discussion_boards/forumdisplay.php/11-Suggestions-for-the-next-release-of-OpenGL">Suggestions for the next release of OpenGL</a></li>
+			
+		
+			
+					</ol>
+				</li>
+			
+		
+		
+	</ul>
+</div>
+<div class="clear"></div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+<div id="thread_info" class="thread_info block">
+	
+	
+	
+	
+	
+	
+	<div class="options_block_container">
+		
+		<div class="options_block">
+			<h4 class="collapse blockhead options_correct">
+				<a class="collapse" id="collapse_posting_rules" href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support#top"><img src="./Direct GL_YUV, GL_YCbCr or YCoCg texture support __files/collapse_40b.png" alt=""></a>
+				Posting Permissions
+			</h4>
+			<div id="posting_rules" class="thread_info_block blockbody formcontrols floatcontainer options_correct">
+				
+<div id="forumrules" class="info_subblock">
+
+	<ul class="youcandoblock">
+		<li>You <strong>may not</strong> post new threads</li>
+		<li>You <strong>may not</strong> post replies</li>
+		<li>You <strong>may not</strong> post attachments</li>
+		<li>You <strong>may not</strong> edit your posts</li>
+		<li>&nbsp;</li>
+	</ul>
+	<div class="bbcodeblock">
+		<ul>
+			<li><a href="https://www.opengl.org/discussion_boards/misc.php?do=bbcode" target="_blank">BB code</a> is <strong>On</strong></li>
+			<li><a href="https://www.opengl.org/discussion_boards/misc.php?do=showsmilies" target="_blank">Smilies</a> are <strong>On</strong></li>
+			<li><a href="https://www.opengl.org/discussion_boards/misc.php?do=bbcode#imgcode" target="_blank">[IMG]</a> code is <strong>On</strong></li>
+			<li><a href="https://www.opengl.org/discussion_boards/misc.php?do=bbcode#videocode" target="_blank">[VIDEO]</a> code is <strong>Off</strong></li>
+			<li>HTML code is <strong>Off</strong></li>
+		</ul>
+	</div>
+	<p class="rules_link"><a href="https://www.opengl.org/discussion_boards/misc.php?do=showrules" target="_blank">Forum Rules</a></p>
+
+</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+<div style="clear: left">
+   
+   
+</div>
+
+<div id="footer" class="floatcontainer footer">
+
+	<form action="https://www.opengl.org/discussion_boards/forum.php" method="get" id="footer_select" class="footer_select">
+
+		
+			<select name="styleid" onchange="switch_id(this, &#39;style&#39;)">
+				<optgroup label="Quick Style Chooser"><option class="hidden"></option></optgroup>
+				
+					
+					<optgroup label=" Standard Styles">
+									
+					
+	<option value="1" class="" selected="selected">-- OpenGL Style</option>
+
+	<option value="4" class="">---- OpenGL Dark Style</option>
+
+					
+					</optgroup>
+										
+				
+				
+					
+					<optgroup label=" Mobile Styles">
+					
+					
+	<option value="12" class="">-- Mobile</option>
+
+					
+					</optgroup>
+										
+				
+			</select>	
+		
+		
+		
+	</form>
+
+	<ul id="footer_links" class="footer_links">
+		<li><a href="https://www.opengl.org/discussion_boards/sendmessage.php" rel="nofollow" accesskey="9">Contact Us</a></li>
+		<li><a href="https://www.opengl.org/">OpenGL.org</a></li>
+		
+		
+		<li><a href="https://www.opengl.org/discussion_boards/archive/index.php">Archive</a></li>
+		
+		
+		
+		<li><a href="https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support#top" onclick="document.location.hash=&#39;top&#39;; return false;">Top</a></li>
+	</ul>
+	
+	
+	
+	
+	<script type="text/javascript">
+	<!--
+		// Main vBulletin Javascript Initialization
+		vBulletin_init();
+	//-->
+	</script>
+        
+</div>
+</div> <!-- closing div for body_wrapper -->
+
+<div class="below_body">
+<div id="footer_time" class="shade footer_time">All times are GMT -7. The time now is <span class="time">07:42 AM</span>.</div>
+
+<div id="footer_copyright" class="shade footer_copyright">
+	<!-- Do not remove this copyright notice -->
+	Powered by <a href="https://www.vbulletin.com/" id="vbulletinlink">vBulletin®</a> Version 4.2.3 <br>Copyright © 2018 vBulletin Solutions, Inc. All rights reserved. 
+	<!-- Do not remove this copyright notice -->	
+</div>
+<div id="footer_morecopyright" class="shade footer_morecopyright">
+	<!-- Do not remove cronimage or your scheduled tasks will cease to function -->
+	
+	<!-- Do not remove cronimage or your scheduled tasks will cease to function -->
+	
+	
+</div>
+ 
+
+</div>
+
+</body></html>

@@ -1,13 +1,13 @@
-# <font color=#0099ff> **安卓 Native** </font> 
+# <font color=#0099ff> **安卓 Native** </font>
 
 > `@think3r` 2019-01-18 22:02:19
 
-## <font color=#009A000> 0x01 openGL </font> 
+## <font color=#009A000> 0x01 openGL </font>
 
 - [OpenGL ES总结（一）OpenGL 初识](https://blog.csdn.net/hejjunlin/article/details/61615215)
 
 
-## <font color=#009A000> 0x02 Android 开发中的 native 层与 Java 层 </font> 
+## <font color=#009A000> 0x02 Android 开发中的 native 层与 Java 层 </font>
 
 > 1.  [ JNI开发中native层与Java层的交互](https://blog.csdn.net/u011452747/article/details/51521023)
 > 2. [android 系统基本架构-软件层次](https://blog.csdn.net/wumingqian_137229/article/details/52845955)
@@ -63,7 +63,7 @@
 - 第四、应用程序（Application）
     - Android 的应用程序主要是用户界面（User Interface）方面的，通常以 JAVA 程序编写，其中还可以包含各种资源文件（放置在 res 目录中）JAVA 程序及相关资源经过编译后，将生成一个 APK 包。Android 本身提供了主屏幕（Home），联系人（Contact），电话（Phone），浏览器（Browers）等众多的核心应用。同时应用程序的开发者还可以使用应用程序框架层的 API 实现自己的程序。这也是 Android开源的巨大潜力的体现。
 
-## <font color=#009A000> 0x03 JNI,  Andoid NDK 与 SDK </font> 
+## <font color=#009A000> 0x03 JNI,  Andoid NDK 与 SDK </font>
 
 > [sdk 与 ndk的区别](https://blog.csdn.net/ffmxnjm/article/details/52159535)
 

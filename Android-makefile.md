@@ -1,12 +1,12 @@
-# <font color=#0099ff> **安卓编译相关** </font> 
+# <font color=#0099ff> **安卓编译相关** </font>
 
 > `@think3r` 2019-01-18 22:02:05  
 
-## <font color=#009A000> 参考链接: </font> 
+## <font color=#009A000> 参考链接: </font>
 
 - [linux和Android的Makefile和android.mk](https://www.cnblogs.com/maogefff/p/7910441.html#_label1)
 
-## <font color=#009A000> 0x00 概述 </font> 
+## <font color=#009A000> 0x00 概述 </font>
 
 - 安卓下的 Makefile 可以生成如下四种代码成果物:
     1. `JAVA`  代码的 `JAR 包` ;
@@ -16,7 +16,7 @@
         - 静态库 `*.so (BUILD_SHARED_LIBRARY)`
         - 静态库  `*.a   (BULID_STATIC_LIBRARY)`
 
-## <font color=#009A000> 0x01 *.mk </font> 
+## <font color=#009A000> 0x01 *.mk </font>
 
 - Android.mk 是一个向 Android NDK 构建系统描述 NDK 项目的 GUN Makefile 片段。它是每一个 NDK 项目的必备组件。构建系统希望它出现在 jni 子目录中。下面是 hello-jni 项目中 Android.mk 文件的内容。
     - Application.mk 用来描述你的工程下的 native 模块, 一般放在 $PROJECT/jni/Application.mk, 其中 $PROJECT 表示你的工程目录，这样就可以被 ndk-build 脚本文件找到. (注：在这种方式下，进入 jni 目录，即 $PROJECT/jni/,然后执行 ndk-build，就可以直接编译 jni 生成 .so 文件了
@@ -51,7 +51,7 @@
 - `LOCAL_JNI_SHARED_LIBRARIES` 定义了要包含的 so 库文件的名字，如果程序没有采用 jni，不需要;
     - `LOCAL_JNI_SHARED_LIBRARIES := libxxx` 这样在编译的时候，NDK 自动会把这个 libxxx 打包进 apk； 放在 `your-apk/lib/` 目录下
     
-## <font color=#009A000> Android Make </font> 
+## <font color=#009A000> Android Make </font>
 
 - 对于 android 而言，android 使用的是 GNU 的 make，因此它的 makefile 格式也是 GNU 的 makefile 格式。现在网络上关于 makefile 最好的文档就是陈皓的《跟我一起写makefile》，这份文档对 makefile 进行了详细的介绍，因此推荐大家先看这份文档
 
@@ -72,17 +72,17 @@
     - ./build/core/Makefile 定义了image是如何生成的
     - 
 
-## <font color=#009A000> 0x03 深入理解 安卓 bulid 系统 </font> 
+## <font color=#009A000> 0x03 深入理解 安卓 bulid 系统 </font>
 
 > [理解 Android Build 系统](https://www.ibm.com/developerworks/cn/opensource/os-cn-android-build/)
 
-### <font color=#FF4500> 简介概述 </font> 
+### <font color=#FF4500> 简介概述 </font>
 
 -   Android Build 系统用来编译 Android 系统，Android SDK 以及相关文档。该系统主要由 Make 文件，Shell 脚本以及 Python 脚本组成，其中最主要的是 Make 文件。众所周知，Android 是一个开源的操作系统。Android 的源码中包含了大量的开源项目以及许多的模块。不同产商的不同设备对于 Android 系统的定制都是不一样的。如何将这些项目和模块的编译统一管理起来，如何能够在不同的操作系统上进行编译，如何在编译时能够支持面向不同的硬件设备，不同的编译类型，且还要提供面向各个产商的定制扩展，是非常有难度的。但 Android Build 系统很好的解决了这些问题，这里面有很多值得我们开发人员学习的地方。
 
 - Build 系统中最主要的处理逻辑都在 Make 文件中，而其他的脚本文件只是起到一些辅助作用，由于篇幅所限，本文只探讨 Make 文件中的内容。
 
-### <font color=#FF4500> makefile 分类 </font> 
+### <font color=#FF4500> makefile 分类 </font>
 
 整个 Build 系统中的 Make 文件可以分为三类：
 
@@ -90,7 +90,7 @@
 2. 第二类是针对某个产品（一个产品可能是某个型号的手机或者平板电脑）的 Make 文件，这些文件通常位于 device 目录下，该目录下又以公司名以及产品名分为两级目录. 对于一个产品的定义通常需要一组文件，这些文件共同构成了对于这个产品的定义。例如，`/device/sony/it26` 目录下的文件共同构成了对于 Sony LT26 型号手机的定义。
 3. 第三类是针对某个模块（关于模块后文会详细讨论）的 Make 文件。整个系统中，包含了大量的模块，每个模块都有一个专门的 Make 文件，这类文件的名称统一为 `Android.mk` ，该文件中定义了如何编译当前模块。Build 系统会在整个源码树中扫描名称为 `Android.mk` 的文件并根据其中的内容执行模块的编译。
 
-## <font color=#009A000> 编译 Android 系统 </font> 
+## <font color=#009A000> 编译 Android 系统 </font>
 
 - Android 系统的编译环境目前只支持 Ubuntu 以及 Mac OS 两种操作系统。关于编译环境的构建方法请参见以下路径：http://source.android.com/source/initializing.html
 
@@ -111,7 +111,7 @@
         - 如果调用 lunch 函数的时候没有指定参数，那么该函数将输出列表以供选择（列表的内容会根据当前 Build 系统中包含的产品配置而不同，具体参见后文“添加新的产品”），此时可以通过输入编号或者名称进行选择。
     - 第三行命令 `make -j8` 才真正开始执行编译。make 的参数 `-j` 指定了同时编译的 Job 数量，这是个整数，该值通常是编译主机 CPU 支持的并发线程总数的 1 倍或 2 倍（例如：在一个 4 核，每个核支持两个线程的 CPU 上，可以使用 make -j8 或 make -j16）。在调用 make 命令时，如果没有指定任何目标，则将使用 **默认** 的名称为 `droid` 目标，该目标会编译出完整的 Android 系统镜像。
 
-## <font color=#009A000> 编译结果路径说明 </font> 
+## <font color=#009A000> 编译结果路径说明 </font>
 
 - Build 结果的目录结构如下:
     - 所有的编译产物都将位于 /out 目录下，该目录下主要有以下几个子目录：
@@ -126,7 +126,7 @@
         - `ramdisk.img` ：在启动时将被 Linux 内核挂载为只读分区，它包含了 /init 文件和一些配置文件。它用来挂载其他系统镜像并启动 init 进程。
         - `userdata.img` ：将被挂载为 /data，包含了应用程序相关的数据以及和用户相关的数据。
 
-## <font color=#009A000> make 文件说明 </font> 
+## <font color=#009A000> make 文件说明 </font>
 
 - 整个 Build 系统的入口文件是源码树根目录下名称为“Makefile”的文件，当在源代码根目录上调用 make 命令时，make 命令首先将读取该文件。Makefile 文件的内容只有一行：“include build/core/main.mk”。该行代码的作用很明显：包含 build/core/main.mk 文件。在 main.mk 文件中又会包含其他的文件，其他文件中又会包含更多的文件，这样就引入了整个 Build 系统。
     - 此处略去, 不再此细讲;
@@ -145,7 +145,7 @@
     - BUILD_HOST_JAVA_LIBRARY
 - 这些常量的值都是另外一个 Make 文件的路径，详细的编译方式都是在对应的 Make 文件中定义的。这些常量和 Make 文件的是一一对应的，对应规则也很简单：常量的名称是 Make 文件的文件名除去后缀全部改为大写然后加上“BUILD_”作为前缀。例如常量 BUILD_HOST_PREBUILT 的值对应的文件就是 host_prebuilt.mk。
 
-## <font color=#009A000> 添加新的模块 </font> 
+## <font color=#009A000> 添加新的模块 </font>
 
 - 在源码树中，一个模块的所有文件通常都位于同一个文件夹中。为了将当前模块添加到整个 Build 系统中，每个模块都需要一个专门的 Make 文件，该文件的名称为“Android.mk”。Build 系统会扫描名称为“Android.mk”的文件，并根据该文件中内容编译出相应的产物。
 

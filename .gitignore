@@ -1,3 +1,5 @@
 doc/
+.vscode/
 *.o
 *.out
+OpenGL-Refpages.tar.gz
