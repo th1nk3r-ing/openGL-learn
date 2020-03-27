@@ -1,0 +1,13 @@
+https://blog.csdn.net/jxw167/article/details/75501637
+
+
+https://codereview.stackexchange.com/questions/88174/yuyv-opengl-fragment-shader
+
+https://www.opengl.org/discussion_boards/showthread.php/169186-Direct-GL_YUV-GL_YCbCr-or-YCoCg-texture-support
+
+https://blog.csdn.net/jxw167/article/details/75501637
+
+http://compgroups.net/comp.graphics.api.opengl/help-on-yuy2-to-rgb-fragment-shader/1116552
+
+https://www.khronos.org/registry/EGL/extensions/EXT/EGL_EXT_image_dma_buf_import.txt
+

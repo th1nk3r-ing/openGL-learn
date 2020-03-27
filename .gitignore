@@ -3,3 +3,10 @@ doc/
 *.o
 *.out
 OpenGL-Refpages.tar.gz
+Mali_OpenGL_ES_Emulator-v3.0.4-2-g8d905-Linux-64bit/
+Mali_OpenGL_ES_Emulator-v3.0.4-2-g8d905-Windows-64bit/
+*.so
+*.lib
+*.dll
+testDemo*
+core
