@@ -132,9 +132,9 @@ static int32_t setupEGL(EGL_Context *pstEGL)
 
 /**
  * @function:   GL_CreateShader
- * @brief:      creat & complite shader form ;
- * @param[in]:  uint32_t type
- * @param[in]:  const int8_t *ps8Src
+ * @brief:      创建着色器
+ * @param[in]:  uint32_t u32Type      
+ * @param[in]:  const GLchar *ps8Src  
  * @param[out]: None
  * @return:     static uint32_t
  */
@@ -164,11 +164,11 @@ static uint32_t GL_CreateShader(uint32_t u32Type, const GLchar *ps8Src)
 
 /**
  * @function:   GL_CreateProgram
- * @brief:      创建和链接着色器程序
- * @param[in]:  const int8_t *ps8VertSrc
- * @param[in]:  const int8_t *ps8FragSrc
+ * @brief:      创建 GLSL 程序
+ * @param[in]:  const GLchar *ps8VertSrc  
+ * @param[in]:  const GLchar *ps8FragSrc  
  * @param[out]: None
- * @return:     static uint32_t           programId
+ * @return:     static uint32_t
  */
 static uint32_t GL_CreateProgram(const GLchar *ps8VertSrc, const GLchar *ps8FragSrc)
 {
@@ -207,7 +207,14 @@ static uint32_t GL_CreateProgram(const GLchar *ps8VertSrc, const GLchar *ps8Frag
 }
 
 
-void Draw ( EGL_Context *esContext )
+/**
+ * @function:   Draw
+ * @brief:      绘制
+ * @param[in]:  EGL_Context *esContext  
+ * @param[out]: None
+ * @return:     void
+ */
+void Draw(EGL_Context *esContext)
 {
 	GLfloat vVertices[] = {  
 						0.0f,  0.5f, 0.0f,
