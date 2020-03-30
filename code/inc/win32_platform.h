@@ -35,8 +35,8 @@
 /*----------------------------------------------*/
 /*                 函数定义                     */
 /*----------------------------------------------*/
-#ifndef __WIN32_H__
-#define __WIN32_H__
+#ifndef __WIN32_OGLES_H__
+#define __WIN32_OGLES_H__
 
 
 #ifdef __cplusplus
@@ -45,10 +45,11 @@ extern "C"{
 #endif
 #endif /* __cplusplus */
 
-extern void win_setupConsole(void);
-extern void win_restoreConsole(void);
-extern LRESULT WINAPI ESWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
-extern GLboolean WinCreate(EGL_Context *esContext, const char *title);
+extern void win_SetupConsole(void);
+extern void win_RestoreConsole(void);
+
+extern void win_WinLoop(EGL_Context *esContext);
+extern GLboolean win_CreateWindow(EGL_Context *esContext, const char *title);
 
 #ifdef __cplusplus
 #if __cplusplus

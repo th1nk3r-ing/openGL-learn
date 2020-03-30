@@ -88,15 +88,15 @@ static int32_t setupEGL(EGL_Context *pstEGL)
     BASE_CHECK_TRUE_RET(pstEGL->eglDisplay == EGL_NO_DISPLAY, -1);
 
     EGL_EXECUTE_CHECK_RET(eglInitialize(pstEGL->eglDisplay, &s32MajorVersion, &s32MinorVersion));
-    Cprintf_white( "[EGL] EGL-Version:[%d.%d]\n", s32MajorVersion, s32MinorVersion);
+    Cprintf_white( "EGL-Version:[%d.%d]\n", s32MajorVersion, s32MinorVersion);
 
-    // qurey EGL info.
+	/* 查询 EGL 信息 */
     ps8ClientApis = eglQueryString(pstEGL->eglDisplay, EGL_CLIENT_APIS);
-    Cprintf_white( "[EGL] EGL_CLIENT_APIS: %s\n", ps8ClientApis);
     ps8Vendor = eglQueryString(pstEGL->eglDisplay, EGL_VENDOR);
-    Cprintf_white( "[EGL] EGL_VENDOR: %s\n", ps8Vendor);
     ps8Version = eglQueryString(pstEGL->eglDisplay, EGL_VERSION);
-    Cprintf_white( "[EGL] EGL_VERSION: %s\n\n", ps8Version);
+    Cprintf_white( "EGL_CLIENT_APIS: %s\n", ps8ClientApis);
+    Cprintf_white( "EGL_VENDOR: %s\n", ps8Vendor);
+    Cprintf_white( "EGL_VERSION: %s\n\n", ps8Version);
 
     // Get a matching config
     EGL_EXECUTE_CHECK_RET(eglChooseConfig(pstEGL->eglDisplay, as32ConfigAttrs,
@@ -107,22 +107,21 @@ static int32_t setupEGL(EGL_Context *pstEGL)
                                                pstEGL->eglNativeWindow, as32SurfaceAttrs);
 	BASE_CHECK_TRUE_RET(pstEGL->eglNativeWindow == EGL_NO_SURFACE, -1);
 
-    // get Surface Width & Height
+    // 获取 surface 的宽高
     EGL_EXECUTE_CHECK_RET(eglQuerySurface(pstEGL->eglDisplay,
                                    pstEGL->eglSurface,
                                    EGL_WIDTH, &pstEGL->s32SurfaceW));
     EGL_EXECUTE_CHECK_RET(eglQuerySurface(pstEGL->eglDisplay,
                                    pstEGL->eglSurface,
                                    EGL_HEIGHT, &pstEGL->s32SurfaceH));
-    Cprintf_white( "surface: WxH:[%d x %d]\n", pstEGL->s32SurfaceW, pstEGL->s32SurfaceH);
-    Cprintf_white( "==============================================\n");
+    Cprintf_yellow( "surface: WxH:[%d x %d]\n", pstEGL->s32SurfaceW, pstEGL->s32SurfaceH);
 
     // Create EGL context
-    pstEGL->eglContext = eglCreateContext(pstEGL->eglDisplay, pvConfig,
-                                         EGL_NO_CONTEXT, as32ContextAttrs);
+    pstEGL->eglContext = 
+    	eglCreateContext(pstEGL->eglDisplay, pvConfig, EGL_NO_CONTEXT, as32ContextAttrs);
 	BASE_CHECK_TRUE_RET( EGL_NO_CONTEXT == pstEGL->eglContext, -1);
 
-    // bind
+    // 绑定 context
     EGL_EXECUTE_CHECK_RET(eglMakeCurrent(pstEGL->eglDisplay, pstEGL->eglSurface,
     						 pstEGL->eglSurface, pstEGL->eglContext));
 
@@ -231,12 +230,6 @@ void Draw(EGL_Context *esContext)
 	glClearColor(1.0f, 1.0f, 1.0f, 1);
 	glClear ( GL_COLOR_BUFFER_BIT );
 
-	eglSwapBuffers(esContext->eglDisplay, esContext->eglSurface);
-
-	Cprintf_green("[%s %d]	disp color\n", __FUNCTION__, __LINE__);
-
-	sleep(1);
-
 	// Load the vertex data
 	glVertexAttribPointer ( 0, 3, GL_FLOAT, GL_FALSE, 0, vVertices );
 	glEnableVertexAttribArray ( 0 );
@@ -253,7 +246,7 @@ void Draw(EGL_Context *esContext)
 
 int main(int argc, char *argv[])
 {
-	win_setupConsole();
+	win_SetupConsole();
 
     mk_Build_Date(NULL);
 
@@ -261,16 +254,18 @@ int main(int argc, char *argv[])
 	stEglInfo.s32SurfaceW = 640;
 	stEglInfo.s32SurfaceH = 480;
 
-	WinCreate(&stEglInfo, "testWin");
+	win_CreateWindow(&stEglInfo, "testWin");
+	
 	setupEGL(&stEglInfo);
-
 	stEglInfo.u32GLSLProgram = GL_CreateProgram(vShaderStr, fShaderStr);
+//	Draw(&stEglInfo);
 
-	Draw(&stEglInfo);
+	stEglInfo.drawFunc = Draw;
+	stEglInfo.shutdownFunc = NULL;
 
-	sleep(10);
+	win_WinLoop(&stEglInfo);
 
-	win_restoreConsole();
+	win_RestoreConsole();
 	system("pause");
 
     return OK;
