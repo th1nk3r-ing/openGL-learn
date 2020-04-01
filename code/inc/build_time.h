@@ -21,8 +21,6 @@
 //#define SHORT_DATA_CHAR__       /*日期字符串使用缩�?*/
 //#define BUILD_TIMES_C_TEST_     /*对本文件进行测试*/  
 
-
-
 typedef struct
 {
     unsigned int    year;

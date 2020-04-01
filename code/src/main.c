@@ -117,8 +117,8 @@ static int32_t setupEGL(EGL_Context *pstEGL)
     Cprintf_yellow( "surface: WxH:[%d x %d]\n", pstEGL->s32SurfaceW, pstEGL->s32SurfaceH);
 
     // Create EGL context
-    pstEGL->eglContext = 
-    	eglCreateContext(pstEGL->eglDisplay, pvConfig, EGL_NO_CONTEXT, as32ContextAttrs);
+    pstEGL->eglContext = eglCreateContext(pstEGL->eglDisplay, 
+                                          pvConfig, EGL_NO_CONTEXT, as32ContextAttrs);
 	BASE_CHECK_TRUE_RET( EGL_NO_CONTEXT == pstEGL->eglContext, -1);
 
     // 绑定 context
@@ -151,7 +151,7 @@ static uint32_t GL_CreateShader(uint32_t u32Type, const GLchar *ps8Src)
         GLchar s8ErrInfo[1024] = {0};
 
         glGetShaderInfoLog(u32Shader, sizeof(s8ErrInfo), NULL, s8ErrInfo);
-		Cprintf_red("[%s %d]  [0x%x]:\n%s\n", __FUNCTION__, __LINE__, u32Type, s8ErrInfo);
+		Cprintf_red("[%s %d]  [0x%x]:\n%s\n", __func__, __LINE__, u32Type, s8ErrInfo);
         glDeleteShader(u32Shader);
         return 0;
     }
@@ -193,7 +193,7 @@ static uint32_t GL_CreateProgram(const GLchar *ps8VertSrc, const GLchar *ps8Frag
     {
         GLchar s8ErrInfo[1024];
         glGetProgramInfoLog(u32Program, sizeof(s8ErrInfo), NULL, s8ErrInfo);
-		Cprintf_red("[%s %d] ERR @ link. \n\t %s\n", __FUNCTION__, __LINE__, s8ErrInfo);
+		Cprintf_red("[%s %d] ERR @ link. \n\t %s\n", __func__, __LINE__, s8ErrInfo);
         return -2;
     }
 
@@ -203,6 +203,26 @@ static uint32_t GL_CreateProgram(const GLchar *ps8VertSrc, const GLchar *ps8Frag
     Cprintf_green( "GLSL link success\n");
 
     return u32Program;
+}
+
+/**
+ * @function:   ResizeWindow
+ * @brief:      调整绘制窗口大小
+ * @param[in]:  EGL_Context *pstEGL  
+ * @param[in]:  uint32_t width       
+ * @param[in]:  uint32_t height      
+ * @param[out]: None
+ * @return:     void
+ */
+void ResizeWindow(EGL_Context *pstEGL, uint32_t width, uint32_t height)
+{
+    
+	glViewport ( 0, 0, width, height);
+    Cprintf_yellow("[%s %d]  original:[%d x %d] now:[%d x %d]\n", 
+            __func__, __LINE__, pstEGL->s32SurfaceW, pstEGL->s32SurfaceH, width, height);
+    pstEGL->s32SurfaceW = width;
+    pstEGL->s32SurfaceH = height;
+	return;
 }
 
 
@@ -223,11 +243,8 @@ void Draw(EGL_Context *esContext)
 	// Use the program object
 	glUseProgram ( esContext->u32GLSLProgram );
 
-	// Set the viewport
-	glViewport ( 0, 0, esContext->s32SurfaceW , esContext->s32SurfaceH );
-
 	// Clear the color buffer
-	glClearColor(1.0f, 1.0f, 1.0f, 1);
+	glClearColor(0.0f, 1.0f, 0.0f, 1);
 	glClear ( GL_COLOR_BUFFER_BIT );
 
 	// Load the vertex data
@@ -238,7 +255,20 @@ void Draw(EGL_Context *esContext)
 
 	eglSwapBuffers(esContext->eglDisplay, esContext->eglSurface);
 
-	Cprintf_green("[%s %d]	disp triangle\n", __FUNCTION__, __LINE__);
+
+    if(0 == esContext->u32DrawCnt % 30)
+    {
+        uint32_t u32NowTime = getTime_ms();
+        esContext->u32DrawFps = 
+           (uint32_t)(30000.0 / (float)(u32NowTime - esContext->u32LastFpsCalcTime) + 0.5);
+        Cprintf_green("[%s %d]  disp:[%d], fps:[%d], thisT:[%d]\n",
+                        __func__, __LINE__, esContext->u32DrawCnt++, 
+                        esContext->u32DrawFps, u32NowTime);
+
+        esContext->u32LastFpsCalcTime = u32NowTime;
+    }
+
+    esContext->u32DrawCnt++;
 
 	return;
 }
@@ -258,9 +288,11 @@ int main(int argc, char *argv[])
 	
 	setupEGL(&stEglInfo);
 	stEglInfo.u32GLSLProgram = GL_CreateProgram(vShaderStr, fShaderStr);
+    ResizeWindow(&stEglInfo, stEglInfo.s32SurfaceW, stEglInfo.s32SurfaceH);
 //	Draw(&stEglInfo);
 
 	stEglInfo.drawFunc = Draw;
+	stEglInfo.resizeWinFunc = ResizeWindow;
 	stEglInfo.shutdownFunc = NULL;
 
 	win_WinLoop(&stEglInfo);

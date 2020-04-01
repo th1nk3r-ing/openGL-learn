@@ -24,19 +24,30 @@
 #include <unistd.h>
 
 /*----------------------------------------------*/
-/*                 宏类型定�?                   */
+/*                 宏类型定义                        */
 /*----------------------------------------------*/
 
+/* [__FUNCTION__, __func__, __PRETTY_FUNCTION__]
+    (https://blog.csdn.net/linuxheik/java/article/details/7621155) */
+#if defined (__GNUC__)
+    #define __func__     ((const char*) (__PRETTY_FUNCTION__))
+#elif defined (__STDC_VERSION__) && __STDC_VERSION__ >= 19901L
+    /* #define __func__     ((const char*) (__func__)) */
+#else
+    #define __func__     ((const char*) (__FUNCTION__))
+#endif
+
+
 #ifndef OK
-#define OK 0 
+#define OK      (0)
 #endif
 
 #ifndef TRUE
-#define TRUE			1
+#define TRUE    (1)
 #endif
 
 #ifndef FALSE
-#define FALSE			0
+#define FALSE	(0)
 #endif
 
 //#if defined(BOOL_TYPE_) || defined (_DEF_WINBOOL_)
@@ -51,7 +62,7 @@
 
 #ifndef COLORED_PRINT
 #define COLORED_PRINT
-/* [参考链接: 通过 printf 设置 Linux 终端输出的颜色和显示方式]
+/* 参考链接 : [通过 printf 设置 Linux 终端输出的颜色和显示方式]
                     (https://www.cnblogs.com/clover-toeic/p/4031618.html)
             [printf 打印颜色](http://blog.csdn.net/lwbeyond/article/details/40588145)*/
     
@@ -104,7 +115,7 @@
 	do {\
 	    if(expr)\
 	    {\
-			Cprintf_red("[%s %d]  \n", __FUNCTION__, __LINE__);\
+			Cprintf_red("[%s %d]  \n", __func__, __LINE__);\
 			return ret;\
 	    }\
 	}while(0)

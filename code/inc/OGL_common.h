@@ -36,7 +36,7 @@
         EGLBoolean bRet = (expr); \
         if(EGL_TRUE != bRet)\
         {\
-			Cprintf_red("[%s %d] err:[0x%x],\n", __FUNCTION__, __LINE__, eglGetError());\
+			Cprintf_red("[%s %d] err:[0x%x],\n", __func__, __LINE__, eglGetError());\
 			return -1;\
         }\
     } while (0)
@@ -48,7 +48,7 @@
         int32_t err = glGetError(); \
         if(err != GL_NO_ERROR)\
         {\
-			Cprintf_red("[%s %d] err:[0x%x],\n", __FUNCTION__, __LINE__, err);\
+			Cprintf_red("[%s %d] err:[0x%x],\n", __func__, __LINE__, err);\
         	return -2;\
         }\
     } while (0)
@@ -73,10 +73,15 @@ struct EGL_Context
     int32_t s32SurfaceH;
 
 	uint32_t u32GLSLProgram;
+
+    uint32_t u32DrawCnt;
+    uint32_t u32DrawFps;
+    uint32_t u32LastFpsCalcTime;
 	
 	/// Callbacks
 	void ( ESCALLBACK *drawFunc ) ( EGL_Context * );
 	void ( ESCALLBACK *shutdownFunc ) ( EGL_Context * );
+	void ( ESCALLBACK *resizeWinFunc ) ( EGL_Context * , uint32_t width, uint32_t height);	
 	void ( ESCALLBACK *keyFunc ) ( EGL_Context *, unsigned char, int, int );
 	void ( ESCALLBACK *updateFunc ) ( EGL_Context *, float deltaTime );
 };
