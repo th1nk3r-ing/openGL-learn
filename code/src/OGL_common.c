@@ -169,7 +169,7 @@ int32_t GL_SetupEGL(EGL_Context *pstEGL)
     // Get a matching config
     int32_t as32ConfigAttrs[] =
     {
-		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
 		EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
         EGL_RED_SIZE, 8,
         EGL_GREEN_SIZE, 8,
@@ -196,7 +196,7 @@ int32_t GL_SetupEGL(EGL_Context *pstEGL)
     /* 创建 Context */
     int32_t as32ContextAttrs[] =
     {
-        EGL_CONTEXT_CLIENT_VERSION, 2,
+        EGL_CONTEXT_CLIENT_VERSION, 3,
         EGL_NONE
     };
     pstEGL->eglContext = eglCreateContext(pstEGL->eglDisplay,

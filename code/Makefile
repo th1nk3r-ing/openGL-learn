@@ -28,9 +28,11 @@ C_SrcFiles = ./src/build_time.c \
 			 ./src/OGL_common.c 
 
 ifeq ($(MAKECMDGOALS), helloTriangle)
-C_SrcFiles += ./src/hello_Triangle.c
+	C_SrcFiles += ./hello_Triangle/hello_Triangle.c
+else ifeq ($(MAKECMDGOALS), triangle2)
+	C_SrcFiles += ./triangle2/triangle2.c
 endif
-			 
+
 
 #Cxx_SrcFiles = 
 #C_SrcFiles += $(patsubst %.c,%.o,$(wildcard ./*.c))
@@ -63,8 +65,9 @@ $(Cxx_Objs) : %.o : %.cpp
 	$(CXX) $(C_Flags) -c $< -o $@
 
 helloTriangle: $(Target) 
+triangle2: $(Target)
 
 .PHONY : clean 
 	
 clean :
-	-rm -rf $(Target) $(Objs)
+	-rm -rf $(Target) $(Objs) $(Target).exe
