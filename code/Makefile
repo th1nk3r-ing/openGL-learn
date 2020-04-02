@@ -24,8 +24,13 @@ C_Flags +=
 
 # 源文件
 C_SrcFiles = ./src/build_time.c \
-			 ./src/main.c \
-			 ./src/win32_platform.c
+			 ./src/win32_platform.c \
+			 ./src/OGL_common.c 
+
+ifeq ($(MAKECMDGOALS), helloTriangle)
+C_SrcFiles += ./src/hello_Triangle.c
+endif
+			 
 
 #Cxx_SrcFiles = 
 #C_SrcFiles += $(patsubst %.c,%.o,$(wildcard ./*.c))
@@ -57,17 +62,9 @@ $(C_Objs) : %.o : %.c
 $(Cxx_Objs) : %.o : %.cpp
 	$(CXX) $(C_Flags) -c $< -o $@
 
+helloTriangle: $(Target) 
 
-.PHONY : clean test run
-
-run :
-	
-test : 
-	@echo -e $(prt_Yellow) "*************************************************************" $(prt_End)
-	@echo -e $(prt_Green) $(C_SrcFiles) $(prt_End)	
-	@echo -e $(prt_Green) $(C_Objs) $(prt_End)	
-	@echo -e $(prt_Green) $(shell pwd) $(prt_End)	
-	@echo -e $(prt_Yellow) "*************************************************************" $(prt_End)
+.PHONY : clean 
 	
 clean :
 	-rm -rf $(Target) $(Objs)

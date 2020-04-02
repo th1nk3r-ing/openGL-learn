@@ -69,19 +69,22 @@ struct EGL_Context
 	EGLContext  eglContext;					/* EGL context */
 	EGLSurface  eglSurface;					/* EGL surface */
 
+    BOOL   bBeReSizeSurface; /* 是否需要调用       glViewport 重配窗口大小 */
     int32_t s32SurfaceW;
     int32_t s32SurfaceH;
+    int32_t s32NewSurfaceW;
+    int32_t s32NewSurfaceH;
+	void ( ESCALLBACK *resizeWinFunc ) ( EGL_Context *, uint32_t width, uint32_t height);
 
 	uint32_t u32GLSLProgram;
 
     uint32_t u32DrawCnt;
     uint32_t u32DrawFps;
     uint32_t u32LastFpsCalcTime;
-	
+
 	/// Callbacks
-	void ( ESCALLBACK *drawFunc ) ( EGL_Context * );
-	void ( ESCALLBACK *shutdownFunc ) ( EGL_Context * );
-	void ( ESCALLBACK *resizeWinFunc ) ( EGL_Context * , uint32_t width, uint32_t height);	
+	int32_t( ESCALLBACK *drawFunc ) ( EGL_Context * );
+	int32_t( ESCALLBACK *shutdownFunc ) ( EGL_Context * );
 	void ( ESCALLBACK *keyFunc ) ( EGL_Context *, unsigned char, int, int );
 	void ( ESCALLBACK *updateFunc ) ( EGL_Context *, float deltaTime );
 };
@@ -98,5 +101,10 @@ struct EGL_Context
 /*----------------------------------------------*/
 /*                 函数定义                     */
 /*----------------------------------------------*/
+uint32_t GL_CreateShader(uint32_t u32Type, const GLchar *ps8Src);
+uint32_t GL_CreateProgram(const GLchar *ps8VertSrc, const GLchar *ps8FragSrc);
+int32_t GL_SetupEGL(EGL_Context *pstEGL);
+void CalcFpsInfo(EGL_Context *pstEGL);
+
 
 

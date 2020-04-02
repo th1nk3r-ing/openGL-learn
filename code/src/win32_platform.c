@@ -102,6 +102,7 @@ void win_RestoreConsole(void)
 }
 
 
+
 /**
  * @function:   __win_windowProcCallback
  * @brief:      Main window procedure
@@ -160,8 +161,8 @@ static LRESULT CALLBACK __win_windowProcCallback
 		}
 		case WM_SIZE:
 		{
-		    if((SIZE_RESTORED == wParam) 
-		        && (pstEglContext) 
+		    if((SIZE_RESTORED == wParam)
+		        && (pstEglContext)
 		        && (NULL != pstEglContext->resizeWinFunc))
 			{
 				RECT windowRect = {0};
@@ -303,5 +304,7 @@ void win_WinLoop(EGL_Context *pstEglContext)
 
 	    sleep_ms(39);
 	}
+
+
 }
 
