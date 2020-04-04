@@ -1,11 +1,10 @@
-# <font color=#0099ff> **EGL** </font>
+# <font color=#0099ff> **OGL 和 OGL-ES** </font>
 
 > `@think3r` 2020-04-04 15:54:14 <br>
 > 参考链接: <br>
-> 1. [【OpenGL-ES】EGL简介](https://blog.csdn.net/ieearth/article/details/71180457)
-> 2. [【Android】Android SurfaceFlinger之OpenGL-ES](https://blog.csdn.net/iEearth/article/details/54729848?locationNum=7&fps=1)
-> 3. [Android OpenGL-ES 1.x 教程的Native实现](http://www.cnblogs.com/bpasser/archive/2011/09/25/2189941.html)
-> 4. [最简单的视音频播放示例5：OpenGL播放RGB/YUV](https://blog.csdn.net/leixiaohua1020/article/details/40333583)
+> 1. [【Android】Android SurfaceFlinger之OpenGL-ES](https://blog.csdn.net/iEearth/article/details/54729848?locationNum=7&fps=1)
+> 2. [Android OpenGL-ES 1.x 教程的Native实现](http://www.cnblogs.com/bpasser/archive/2011/09/25/2189941.html)
+> 3. [最简单的视音频播放示例5：OpenGL播放RGB/YUV](https://blog.csdn.net/leixiaohua1020/article/details/40333583)
 
 ## <font color=#009A000> OGL 一般使用流程 </font>
 

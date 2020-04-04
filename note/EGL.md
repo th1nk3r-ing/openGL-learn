@@ -6,6 +6,7 @@
 > 2. [EGL 1.0 学习笔记](https://blog.csdn.net/djzhao/article/details/79936973)
 > 3. [EGL教程汇总](https://blog.csdn.net/u013467442/article/details/44490631)
 > 4. [OpenGL-ES EGL的 eglChooseConfig使用问题](https://blog.csdn.net/liminled/article/details/46504439)
+> 5. [【OpenGL-ES】EGL简介](https://blog.csdn.net/ieearth/article/details/71180457)
 
 ## <font color=#009A000> 0x00 EGL 介绍 </font>
 
@@ -123,5 +124,3 @@ EGL 包含了自己的一组数据类型，同时也提供了对一组平台相�
     - OpenGL 的 pipeline 从程序的角度看就是一个状态机，有当前的颜色、纹理坐标、变换矩阵、绚染模式等一大堆状态，这些状态作用于程序提交的顶点 坐标等图元从而形成帧缓冲内的像素。
     - 在 OpenGL 的编程接口中，Context 就代表这个状态机，程序的主要工作就是向Context 提供图元、设置状态，偶尔也从 Context 里获取一些信息。
     - 函数原型 `EGLContext eglCreateContext(EGLDisplay dpy, EGLSurface write, EGLSurface read, EGLContext * share_list)` 来创建一个 Context。
-
----

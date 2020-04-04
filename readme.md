@@ -1,21 +1,30 @@
 # <font color=#0099ff> **openGL 学习笔记** </font>
 
-> `@think3r` 2018-05-09 22:56:27  
+> `@think3r` 2018-05-09 22:56:27
+> 1. [OpenGL学习路径](https://cstsinghua.github.io/2018/07/12/openGL%E5%AD%A6%E4%B9%A0%E8%B7%AF%E5%BE%84/)
+> 2. [Android 开发者官方开发者指南](https://developer.android.google.cn/guide?hl=zh_cn)
+> 3. [learnopengl](https://learnopengl-cn.github.io/) 
+> 4. [OpenGL-wikipedia](https://zh.wikipedia.org/wiki/OpenGL)
+> 5. [OPENGL ES 3.0编程指南  原书第2版 --- github](https://github.com/danginsburg/OpenGL-ES3-book)
+> 6. [https://github.com/KhronosGroup](https://github.com/KhronosGroup)
+> 7. [khronos 官网](https://www.khronos.org/registry/EGL/)
+> 8. [OpenGL-man-Page](https://www.khronos.org/registry/EGL/sdk/docs/man/)
+> 9. [OpenGL-Refpages---> github](https://github.com/KhronosGroup/OpenGL-Refpages)
 
+  
 ## <font color=#009A000> 0x01 参考链接 </font>
 
-主要记录自己在学习 openGL 中的一些笔记;
+主要记录自己在学习 openGL 中的一些笔记 :
 
-- [openGL ES 学习笔记](./note/openGL-learn.md)
-- [openGL ES 的一些官方资源](./note/openGL-es.md)
+1. [openGL 概述](./note/openGL概述.md)
+2. [EGL](./note/EGL.md)
+3. [EGL 之外的东西](./note/EGL之外的东西.md)
+4. [OpenGL 和 OpenGL-ES](./note/openGL和openGL-ES.md)
+5. [GLSL](./note/GLSL.md)
 
-- [OpenGL学习路径](https://cstsinghua.github.io/2018/07/12/openGL%E5%AD%A6%E4%B9%A0%E8%B7%AF%E5%BE%84/)
-- [Android 开发者官方开发者指南](https://developer.android.google.cn/guide?hl=zh_cn)
-- [learnopengl](https://learnopengl-cn.github.io/)
-- [OpenGL-wikipedia](https://zh.wikipedia.org/wiki/OpenGL)
-- [OPENGL ES 3.0编程指南  原书第2版 --- github](https://github.com/danginsburg/OpenGL-ES3-book)
+## <font color=#009A000> 0x02 学习环境搭建 </font>
 
-## <font color=#009A000> 0x02 环境搭建 </font>
+### <font color=#FF4500> **windwos 下 OpenGL 环境搭建** </font>
 
 > 参考链接:
 > 1. [vs2017下搭建opengl es 3.0开发环境](https://blog.csdn.net/brahmsjiang/article/details/78572141)
@@ -31,7 +40,9 @@
 3. 开发环境 : source Insight + make;
     - wsl 远程时执行窗口相关的命令时, 容易出现 `GFW` 等相关的错误, 可使用 `export DISPLAY=:1` 来搞定;
 
-### <font color=#FF4500> ubuntu 下的 OpenGL Es 模拟限制 </font>
+---
+
+### <font color=#FF4500> ~~ubuntu 下的 OpenGL Es 模拟限制~~ </font>
 
 1. [can't run mail-cube with emulator on ubuntu 16.04](https://community.arm.com/developer/tools-software/graphics/f/discussions/6875/can-t-run-mail-cube-with-emulator-on-ubuntu-16-04)
 2. [OpenGl 4 support for VMWare Workstation Pro](https://communities.vmware.com/thread/553334)
@@ -48,24 +59,13 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
 
  According to the Mali OpenGL ES Emulator documentation:
 >The emulator requires a graphics card that supports at least OpenGL `4.3`.
-而 VmWare 下的模拟器, 则只支持到 `OpenGL 3.0`; VirtualBox 更是只有 `2.0` ; 因此将环境先迁移 windows 下;
+而 VmWare 下的模拟器, 则只支持到 `OpenGL 3.0`; VirtualBox 更是只有 `2.0` ; <u>**因此将环境先迁移 windows 下;**</u>
 
-## <font color=#009A000> Windows 下 模拟环境的搭建 </font>
+### <font color=#FF4500> **Windows 下 OpenGL-Es 模拟环境的搭建** </font>
 
-关于 cmd 下 printf 颜色的支持:
+略; 同上述 Linux ;
+
+关于 cmd 下 `printf()` 颜色的支持 :
 
 - [C Programming - using ANSI escape codes on Windows, macOS and Linux terminals](https://solarianprogrammer.com/2019/04/08/c-programming-ansi-escape-codes-windows-macos-linux-terminals/)
 - [ANSI escape code](https://en.wikipedia.org/wiki/ANSI_escape_code#DOS_and_Windows)
-
-----
-
-官方 github 地址:  [https://github.com/KhronosGroup](https://github.com/KhronosGroup)
-
-## <font color=#009A000> 0x00 EGL </font>
-
-- [khronos 官网](https://www.khronos.org/registry/EGL/)
-- 当前版本的 EGL 是 EGL-1.5 , 更新于 2014 年 8 月 27 日. 
-- [eglspec.1.5.withchanges.pdf](https://www.khronos.org/registry/EGL/specs/eglspec.1.5.withchanges.pdf)
-- [man-Page](https://www.khronos.org/registry/EGL/sdk/docs/man/)
-- [OpenGL-Refpages---> github](https://github.com/KhronosGroup/OpenGL-Refpages)
-  - 可用浏览器打开 make 之后的 xml 文件, 作为 man Page 查看; (也可以直接下载 make 后打包好的文件)
