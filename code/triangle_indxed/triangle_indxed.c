@@ -22,6 +22,9 @@
 /*----------------------------------------------*/
 /*                 宏类型定义                   */
 /*----------------------------------------------*/
+#define USE_EBO                     /* 使用 BO,VBO,VAO,EBO */     
+//#define USE_TRANGLES              /* 不使用 BO 的 6 顶点, 每次绘制都需要传递顶点 */
+//#define USE_TRANGLES_STRIP        /* 不使用 BO 的 4 顶点, 每次绘制都需要传递顶点 */
 
 /*----------------------------------------------*/
 /*                结构体定义                    */
@@ -34,6 +37,8 @@
 /*----------------------------------------------*/
 /*                 全局变量                     */
 /*----------------------------------------------*/
+uint32_t VAO = 0, VBO = 0, EBO = 0;
+
 char vShaderStr[] =
    "#version 300 es 						 \n"
    "layout(location = 0) in vec3 vPosition;  \n"
@@ -82,9 +87,6 @@ static int32_t resizeSurface(EGL_Context *esContext)
 }
 
 
-
-uint32_t VAO, VBO;
-
 /**
  * @function:   Draw
  * @brief:      绘制
@@ -101,26 +103,33 @@ int32_t beforeDraw(EGL_Context *esContext)
     /* Use the program object */
 	GL_EXECUTE_CHECK_RET(glUseProgram (esContext->u32GLSLProgram));
 
-    /* Load the vertex data */
+#ifdef USE_EBO
+    Cprintf_reverse("[%s %d]  USE_EBO\n", __func__, __LINE__);
+
     float vVertices[] = {
-        // first triangle
-        -0.9f, -0.5f, 0.0f,  // left
-        -0.0f, -0.5f, 0.0f,  // right
-        -0.45f, 0.5f, 0.0f,  // top
-        // second triangle
-         0.0f, -0.5f, 0.0f,  // left
-         0.9f, -0.5f, 0.0f,  // right
-         0.45f, 0.5f, 0.0f   // top
+        0.5f, 0.5f, 0.0f,   // 右上角
+        0.5f, -0.5f, 0.0f,  // 右下角
+        -0.5f, -0.5f, 0.0f, // 左下角
+        -0.5f, 0.5f, 0.0f,   // 左上角
+    };
+
+    unsigned int indices[] = { // 注意索引从0开始! 
+        0, 1, 3, // 第一个三角形
+        1, 2, 3, // 第二个三角形
     };
 
     GL_EXECUTE_CHECK_RET(glGenVertexArraysOES(1, &VAO));
-    GL_EXECUTE_CHECK_RET(glGenBuffers(1, &VBO));
+    GL_EXECUTE_CHECK_RET(glGenBuffers(1, &VBO));   
+    GL_EXECUTE_CHECK_RET(glGenBuffers(1, &EBO));
     
     /* bind the Vertex Array Object first, 
         then bind and set vertex buffer(s), 
             and then configure vertex attributes(s). */
     GL_EXECUTE_CHECK_RET(glBindVertexArrayOES(VAO));
-    GL_EXECUTE_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, VBO));
+    GL_EXECUTE_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, VBO));   
+    GL_EXECUTE_CHECK_RET(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
+
+    GL_EXECUTE_CHECK_RET(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
     GL_EXECUTE_CHECK_RET(glBufferData(GL_ARRAY_BUFFER, sizeof(vVertices), vVertices, GL_STATIC_DRAW));
 	GL_EXECUTE_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
 	GL_EXECUTE_CHECK_RET(glEnableVertexAttribArray(0));
@@ -130,6 +139,16 @@ int32_t beforeDraw(EGL_Context *esContext)
             so afterwards we can safely unbind */
     GL_EXECUTE_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, 0));
     GL_EXECUTE_CHECK_RET(glBindVertexArrayOES(0));
+
+#elif (defined USE_TRANGLES)
+
+    Cprintf_reverse("[%s %d]  USE_TRANGLES\n", __func__, __LINE__);
+
+#elif (defined USE_TRANGLES_STRIP)
+
+    Cprintf_reverse("[%s %d]  USE_TRANGLES_STRIP\n", __func__, __LINE__);
+
+#endif
 
     Cprintf_green("[%s %d]  \n", __func__, __LINE__);
 
@@ -149,10 +168,42 @@ int32_t Draw(EGL_Context *esContext)
 	GL_EXECUTE_CHECK_RET(glClearColor(0.0f, 1.0f, 0.0f, 1));
 	GL_EXECUTE_CHECK_RET(glClear(GL_COLOR_BUFFER_BIT));
 
-    GL_EXECUTE_CHECK_RET(glBindVertexArrayOES(VAO));
+#ifdef USE_EBO	
 
-    /* draw */
+    GL_EXECUTE_CHECK_RET(glBindVertexArrayOES(VAO));
+    GL_EXECUTE_CHECK_RET(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
+    
+#elif (defined USE_TRANGLES)
+    /* Load the vertex data */
+    float vVertices[] = {
+        // 第一个三角形
+        0.5f,  0.5f, 0.0f,  // 右上角
+        0.5f, -0.5f, 0.0f,  // 右下角
+        -0.5f, 0.5f, 0.0f,  // 左上角
+        // 第二个三角形
+         0.5f, -0.5f, 0.0f,  // 右下角
+        -0.5f, -0.5f, 0.0f,  // 左下角
+        -0.5f,  0.5f, 0.0f,  // 左上角
+    };
+
+    GL_EXECUTE_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vVertices));
+	GL_EXECUTE_CHECK_RET(glEnableVertexAttribArray(0));	
 	GL_EXECUTE_CHECK_RET(glDrawArrays( GL_TRIANGLES, 0, 6));
+	
+#elif (defined USE_TRANGLES_STRIP)
+
+    float vVertices[] = {    
+        -0.5f, 0.5f, 0.0f,   // 左上角        
+        -0.5f, -0.5f, 0.0f, // 左下角
+        0.5f, 0.5f, 0.0f,   // 右上角
+        0.5f, -0.5f, 0.0f,  // 右下角
+    };
+    
+    GL_EXECUTE_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vVertices));
+    GL_EXECUTE_CHECK_RET(glEnableVertexAttribArray(0)); 
+    GL_EXECUTE_CHECK_RET(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
+
+#endif	
 
     /* swap 2 disp */
 	EGL_EXECUTE_CHECK_RET(eglSwapBuffers(esContext->eglDisplay, esContext->eglSurface));
@@ -175,6 +226,17 @@ int32_t deInit(EGL_Context *esContext)
     Cprintf_yellow("[%s %d]  \n", __func__, __LINE__);
 
     GL_EXECUTE_CHECK_RET(glDeleteProgram(esContext->u32GLSLProgram));
+
+    if(VAO)
+    {
+        GL_EXECUTE_CHECK_RET(glDeleteVertexArraysOES(1, &VAO));
+    }
+
+    if(EBO)
+    {
+        GL_EXECUTE_CHECK_RET(glDeleteBuffers(1, &EBO));
+    }
+
 
     GL_EXECUTE_CHECK_RET(eglMakeCurrent(esContext->eglDisplay, EGL_NO_SURFACE,
                                         EGL_NO_SURFACE, EGL_NO_CONTEXT));

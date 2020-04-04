@@ -1,6 +1,7 @@
 # <font color=#0099ff> **openGL 学习笔记** </font>
 
-> `@think3r` 2018-05-09 22:56:27
+> `@think3r` 2018-05-09 22:56:27 <br>
+> 参考链接 :
 > 1. [OpenGL学习路径](https://cstsinghua.github.io/2018/07/12/openGL%E5%AD%A6%E4%B9%A0%E8%B7%AF%E5%BE%84/)
 > 2. [Android 开发者官方开发者指南](https://developer.android.google.cn/guide?hl=zh_cn)
 > 3. [learnopengl](https://learnopengl-cn.github.io/) 
@@ -11,18 +12,25 @@
 > 8. [OpenGL-man-Page](https://www.khronos.org/registry/EGL/sdk/docs/man/)
 > 9. [OpenGL-Refpages---> github](https://github.com/KhronosGroup/OpenGL-Refpages)
 
-  
-## <font color=#009A000> 0x01 参考链接 </font>
+---
+
+## <font color=#009A000> 0x00 学习笔记 </font>
 
 主要记录自己在学习 openGL 中的一些笔记 :
 
-1. [openGL 概述](./note/openGL概述.md)
-2. [EGL](./note/EGL.md)
-3. [EGL 之外的东西](./note/EGL之外的东西.md)
-4. [OpenGL 和 OpenGL-ES](./note/openGL和openGL-ES.md)
-5. [GLSL](./note/GLSL.md)
+1. [**openGL 概述**](./note/openGL概述.md)
 
-## <font color=#009A000> 0x02 学习环境搭建 </font>
+2. [**EGL**](./note/EGL.md)
+
+3. [**EGL 之外的东西**](./note/EGL之外的东西.md)
+
+4. [**OpenGL 和 OpenGL-ES**](./note/openGL和openGL-ES.md)
+
+5. [**GLSL**](./note/GLSL.md)
+
+---
+
+## <font color=#009A000> 0x01 学习环境搭建 </font>
 
 ### <font color=#FF4500> **windwos 下 OpenGL 环境搭建** </font>
 
@@ -69,3 +77,18 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
 
 - [C Programming - using ANSI escape codes on Windows, macOS and Linux terminals](https://solarianprogrammer.com/2019/04/08/c-programming-ansi-escape-codes-windows-macos-linux-terminals/)
 - [ANSI escape code](https://en.wikipedia.org/wiki/ANSI_escape_code#DOS_and_Windows)
+
+---
+
+## <font color=#009A000> 0x02 demo </font>
+
+1. `make helloTriangle`
+   - 环境测试 && 最初入门;
+2. `make triangle2`
+   - BO + VBO + VAO 绘制双三角形;
+3. `make triangleIndxed`
+   - `-D USE_EBO` 使用 BO + VBO + VAO + EBO 绘制四边形;
+   - `-D USE_TRANGLES` 6 顶点直接绘制四边形;
+   - `-D USE_TRANGLES_STRIP` 4 顶点直接绘制四边形;
+4. `make triangle_2program`
+   -  

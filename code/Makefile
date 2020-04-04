@@ -29,6 +29,8 @@ C_SrcFiles = ./src/build_time.c \
 
 ifeq ($(MAKECMDGOALS), helloTriangle)
 	C_SrcFiles += ./hello_Triangle/hello_Triangle.c
+else ifeq ($(MAKECMDGOALS), triangleIndxed)
+	C_SrcFiles += ./triangle_indxed/triangle_indxed.c
 else ifeq ($(MAKECMDGOALS), triangle2)
 	C_SrcFiles += ./triangle2/triangle2.c
 endif
@@ -64,7 +66,8 @@ $(C_Objs) : %.o : %.c
 $(Cxx_Objs) : %.o : %.cpp
 	$(CXX) $(C_Flags) -c $< -o $@
 
-helloTriangle: $(Target) 
+helloTriangle: $(Target)
+triangleIndxed: $(Target)
 triangle2: $(Target)
 
 .PHONY : clean 
