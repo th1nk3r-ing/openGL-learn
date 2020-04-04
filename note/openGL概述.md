@@ -1,11 +1,11 @@
 # <font color=#0099ff> **OpenGL 基础知识** </font>
 
-> `@think3r` 2020-04-03 22:54:03 
+> `@think3r` 2020-04-03 22:54:03
 
 > 1. [知乎 :  如何理解 OpenGL 中着色器、渲染管线、光栅化等概念？](https://www.zhihu.com/question/29163054/answer/296309838)  
 > 2. [官方网站与 API 文档](https://www.khronos.org/)
 >    - [openGL](https://www.khronos.org/opengl)
->    - [openGL-ES](https://www.khronos.org/opengles)
+>    - [openGL-ES](https://www.khronos.org/OpenGL-ES)
 >    - [EGL](https://www.khronos.org/egl)
 > 3. [OpenGL 与 OpenGL ES2 之间有何区别？](https://www.zhihu.com/question/25078532)
 
@@ -36,24 +36,12 @@
 - 像 AMD、Nvidia 等图形硬件厂家还得支持微软的 Direct3D，所以他们还得按照微软的接口说明书，整合 Direct3D 的库给 Windows 使用。
   - 在 Windows 上，还有一种情况，就是这个 OpenGL 库可能是 Direct3D 接口的一个封装(Wrapper)。表面上调用 OpenGL 接口，实际上里面的实现是间接调用了 Direct3D 接口。
   - PASS : 这个 Wrapper 方法同样可以在电脑上提供 OpenGL-ES 的模拟环境, 如 `Mali OpenGL ES Emulator` ;
+- 再说一点自己学习 OpenGL 时候的一个明显的感觉：OpenGL 的函数好多啊。OpenGL 的函数的特点是数量多，但是每个函数的参数少。而 Direct 3D 的特点和它正好反过来，函数少，但是每个函数的参数多。
 
 ---
 
 ## <font color=#009A000> 0x02 openGL, openEGL, openGL-ES, GLFW, glut 等概念的区分 </font>
 
-### <font color=#FF4500> 绘制环境 </font>
-
-- **OpenGL 只是关注于怎么调用接口实现绘画**, 因此其在使用时，需要与一个实际的窗口系统关联起来。
-- 在不同平台上有不同的机制以关联窗口系统 :
-  - 在 Windows 上是 WGL;
-  - 在 Linux 上是 GLX (X-Window);
-  - 在 Apple OS 上是 AGL ;
-  - 在嵌入式设备上则是 EGL 。
-  - 很遗憾, 这部分都 **没有实现跨平台** 。
-- 这也是为什么存在 glut（已经不更新了，代替者 freeglut，不支持 macOS）、glfw 这些“**半**”跨平台的框架, 这些框架帮助你轻松地在各平台下使用 OpenGL。
-  - glut 是基本的窗口界面，是独立于 gl 和 glu 的. 如果不喜欢用 glut 可以用 MFC 和 Win32 窗口等代替，但是 glut 是跨平台的，这就保证了我们编出的程序是跨平台的，如果用 MFC 或者 Win32 只能在 windows 操作系统上使用。选择 OpenGL 的一个很大原因就是因为它的跨平台性，所以我们可以尽量的使用 glut 库。
-
----
 
 ### <font color=#FF4500> GL 和 GL-ES </font>
 
@@ -69,7 +57,24 @@
   - 硬件实现 : 前面提到这组函数接口主要是为了和 GPU 这个硬件进行打交道的。所以各个硬件厂商会提供相关的实现，例如高通平台的 adreno 解决方案, arm 的 Mali 方案;
   - 软件实现 : android 也提供了一套 OpenGL ES 的软件实现，就是说不用 GPU 了，完全用软件实现画图的相关功能，也就是 libagl，软件实现最终编译完保存   `system\lib\egl\libGLES_android.so`
 
-## <font color=#009A000> 0x03 EGL 官方解释 </font>
+---
+
+- **OpenGL 只是关注于怎么调用接口实现绘画**, 但它们的设计目的是独立于任何窗口系统或者操作系统. 因而, 他们并没有包含打开窗口, 或者从键盘, 鼠标读取事件的函数. 而且遗憾的是, 如果连最基本的打开窗口的功能都没有, 编写一个完整的图形程序几乎是不可能的. 并且, 绝大多数有趣的程序都需要一些用户输入, 或者需要操作系统和窗口系统的其它服务. 因此其在使用时，需要与一个实际的窗口系统关联起来。
+- 在不同平台上有不同的机制以关联窗口系统 :
+  - 在 Windows 上是 `WGL`或 `GLUT` (现基本被 `glfw` 取代);
+  - 在 Linux 上是 `GLX` (X-Window);
+  - 在 Apple OS 上是 `AGL` ;
+  - 在嵌入式设备上则是 `EGL` 。
+  - 很遗憾, 这部分都 **没有实现跨平台** 。
+- 这也是为什么存在 glut（已经不更新了，代替者 freeglut，不支持 macOS）、glfw 这些“**半**”跨平台的框架, 这些框架帮助你轻松地在各平台下使用 OpenGL。
+  - GLUT: `OpenGL 应用工具包 (OpenGL Utility Toolkit)`, 是一个与窗口系统无关的工具包。它作为 AUX 库的功能更强的替代品，用于隐藏不同窗口系统 API 的复杂性。GLUT 的子程序的前缀使用 `glut` ;
+  - GLUT 是专为构建中小型 OpenGL 程序。虽然 GLUT 是适合学习 OpenGL 和开发简单的 OpenGL 应用程序。 GLUT 并不是一个功能全面的工具包所以大型应用程序需要复杂的用户界面最好使用本机窗口系统工具包。所以 GLUT 是简单的、容易的、小的。
+  - glut 是基本的窗口界面，是独立于 gl 和 glu 的. 如果不喜欢用 glut 可以用 MFC 和 Win32 窗口等代替，但是 glut 是跨平台的，这就保证了我们编出的程序是跨平台的，如果用 MFC 或者 Win32 只能在 windows 操作系统上使用。选择 OpenGL 的一个很大原因就是因为它的跨平台性，所以我们可以尽量的使用 glut 库。
+  > - `GLUT library available on Android?`
+   >   - Why do you want to use GLUT on Android? You know that **GLUT never was meant for real-world applications**, just for small demos and tutorials;
+
+
+## <font color=#009A000> 0x03 EGL </font>
 
 - <u>**如下为 EGL 的官方的简介与翻译 :**</u>
 
@@ -89,5 +94,3 @@
 ---
 
 - EGL 则是 OpenGL ES 在嵌入式平台上 WGL, GLX, AGL 等 的等价物。EGL 假设 OS 会提供窗口系统，但 EGL 与平台无关，并不局限于任何特定的窗口系统，所有用到本地窗口系统的地方都用屏蔽指针来处理。我觉得这就是它易于移植的关键. 
-- 一个 window 恰如你在计算机中看到的一个 window。它拥有唯一一个用以绘制自己的内容的 surface。应用通过 Window Manager 创建一个 window，Window Manager 为每一个 window 创建一个 surface，并把该 surface 传递给应用以便应用在上面绘制。应用可以在 surface 上任意进行绘制。对于 Window Manager 来说，surface 就是一个不透明的矩形而已。
-- 由于 OpenGL ES 是跨平台的，引入 EGL 就是为了屏蔽不同平台上的区别。本地窗口相关的 API 提供了访问本地窗口系统的接口，EGL 提供了创建渲染表面，接下来 OpenGL ES 就可以在这个渲染表面上绘制，同时提供了图形上下文(context)，用来进行状态管理。

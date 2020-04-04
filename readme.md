@@ -13,8 +13,7 @@
 - [Android 开发者官方开发者指南](https://developer.android.google.cn/guide?hl=zh_cn)
 - [learnopengl](https://learnopengl-cn.github.io/)
 - [OpenGL-wikipedia](https://zh.wikipedia.org/wiki/OpenGL)
-- [OPENGL ES 3.0编程指南  原书第2版 --- github](https://github.com/danginsburg/opengles3-book)
-
+- [OPENGL ES 3.0编程指南  原书第2版 --- github](https://github.com/danginsburg/OpenGL-ES3-book)
 
 ## <font color=#009A000> 0x02 环境搭建 </font>
 
@@ -57,3 +56,16 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
 
 - [C Programming - using ANSI escape codes on Windows, macOS and Linux terminals](https://solarianprogrammer.com/2019/04/08/c-programming-ansi-escape-codes-windows-macos-linux-terminals/)
 - [ANSI escape code](https://en.wikipedia.org/wiki/ANSI_escape_code#DOS_and_Windows)
+
+----
+
+官方 github 地址:  [https://github.com/KhronosGroup](https://github.com/KhronosGroup)
+
+## <font color=#009A000> 0x00 EGL </font>
+
+- [khronos 官网](https://www.khronos.org/registry/EGL/)
+- 当前版本的 EGL 是 EGL-1.5 , 更新于 2014 年 8 月 27 日. 
+- [eglspec.1.5.withchanges.pdf](https://www.khronos.org/registry/EGL/specs/eglspec.1.5.withchanges.pdf)
+- [man-Page](https://www.khronos.org/registry/EGL/sdk/docs/man/)
+- [OpenGL-Refpages---> github](https://github.com/KhronosGroup/OpenGL-Refpages)
+  - 可用浏览器打开 make 之后的 xml 文件, 作为 man Page 查看; (也可以直接下载 make 后打包好的文件)

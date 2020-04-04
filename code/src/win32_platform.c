@@ -207,7 +207,7 @@ GLboolean win_CreateWindow(EGL_Context *pstEglContext, const char *title)
 	wndclass.lpfnWndProc   = ( WNDPROC ) __win_windowProcCallback;
 	wndclass.hInstance     = hInstance;
 	wndclass.hbrBackground = ( HBRUSH ) GetStockObject ( BLACK_BRUSH );
-	wndclass.lpszClassName = "openglEs2.0";
+	wndclass.lpszClassName = "OpenGL-ES2.0";
 
 	if ( !RegisterClass ( &wndclass ) )
 	{
@@ -226,7 +226,7 @@ GLboolean win_CreateWindow(EGL_Context *pstEglContext, const char *title)
 	AdjustWindowRect ( &windowRect, wStyle, FALSE );
 
 	pstEglContext->eglNativeWindow = CreateWindow (
-                            			"openglEs2.0",
+                            			"OpenGL-ES2.0",
                             			title,
                             			wStyle,
                             			0,
