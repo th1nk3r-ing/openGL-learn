@@ -24,7 +24,8 @@
 
 3. [**EGL 之外的东西**](./note/EGL之外的东西.md)
 
-4. [**OpenGL 和 OpenGL-ES**](./note/openGL和openGL-ES.md)
+4. ~~[**OpenGL 和 OpenGL-ES**](./note/openGL和openGL-ES.md)~~
+   - <font color=#EA00DA>待修正 VAO 相关的错误</font> 
 
 5. [**GLSL**](./note/GLSL.md)
 
