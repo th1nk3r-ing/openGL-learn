@@ -22,7 +22,9 @@
 /*----------------------------------------------*/
 /*                 宏类型定义                   */
 /*----------------------------------------------*/
-#define USE_EBO                     /* 使用 BO,VBO,VAO,EBO */     
+#define USE_VAO                     /* 使用 BO,VBO,VAO,EBO */
+//#define USE_VBO                     /* 使用 BO, VBO */
+//#define USE_EBO                     /* 使用 BO, VBO, EBO */
 //#define USE_TRANGLES              /* 不使用 BO 的 6 顶点, 每次绘制都需要传递顶点 */
 //#define USE_TRANGLES_STRIP        /* 不使用 BO 的 4 顶点, 每次绘制都需要传递顶点 */
 
@@ -103,7 +105,67 @@ int32_t beforeDraw(EGL_Context *esContext)
     /* Use the program object */
 	GL_EXECUTE_CHECK_RET(glUseProgram (esContext->u32GLSLProgram));
 
-#ifdef USE_EBO
+#ifdef USE_VAO
+    Cprintf_reverse("[%s %d]  USE_VAO\n", __func__, __LINE__);
+
+    float vVertices[] = {
+        0.5f, 0.5f, 0.0f,   // 右上角
+        0.5f, -0.5f, 0.0f,  // 右下角
+        -0.5f, -0.5f, 0.0f, // 左下角
+        -0.5f, 0.5f, 0.0f,   // 左上角
+    };
+
+    unsigned int indices[] = { // 注意索引从0开始!
+        0, 1, 3, // 第一个三角形
+        1, 2, 3, // 第二个三角形
+    };
+
+    GL_EXECUTE_CHECK_RET(glGenVertexArrays(1, &VAO));
+    GL_EXECUTE_CHECK_RET(glGenBuffers(1, &VBO));
+    GL_EXECUTE_CHECK_RET(glGenBuffers(1, &EBO));
+
+    /* bind the Vertex Array Object first,
+        then bind and set vertex buffer(s),
+            and then configure vertex attributes(s). */
+    GL_EXECUTE_CHECK_RET(glBindVertexArray(VAO));
+    GL_EXECUTE_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, VBO));
+    GL_EXECUTE_CHECK_RET(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
+
+    GL_EXECUTE_CHECK_RET(glBufferData(GL_ARRAY_BUFFER, sizeof(vVertices), vVertices, GL_STATIC_DRAW));
+    GL_EXECUTE_CHECK_RET(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
+
+	GL_EXECUTE_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
+	GL_EXECUTE_CHECK_RET(glEnableVertexAttribArray(0));
+
+    /* note that this is allowed, the call to glVertexAttribPointer
+        registered VBO as the vertex attribute's bound vertex buffer object,
+            so afterwards we can safely unbind */
+    GL_EXECUTE_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    GL_EXECUTE_CHECK_RET(glBindVertexArrayOES(0));
+
+#elif (defined USE_VBO)
+
+    Cprintf_reverse("[%s %d]  USE_VBO\n", __func__, __LINE__);
+
+    float vVertices[] = {
+        // 第一个三角形
+        0.5f,  0.5f, 0.0f,  // 右上角
+        0.5f, -0.5f, 0.0f,  // 右下角
+        -0.5f, 0.5f, 0.0f,  // 左上角
+        // 第二个三角形
+         0.5f, -0.5f, 0.0f,  // 右下角
+        -0.5f, -0.5f, 0.0f,  // 左下角
+        -0.5f,  0.5f, 0.0f,  // 左上角
+    };
+    GL_EXECUTE_CHECK_RET(glGenBuffers(1, &VBO));
+    GL_EXECUTE_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, VBO));
+
+    GL_EXECUTE_CHECK_RET(glBufferData(GL_ARRAY_BUFFER, sizeof(vVertices), vVertices, GL_STATIC_DRAW));
+    GL_EXECUTE_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0));
+	GL_EXECUTE_CHECK_RET(glEnableVertexAttribArray(0));
+
+#elif (defined USE_EBO)
+
     Cprintf_reverse("[%s %d]  USE_EBO\n", __func__, __LINE__);
 
     float vVertices[] = {
@@ -113,32 +175,25 @@ int32_t beforeDraw(EGL_Context *esContext)
         -0.5f, 0.5f, 0.0f,   // 左上角
     };
 
-    unsigned int indices[] = { // 注意索引从0开始! 
+    unsigned int indices[] = { // 注意索引从0开始!
         0, 1, 3, // 第一个三角形
         1, 2, 3, // 第二个三角形
     };
 
-    GL_EXECUTE_CHECK_RET(glGenVertexArraysOES(1, &VAO));
-    GL_EXECUTE_CHECK_RET(glGenBuffers(1, &VBO));   
+    GL_EXECUTE_CHECK_RET(glGenBuffers(1, &VBO));
     GL_EXECUTE_CHECK_RET(glGenBuffers(1, &EBO));
-    
-    /* bind the Vertex Array Object first, 
-        then bind and set vertex buffer(s), 
+
+    /* bind the Vertex Array Object first,
+        then bind and set vertex buffer(s),
             and then configure vertex attributes(s). */
-    GL_EXECUTE_CHECK_RET(glBindVertexArrayOES(VAO));
-    GL_EXECUTE_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, VBO));   
+    GL_EXECUTE_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, VBO));
     GL_EXECUTE_CHECK_RET(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
 
-    GL_EXECUTE_CHECK_RET(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
     GL_EXECUTE_CHECK_RET(glBufferData(GL_ARRAY_BUFFER, sizeof(vVertices), vVertices, GL_STATIC_DRAW));
+    GL_EXECUTE_CHECK_RET(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
+
 	GL_EXECUTE_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
 	GL_EXECUTE_CHECK_RET(glEnableVertexAttribArray(0));
-
-    /* note that this is allowed, the call to glVertexAttribPointer 
-        registered VBO as the vertex attribute's bound vertex buffer object,
-            so afterwards we can safely unbind */
-    GL_EXECUTE_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GL_EXECUTE_CHECK_RET(glBindVertexArrayOES(0));
 
 #elif (defined USE_TRANGLES)
 
@@ -168,13 +223,24 @@ int32_t Draw(EGL_Context *esContext)
 	GL_EXECUTE_CHECK_RET(glClearColor(0.0f, 1.0f, 0.0f, 1));
 	GL_EXECUTE_CHECK_RET(glClear(GL_COLOR_BUFFER_BIT));
 
-#ifdef USE_EBO	
+#ifdef USE_VAO
 
     GL_EXECUTE_CHECK_RET(glBindVertexArrayOES(VAO));
     GL_EXECUTE_CHECK_RET(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
-    
+#elif (defined USE_VBO)
+
+    GL_EXECUTE_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, VBO));
+	GL_EXECUTE_CHECK_RET(glDrawArrays( GL_TRIANGLES, 0, 6));
+
+#elif (defined USE_EBO)
+
+    GL_EXECUTE_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, VBO));
+    /* glDrawElements 函数从当前绑定到 GL_ELEMENT_ARRAY_BUFFER 目标的 EBO 中获取索引 */
+    GL_EXECUTE_CHECK_RET(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
+    GL_EXECUTE_CHECK_RET(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
+
 #elif (defined USE_TRANGLES)
-    /* Load the vertex data */
+
     float vVertices[] = {
         // 第一个三角形
         0.5f,  0.5f, 0.0f,  // 右上角
@@ -187,23 +253,23 @@ int32_t Draw(EGL_Context *esContext)
     };
 
     GL_EXECUTE_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vVertices));
-	GL_EXECUTE_CHECK_RET(glEnableVertexAttribArray(0));	
+	GL_EXECUTE_CHECK_RET(glEnableVertexAttribArray(0));
 	GL_EXECUTE_CHECK_RET(glDrawArrays( GL_TRIANGLES, 0, 6));
-	
+
 #elif (defined USE_TRANGLES_STRIP)
 
-    float vVertices[] = {    
-        -0.5f, 0.5f, 0.0f,   // 左上角        
+    float vVertices[] = {
+        -0.5f, 0.5f, 0.0f,   // 左上角
         -0.5f, -0.5f, 0.0f, // 左下角
         0.5f, 0.5f, 0.0f,   // 右上角
         0.5f, -0.5f, 0.0f,  // 右下角
     };
-    
+
     GL_EXECUTE_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vVertices));
-    GL_EXECUTE_CHECK_RET(glEnableVertexAttribArray(0)); 
+    GL_EXECUTE_CHECK_RET(glEnableVertexAttribArray(0));
     GL_EXECUTE_CHECK_RET(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
 
-#endif	
+#endif
 
     /* swap 2 disp */
 	EGL_EXECUTE_CHECK_RET(eglSwapBuffers(esContext->eglDisplay, esContext->eglSurface));

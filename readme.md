@@ -88,7 +88,9 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
 2. `make triangle2`
    - BO + VBO + VAO 绘制双三角形;
 3. `make triangleIndxed`
-   - `-D USE_EBO` 使用 BO + VBO + VAO + EBO 绘制四边形;
+   - `-D USE_VAO` 使用 BO + VBO + VAO + EBO 绘制四边形;
+   - `-D USE_VBO` 使用 BO + VBO  绘制四边形;
+   - `-D USE_EBO` 使用 BO + VBO + EBO 绘制四边形;
    - `-D USE_TRANGLES` 6 顶点直接绘制四边形;
    - `-D USE_TRANGLES_STRIP` 4 顶点直接绘制四边形;
 4. `make triangle_2program`
