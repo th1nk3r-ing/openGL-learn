@@ -13,7 +13,7 @@ MAKEFLAGS = -j
 
 Target = testDemo
 
-Include_Dir :=  -I./inc/ \
+Include_Dir :=  -I./common/inc/ \
 				-I../file/Mali_OpenGL_ES_Emulator-v3.0.4-2-g8d905-Windows-64bit/include/
 
 # 编译选项
@@ -23,16 +23,16 @@ C_Flags += $(Include_Dir)
 C_Flags += 
 
 # 源文件
-C_SrcFiles = ./src/build_time.c \
-			 ./src/win32_platform.c \
-			 ./src/OGL_common.c 
+C_SrcFiles = ./common/src/build_time.c \
+			 ./common/src/win32_platform.c \
+			 ./common/src/OGL_common.c 
 
 ifeq ($(MAKECMDGOALS), helloTriangle)
-	C_SrcFiles += ./hello_Triangle/hello_Triangle.c
+	C_SrcFiles += ./example/hello_Triangle/hello_Triangle.c
 else ifeq ($(MAKECMDGOALS), triangleIndxed)
-	C_SrcFiles += ./triangle_indxed/triangle_indxed.c
+	C_SrcFiles += ./example/triangle_indxed/triangle_indxed.c
 else ifeq ($(MAKECMDGOALS), triangle2)
-	C_SrcFiles += ./triangle2/triangle2.c
+	C_SrcFiles += ./example/triangle2/triangle2.c
 endif
 
 
@@ -73,4 +73,4 @@ triangle2: $(Target)
 .PHONY : clean 
 	
 clean :
-	-rm -rf $(Target) $(Objs) $(Target).exe
+	-rm -rf $(Target) $(Objs) *.o $(Target).exe

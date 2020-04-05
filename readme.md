@@ -89,10 +89,12 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
    - BO + VBO + VAO 绘制双三角形;
 3. `make triangleIndxed`
    - 全局变量 `u32DrawMode` 绘制模式, 可为 : `GL_TRIANGLES`, `GL_POINTS`, `GL_LINE_LOOP` 等;
-   - `-D USE_VAO` 使用 BO + VBO + VAO + EBO 绘制四边形;
-   - `-D USE_VBO` 使用 BO + VBO  绘制四边形;
-   - `-D USE_EBO` 使用 BO + VBO + EBO 绘制四边形;
+   - `-D USE_VAO` 使用 <u>BO + VBO + VAO + EBO</u> 绘制四边形;
+     - hello_triangle_indexed
+   - `-D USE_VBO` 使用 <u>BO + VBO</u>  绘制四边形;
+   - `-D USE_EBO` 使用 <u>BO + VBO + EBO</u> 绘制四边形;
    - `-D USE_TRANGLES` 6 顶点直接绘制四边形;
    - `-D USE_TRANGLES_STRIP` 4 顶点直接绘制四边形;
-4. `make triangle_2program`
-   -  
+4. `make triangle2`
+   - `-D ONE_VBO` 使用 <u>1 VBO + 2 EBO + 2 VAO + 2 program</u> 绘制颜色不同的四边形;
+   - `-D TWO_VBO` 使用 <u>2 VBO + 2 VAO + 2 program</u> 绘制颜色不同的四边形;
