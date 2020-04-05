@@ -46,6 +46,7 @@ char vShaderStr[] =
     "   gl_Position = vec4(vPosition.x, vPosition.y, vPosition.z, 1.0); 	 \n"
     "}										 \n";
 
+/* shader toy 移植而来 */
 char fShaderStr[] =
     "#version 300 es                             \n"
     "precision mediump float;                    \n"
@@ -91,10 +92,13 @@ char fShaderStr[] =
 static int32_t resizeSurface(EGL_Context *esContext)
 {
     if(esContext->bBeReSizeSurface)
-    {
+    {    
+        /* 配置片段着色器中的窗口大小变量 */
         int windowSizeLocation = glGetUniformLocation(esContext->u32GLSLProgram, "iResolution");
+        BASE_CHECK_TRUE_RET(windowSizeLocation < 0, -1);
         GL_RUN_CHECK_RET(glUniform2f(windowSizeLocation, (float)esContext->s32NewSurfaceW,
                                     (float)esContext->s32NewSurfaceH));
+                                    
         GL_RUN_CHECK_RET(glViewport( 0, 0, esContext->s32NewSurfaceW,
                                             esContext->s32NewSurfaceH));
         Cprintf_yellow("[%s %d]  original:[%d x %d] now:[%d x %d]\n",__func__, __LINE__,
@@ -153,12 +157,8 @@ int32_t beforeDraw(EGL_Context *esContext)
     GL_RUN_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
     GL_RUN_CHECK_RET(glEnableVertexAttribArray(0));
 
-    /* note that this is allowed, the call to glVertexAttribPointer
-       registered VBO as the vertex attribute's bound vertex buffer object,
-           so afterwards we can safely unbind */
     GL_RUN_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, 0));
     GL_RUN_CHECK_RET(glBindVertexArrayOES(0));
-
 
     GL_RUN_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, 0)); /* 解绑 */
     GL_RUN_CHECK_RET(glBindVertexArrayOES(0));
@@ -168,6 +168,13 @@ int32_t beforeDraw(EGL_Context *esContext)
 	return OK;
 }
 
+/**
+ * @function:   Draw
+ * @brief:      绘制函数
+ * @param[in]:  EGL_Context *esContext  
+ * @param[out]: None
+ * @return:     int32_t
+ */
 int32_t Draw(EGL_Context *esContext)
 {
     /* 绑定 Context 至当前线程 */
@@ -184,11 +191,11 @@ int32_t Draw(EGL_Context *esContext)
     GL_RUN_CHECK_RET(glUseProgram(esContext->u32GLSLProgram));
     GL_RUN_CHECK_RET(glBindVertexArrayOES(VAO));
 
-#ifdef UINFORM_TEST
-    float timeValue = (float)getTime_ms() / 1000.0;
-    int timeLocation = glGetUniformLocation(esContext->u32GLSLProgram, "time");
-    glUniform1f(timeLocation, timeValue);
-#endif
+    /* 配置片段着色器中的时间变量 */
+    float fTimeValue = (float)getTime_ms() / (float)1000.0;
+    int timeLocation = glGetUniformLocation(esContext->u32GLSLProgram, "time");    
+    BASE_CHECK_TRUE_RET(timeLocation < 0, -1);
+    GL_RUN_CHECK_RET(glUniform1f(timeLocation, fTimeValue));
 
     GL_RUN_CHECK_RET(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
 
@@ -250,8 +257,6 @@ int main(int argc, char *argv[])
 	GL_SetupEGL(&stEglInfo);
 	stEglInfo.u32GLSLProgram = GL_CreateProgram(vShaderStr, fShaderStr);
  	BASE_CHECK_TRUE_RET(0 == stEglInfo.u32GLSLProgram, -1);
-
-//    printf("\n %s\n", fShaderStr);
 
 	stEglInfo.drawFunc = Draw;
 	stEglInfo.shutdownFunc = NULL;
