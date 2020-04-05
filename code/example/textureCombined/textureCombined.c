@@ -40,23 +40,33 @@
 /*                 全局变量                     */
 /*----------------------------------------------*/
 uint32_t VBO = 0, VAO = 0, EBO = 0;
+uint32_t u32Texture = 0;
 
 char vShaderStr[] =
-    "#version 300 es 						 \n"
-    "layout(location = 0) in vec3 vPosition;  \n"
-    "void main() 							 \n"
-    "{										 \n"
+    "#version 300 es 						  \n"
+    "layout(location = 0) in vec3 vPosition;  \n"   
+    "layout (location = 1) in vec3 aColor;    \n"
+    "layout(location = 2) in vec2 aTexCoord;  \n"
+    "out vec2 TexCoord;                       \n"
+    "out vec3 ourColor;"
+    "void main() 						 	  \n"
+    "{										  \n"
+    "   ourColor = aColor;                    \n"
+    "   TexCoord = aTexCoord;                 \n"
     "   gl_Position = vec4(vPosition.x, vPosition.y, vPosition.z, 1.0); 	 \n"
-    "}										 \n";
+    "}										  \n";
 
 /* shader toy 移植而来 */
 char fShaderStr[] =
-    "#version 300 es                             \n"
-    "precision mediump float;                    \n"
-    "out vec4 fragColor;                          \n"
+    "#version 300 es                        \n"
+    "precision mediump float;               \n"
+    "in vec3 ourColor;                      \n"
+    "in  vec2 TexCoord;                     \n"    
+    "uniform sampler2D ourTexture;          \n"    
+    "out vec4 fragColor;                    \n"
     "void main() \
     {\
-         fragColor = vec4(1.0, 0.0, 1.0, 1.0);\
+         fragColor = texture(ourTexture, TexCoord) * vec4(ourColor, 1.0) ;\
     }";
 
 
@@ -91,6 +101,54 @@ static int32_t resizeSurface(EGL_Context *esContext)
 
 
 /**
+ * @function:   _texture
+ * @brief:      纹理配置
+ * @param[in]:  EGL_Context *esContext  
+ * @param[out]: None
+ * @return:     static int32_t
+ */
+static int32_t _ConfTexture(EGL_Context *esContext)
+{
+    /* 纹理顶点属性绑定至 VAO */
+    GL_RUN_CHECK_RET(glBindVertexArray(VAO));
+    GL_RUN_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, VBO));
+    GL_RUN_CHECK_RET(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))));
+    GL_RUN_CHECK_RET(glEnableVertexAttribArray(2));
+    GL_RUN_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, 0)); /* 解绑 */
+    GL_RUN_CHECK_RET(glBindVertexArray(0));
+
+    GL_RUN_CHECK_RET(glGenTextures(1, &u32Texture));
+    GL_RUN_CHECK_RET(glBindTexture(GL_TEXTURE_2D, u32Texture));    
+    // 为当前绑定的纹理对象设置环绕、过滤方式
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // load image, create texture and generate mipmaps
+    int width, height, nrChannels;
+    char *ps8TexturePath  = "./resources/textures/container.jpg";
+    // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
+    unsigned char *data = stbi_load(ps8TexturePath, &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        Cprintf_yellow("[%s %d]  load image:[%s] OK! [%d x %d] @ %d Channels\n", 
+            __func__, __LINE__, ps8TexturePath, width, height, nrChannels);
+        
+        GL_RUN_CHECK_RET(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data));
+    }
+    else
+    {
+        Cprintf_red("[%s %d]  Failed to load texture :[%s]\n", __func__, __LINE__, ps8TexturePath);
+    }
+    
+    stbi_image_free(data);
+
+    return OK;
+}
+
+
+/**
  * @function:   Draw
  * @brief:      绘制
  * @param[in]:  EGL_Context *esContext
@@ -108,10 +166,11 @@ int32_t beforeDraw(EGL_Context *esContext)
     GL_RUN_CHECK_RET(glLineWidth(3));
 
     float vVertices[] = {
-       0.5f, 0.5f, 0.0f,   // 右上角
-       0.5f, -0.5f, 0.0f,  // 右下角
-       -0.5f, -0.5f, 0.0f, // 左下角
-       -0.5f, 0.5f, 0.0f,   // 左上角
+   //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
+        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
+        0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 右下
+       -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
+       -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上
     };
 
     unsigned int indices[] = {
@@ -130,35 +189,21 @@ int32_t beforeDraw(EGL_Context *esContext)
     GL_RUN_CHECK_RET(glBufferData(GL_ARRAY_BUFFER, sizeof(vVertices), vVertices, GL_STATIC_DRAW));
     GL_RUN_CHECK_RET(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
 
-    GL_RUN_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
+    GL_RUN_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0));
     GL_RUN_CHECK_RET(glEnableVertexAttribArray(0));
-
-    GL_RUN_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GL_RUN_CHECK_RET(glBindVertexArrayOES(0));
-
+    GL_RUN_CHECK_RET(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))));
+    GL_RUN_CHECK_RET(glEnableVertexAttribArray(1));
+    
     GL_RUN_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, 0)); /* 解绑 */
-    GL_RUN_CHECK_RET(glBindVertexArrayOES(0));
+    GL_RUN_CHECK_RET(glBindVertexArray(0));
 
     Cprintf_green("[%s %d]  \n", __func__, __LINE__);
 
-    // load image, create texture and generate mipmaps
-    int width, height, nrChannels;
-    // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-    unsigned char *data = stbi_load(FileSystem::getPath("resources/textures/container.jpg").c_str(), &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
-
+    _ConfTexture(esContext);
 
 	return OK;
 }
+
 
 
 /**
@@ -182,8 +227,9 @@ int32_t Draw(EGL_Context *esContext)
 	GL_RUN_CHECK_RET(glClear(GL_COLOR_BUFFER_BIT));
 
     GL_RUN_CHECK_RET(glUseProgram(esContext->u32GLSLProgram));
+    
+    GL_RUN_CHECK_RET(glBindTexture(GL_TEXTURE_2D, u32Texture));
     GL_RUN_CHECK_RET(glBindVertexArrayOES(VAO));
-
     GL_RUN_CHECK_RET(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
 
     /* swap to disp */
