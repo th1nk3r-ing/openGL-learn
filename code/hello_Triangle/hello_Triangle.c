@@ -67,13 +67,13 @@ char fShaderStr[] =
 int32_t Draw(EGL_Context *esContext)
 {
     /* 绑定 Context 至当前线程 */
-    EGL_EXECUTE_CHECK_RET(eglMakeCurrent(esContext->eglDisplay, esContext->eglSurface,
+    EGL_RUN_CHECK_RET(eglMakeCurrent(esContext->eglDisplay, esContext->eglSurface,
     						 esContext->eglSurface, esContext->eglContext));
 
     /* 重配窗口大小 */
     if(esContext->bBeReSizeSurface)
     {
-        GL_EXECUTE_CHECK_RET(glViewport( 0, 0, esContext->s32NewSurfaceW,
+        GL_RUN_CHECK_RET(glViewport( 0, 0, esContext->s32NewSurfaceW,
                                             esContext->s32NewSurfaceH));
         Cprintf_yellow("[%s %d]  original:[%d x %d] now:[%d x %d]\n",__func__, __LINE__,
             esContext->s32SurfaceW, esContext->s32SurfaceH,
@@ -85,24 +85,24 @@ int32_t Draw(EGL_Context *esContext)
     }
 
     /* Use the program object */
-	GL_EXECUTE_CHECK_RET(glUseProgram (esContext->u32GLSLProgram));
+	GL_RUN_CHECK_RET(glUseProgram (esContext->u32GLSLProgram));
 
 	// Clear the color buffer
-	GL_EXECUTE_CHECK_RET(glClearColor(0.0f, 1.0f, 0.0f, 1));
-	GL_EXECUTE_CHECK_RET(glClear(GL_COLOR_BUFFER_BIT));
+	GL_RUN_CHECK_RET(glClearColor(0.0f, 1.0f, 0.0f, 1));
+	GL_RUN_CHECK_RET(glClear(GL_COLOR_BUFFER_BIT));
 
     /* Load the vertex data */
 	GLfloat vVertices[] = { 0.0f,   0.5f, 0.0f,
     	                    -0.5f, -0.5f, 0.0f,
 	                        0.5f,  -0.5f, 0.0f  };
-	GL_EXECUTE_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vVertices));
-	GL_EXECUTE_CHECK_RET(glEnableVertexAttribArray(0));
+	GL_RUN_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vVertices));
+	GL_RUN_CHECK_RET(glEnableVertexAttribArray(0));
 
     /* draw */
-	GL_EXECUTE_CHECK_RET(glDrawArrays( GL_TRIANGLES, 0, 3));
+	GL_RUN_CHECK_RET(glDrawArrays( GL_TRIANGLES, 0, 3));
 
     /* swap 2 disp */
-	EGL_EXECUTE_CHECK_RET(eglSwapBuffers(esContext->eglDisplay, esContext->eglSurface));
+	EGL_RUN_CHECK_RET(eglSwapBuffers(esContext->eglDisplay, esContext->eglSurface));
 
     CalcFpsInfo(esContext);
 
@@ -120,16 +120,16 @@ int32_t deInit(EGL_Context *esContext)
 {
     Cprintf_yellow("[%s %d]  \n", __func__, __LINE__);
 
-    GL_EXECUTE_CHECK_RET(glDeleteProgram(esContext->u32GLSLProgram));
+    GL_RUN_CHECK_RET(glDeleteProgram(esContext->u32GLSLProgram));
 
-    GL_EXECUTE_CHECK_RET(eglMakeCurrent(esContext->eglDisplay, EGL_NO_SURFACE,
+    GL_RUN_CHECK_RET(eglMakeCurrent(esContext->eglDisplay, EGL_NO_SURFACE,
                                         EGL_NO_SURFACE, EGL_NO_CONTEXT));
 
-    GL_EXECUTE_CHECK_RET(eglDestroyContext(esContext->eglDisplay, esContext->eglContext));
+    GL_RUN_CHECK_RET(eglDestroyContext(esContext->eglDisplay, esContext->eglContext));
 
-    GL_EXECUTE_CHECK_RET(eglDestroySurface(esContext->eglDisplay, esContext->eglSurface));
+    GL_RUN_CHECK_RET(eglDestroySurface(esContext->eglDisplay, esContext->eglSurface));
 
-    GL_EXECUTE_CHECK_RET(eglTerminate(esContext->eglDisplay));
+    GL_RUN_CHECK_RET(eglTerminate(esContext->eglDisplay));
 
     return OK;
 }

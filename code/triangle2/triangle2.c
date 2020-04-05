@@ -67,7 +67,7 @@ static int32_t resizeSurface(EGL_Context *esContext)
 {
     if(esContext->bBeReSizeSurface)
     {
-        GL_EXECUTE_CHECK_RET(glViewport( 0, 0, esContext->s32NewSurfaceW,
+        GL_RUN_CHECK_RET(glViewport( 0, 0, esContext->s32NewSurfaceW,
                                             esContext->s32NewSurfaceH));
         Cprintf_yellow("[%s %d]  original:[%d x %d] now:[%d x %d]\n",__func__, __LINE__,
             esContext->s32SurfaceW, esContext->s32SurfaceH,
@@ -95,11 +95,11 @@ uint32_t VAO, VBO;
 int32_t beforeDraw(EGL_Context *esContext)
 {
     /* 绑定 Context 至当前线程 */
-    EGL_EXECUTE_CHECK_RET(eglMakeCurrent(esContext->eglDisplay, esContext->eglSurface,
+    EGL_RUN_CHECK_RET(eglMakeCurrent(esContext->eglDisplay, esContext->eglSurface,
     						 esContext->eglSurface, esContext->eglContext));
 
     /* Use the program object */
-	GL_EXECUTE_CHECK_RET(glUseProgram (esContext->u32GLSLProgram));
+	GL_RUN_CHECK_RET(glUseProgram (esContext->u32GLSLProgram));
 
     /* Load the vertex data */
     float vVertices[] = {
@@ -113,23 +113,23 @@ int32_t beforeDraw(EGL_Context *esContext)
          0.45f, 0.5f, 0.0f   // top
     };
 
-    GL_EXECUTE_CHECK_RET(glGenVertexArraysOES(1, &VAO));
-    GL_EXECUTE_CHECK_RET(glGenBuffers(1, &VBO));
+    GL_RUN_CHECK_RET(glGenVertexArraysOES(1, &VAO));
+    GL_RUN_CHECK_RET(glGenBuffers(1, &VBO));
     
     /* bind the Vertex Array Object first, 
         then bind and set vertex buffer(s), 
             and then configure vertex attributes(s). */
-    GL_EXECUTE_CHECK_RET(glBindVertexArrayOES(VAO));
-    GL_EXECUTE_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, VBO));
-    GL_EXECUTE_CHECK_RET(glBufferData(GL_ARRAY_BUFFER, sizeof(vVertices), vVertices, GL_STATIC_DRAW));
-	GL_EXECUTE_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
-	GL_EXECUTE_CHECK_RET(glEnableVertexAttribArray(0));
+    GL_RUN_CHECK_RET(glBindVertexArrayOES(VAO));
+    GL_RUN_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, VBO));
+    GL_RUN_CHECK_RET(glBufferData(GL_ARRAY_BUFFER, sizeof(vVertices), vVertices, GL_STATIC_DRAW));
+	GL_RUN_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
+	GL_RUN_CHECK_RET(glEnableVertexAttribArray(0));
 
     /* note that this is allowed, the call to glVertexAttribPointer 
         registered VBO as the vertex attribute's bound vertex buffer object,
             so afterwards we can safely unbind */
-    GL_EXECUTE_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GL_EXECUTE_CHECK_RET(glBindVertexArrayOES(0));
+    GL_RUN_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    GL_RUN_CHECK_RET(glBindVertexArrayOES(0));
 
     Cprintf_green("[%s %d]  \n", __func__, __LINE__);
 
@@ -139,23 +139,23 @@ int32_t beforeDraw(EGL_Context *esContext)
 int32_t Draw(EGL_Context *esContext)
 {
     /* 绑定 Context 至当前线程 */
-    EGL_EXECUTE_CHECK_RET(eglMakeCurrent(esContext->eglDisplay, esContext->eglSurface,
+    EGL_RUN_CHECK_RET(eglMakeCurrent(esContext->eglDisplay, esContext->eglSurface,
     						 esContext->eglSurface, esContext->eglContext));
 
     /* 重配窗口大小 */
     resizeSurface(esContext);
 
 	// Clear the color buffer
-	GL_EXECUTE_CHECK_RET(glClearColor(0.0f, 1.0f, 0.0f, 1));
-	GL_EXECUTE_CHECK_RET(glClear(GL_COLOR_BUFFER_BIT));
+	GL_RUN_CHECK_RET(glClearColor(0.0f, 1.0f, 0.0f, 1));
+	GL_RUN_CHECK_RET(glClear(GL_COLOR_BUFFER_BIT));
 
-    GL_EXECUTE_CHECK_RET(glBindVertexArrayOES(VAO));
+    GL_RUN_CHECK_RET(glBindVertexArrayOES(VAO));
 
     /* draw */
-	GL_EXECUTE_CHECK_RET(glDrawArrays( GL_TRIANGLES, 0, 6));
+	GL_RUN_CHECK_RET(glDrawArrays( GL_TRIANGLES, 0, 6));
 
     /* swap 2 disp */
-	EGL_EXECUTE_CHECK_RET(eglSwapBuffers(esContext->eglDisplay, esContext->eglSurface));
+	EGL_RUN_CHECK_RET(eglSwapBuffers(esContext->eglDisplay, esContext->eglSurface));
 
     CalcFpsInfo(esContext);
 
@@ -174,16 +174,16 @@ int32_t deInit(EGL_Context *esContext)
 {
     Cprintf_yellow("[%s %d]  \n", __func__, __LINE__);
 
-    GL_EXECUTE_CHECK_RET(glDeleteProgram(esContext->u32GLSLProgram));
+    GL_RUN_CHECK_RET(glDeleteProgram(esContext->u32GLSLProgram));
 
-    GL_EXECUTE_CHECK_RET(eglMakeCurrent(esContext->eglDisplay, EGL_NO_SURFACE,
+    GL_RUN_CHECK_RET(eglMakeCurrent(esContext->eglDisplay, EGL_NO_SURFACE,
                                         EGL_NO_SURFACE, EGL_NO_CONTEXT));
 
-    GL_EXECUTE_CHECK_RET(eglDestroyContext(esContext->eglDisplay, esContext->eglContext));
+    GL_RUN_CHECK_RET(eglDestroyContext(esContext->eglDisplay, esContext->eglContext));
 
-    GL_EXECUTE_CHECK_RET(eglDestroySurface(esContext->eglDisplay, esContext->eglSurface));
+    GL_RUN_CHECK_RET(eglDestroySurface(esContext->eglDisplay, esContext->eglSurface));
 
-    GL_EXECUTE_CHECK_RET(eglTerminate(esContext->eglDisplay));
+    GL_RUN_CHECK_RET(eglTerminate(esContext->eglDisplay));
 
     return OK;
 }

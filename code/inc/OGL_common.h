@@ -33,7 +33,7 @@
 #endif
 
 /* EL 执行表达式, 检查执行结果, 出错时返回	*/
-#define EGL_EXECUTE_CHECK_RET(expr) \
+#define EGL_RUN_CHECK_RET(expr) \
     do { \
         EGLBoolean bRet = (expr); \
         if(EGL_TRUE != bRet)\
@@ -44,7 +44,7 @@
     } while (0)
 
 /* GL 执行表达式, 检查执行结果, 出错时返回	*/
-#define GL_EXECUTE_CHECK_RET(expr) \
+#define GL_RUN_CHECK_RET(expr) \
     do { \
     	(expr);\
         int32_t err = glGetError(); \

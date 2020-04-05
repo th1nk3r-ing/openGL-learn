@@ -129,8 +129,8 @@ uint32_t GL_CreateProgram(const GLchar *ps8VertSrc, const GLchar *ps8FragSrc)
         return 0;
     }
 
-    GL_EXECUTE_CHECK_RET(glDeleteShader(u32VertShader));
-    GL_EXECUTE_CHECK_RET(glDeleteShader(u32FragShader));
+    GL_RUN_CHECK_RET(glDeleteShader(u32VertShader));
+    GL_RUN_CHECK_RET(glDeleteShader(u32FragShader));
 
     Cprintf_green( "GLSL link success\n");
 
@@ -148,14 +148,14 @@ int32_t GL_SetupEGL(EGL_Context *pstEGL)
 {
     EGLConfig pvConfig = NULL;
 
-    EGL_EXECUTE_CHECK_RET(eglBindAPI(EGL_OPENGL_ES_API));
+    EGL_RUN_CHECK_RET(eglBindAPI(EGL_OPENGL_ES_API));
 
     /* 获取默认 display 参数 */
     pstEGL->eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
     BASE_CHECK_TRUE_RET(pstEGL->eglDisplay == EGL_NO_DISPLAY, -1);
 
     int32_t s32MajorVersion = 0, s32MinorVersion = 0;
-    EGL_EXECUTE_CHECK_RET(eglInitialize(pstEGL->eglDisplay, &s32MajorVersion, &s32MinorVersion));
+    EGL_RUN_CHECK_RET(eglInitialize(pstEGL->eglDisplay, &s32MajorVersion, &s32MinorVersion));
     Cprintf_white( "EGL-Version:[%d.%d]\n", s32MajorVersion, s32MinorVersion);
 
 	/* 查询 EGL 版本信息 */
@@ -177,7 +177,7 @@ int32_t GL_SetupEGL(EGL_Context *pstEGL)
         EGL_NONE
     };
     int32_t s32CfgCount = 0;
-    EGL_EXECUTE_CHECK_RET(eglChooseConfig(pstEGL->eglDisplay, as32ConfigAttrs,
+    EGL_RUN_CHECK_RET(eglChooseConfig(pstEGL->eglDisplay, as32ConfigAttrs,
     						  &pvConfig, 1, &s32CfgCount));
 
     /* 通过 NativeWindwo 创建 egl Surface */
@@ -187,9 +187,9 @@ int32_t GL_SetupEGL(EGL_Context *pstEGL)
 	BASE_CHECK_TRUE_RET(pstEGL->eglNativeWindow == EGL_NO_SURFACE, -1);
 
     /* 获取 surface 的宽高 */
-    EGL_EXECUTE_CHECK_RET(eglQuerySurface(pstEGL->eglDisplay, pstEGL->eglSurface,
+    EGL_RUN_CHECK_RET(eglQuerySurface(pstEGL->eglDisplay, pstEGL->eglSurface,
                                    EGL_WIDTH, &pstEGL->s32SurfaceW));
-    EGL_EXECUTE_CHECK_RET(eglQuerySurface(pstEGL->eglDisplay, pstEGL->eglSurface,
+    EGL_RUN_CHECK_RET(eglQuerySurface(pstEGL->eglDisplay, pstEGL->eglSurface,
                                    EGL_HEIGHT, &pstEGL->s32SurfaceH));
     Cprintf_yellow( "surface: WxH:[%d x %d]\n", pstEGL->s32SurfaceW, pstEGL->s32SurfaceH);
 
@@ -204,7 +204,7 @@ int32_t GL_SetupEGL(EGL_Context *pstEGL)
 	BASE_CHECK_TRUE_RET( EGL_NO_CONTEXT == pstEGL->eglContext, -1);
 
     /* 绑定 Context 至当前线程 */
-    EGL_EXECUTE_CHECK_RET(eglMakeCurrent(pstEGL->eglDisplay, pstEGL->eglSurface,
+    EGL_RUN_CHECK_RET(eglMakeCurrent(pstEGL->eglDisplay, pstEGL->eglSurface,
     						 pstEGL->eglSurface, pstEGL->eglContext));
 
     /* 配置窗口大小回调函数 */

@@ -1,14 +1,17 @@
 # <font color=#0099ff> **BO, EBO, VBO, VAO** </font>
-> `@think3r` 2020-04-05 12:18:42
+> `@think3r` 2020-04-05 12:18:42 <br>
+> 参考链接:
+> 1. [learnopengl-CN 你好，三角形](https://learnopengl-cn.github.io/01%20Getting%20started/04%20Hello%20Triangle/)
+> 2. [如何正确理解 opengl 的 vao ？](https://www.zhihu.com/question/30095978)
 
 ## <font color=#009A000> BO, VBO, VAO 概念详解 </font>
 
-1. Buffer Object, `**BO**` :
-   - OpenGL 有很多缓冲对象类型，缓冲的意思是将 CPU 端的数据传送到 GPU(通过 `glBufferData` 传递), 然后可以通过一个 ID 来进行管理和使用;
+1. Buffer Object, **`BO`** :
+   - OpenGL 有很多缓冲对象类型，缓冲的意思是将 CPU 端的数据传送到 GPU (通过 `glBufferData()` 传递), 然后可以通过一个 ID 来进行管理和使用;
      - 使用这些缓冲对象的好处是我们可以一次性的发送一大批数据到显卡上，而不是每个顶点发送一次。从 CPU 把数据发送到显卡相对较慢，所以只要可能我们都要尝试尽量一次性发送尽可能多的数据。当数据发送至显卡的内存中后，顶点着色器几乎能立即访问顶点，这是个非常快的过程。
         - 不明白的话, 滚回去接着看上面的 openGL 客户端和服务端模式.
    - 虽然 BO 能将数据送到 GPU 端, 但 GPU 怎么使用(是颜色? 是顶点? 还是其它的索引数据?), 这些 GPU 都不知道.
-2. 顶点缓冲对象：Vertex Buffer Object，`**VBO**`
+2. 顶点缓冲对象：Vertex Buffer Object，**`VBO`**
    - 通过绑定 BO 至 `GL_ARRAY_BUFFER` 我们得到了 VBO, <u>VBO 确定了这是顶点数据(供顶点着色器使用). </u>
      - 但 VBO 没解释这是什么的顶点(点? 线? 三角形? 四边形?), 也说不了, 仅此而已.
        - OpenGL 需要你去指定这些数据所表示的渲染类型。我们是希望把这些数据渲染成一系列的点？一系列的三角形？还是仅仅是一个长长的线？做出的这些提示叫做**图元(Primitive)**，任何一个绘制指令的调用都将把图元传递给 OpenGL。这是其中的几个：`GL_POINTS、GL_TRIANGLES、GL_LINE_STRIP`。 *这些都是后话了.*
@@ -21,18 +24,18 @@
      - 数据的起始地址等等;
    - 一个包含了属性的 VBO 可表示成下图所示 :
    ![VBO](./../image/VBO.png)
-4. 顶点数组对象：Vertex Array Object，`**VAO**`, 又是对 VBO 的一次封装 ---> **( VBO 属性指针 + 配置的 VBO 的状态 )**;
-   - 顶点数组对象(Vertex Array Object, VAO)可以像顶点缓冲对象那样被绑定，任何随后的顶点属性调用都会储存在这个 VAO 中。
+4. 顶点数组对象：Vertex Array Object，**`VAO`**, 又是对 VBO 的一次封装 ---> **( VBO 属性指针 + 配置的 VBO 的状态 + EBO)**;
+   - 顶点数组对象(Vertex Array Object, VAO)可以像顶点缓冲对象那样被绑定，任何随后的顶点属性调用(`gl*VertexAttrib*()`)都会储存在这个 VAO 中。
    - 这样的**好处**就是，当配置顶点属性指针时，你只需要将那些调用执行一次，之后再绘制物体的时候只需要绑定相应的 VAO 就行了。 这使在不同顶点数据和属性配置之间切换变得非常简单，只需要绑定不同的 VAO 就行了。刚刚设置的所有状态都将存储在 VAO 中.
    ![VAO](./../image/VAO.png)
    - 一个顶点数组对象会储存以下这些内容：
-      - `glEnableVertexAttribArray()` 时的启用的是哪个定点(属性);
+      - `glEnableVertexAttribArray()` 时的启用的是哪个定点属性; `glDisableVertexAttribArray()` 关闭的顶点属性
       - 通过 `glVertexAttribPointer()` 设置的顶点属性配置。
       - 通过 `glVertexAttribPointer()` 调用与顶点属性关联的顶点缓冲对象。
       - 配置的 EBO 及其状态;
-5. 索引缓冲对象：Element Buffer Object，`**EBO**` 或 Index Buffer Object，`**IBO**`
-   - EBO 是减少 VBO 中顶点数量的一次变种, 同时也可以被 VAO 管理.
-
+5. 索引缓冲对象：Element Buffer Object，**`EBO`** 或 Index Buffer Object，**`IBO`**
+   - EBO 是减少 VBO 中顶点数量的一次变种, 同时也可以被 VAO 管理(参见上图).
+  
 ---
 
 **总结一下 (用结构体实现的方式去理解上述概念):**
@@ -44,7 +47,7 @@
 3. EBO 是也是一个 BO, 存有数据, 只不过其数据是 VBO 中顶点数据的索引, 其目的是用来减少 VBO 中数据的个数的;
 4. VAO 则是一系列的指针, 这些指针分别都指向了 2 中已可以使用的顶点, 其目的是一次配置到处使用;
 
-<font color=#EA00DA>**[openGL 数据结构还原](./openGL数据结构的抽象.h)**</font>
+## <font color=#009A000> **[openGL 数据结构还原](./openGL数据结构的抽象.h)** </font>
 
 ---
 
@@ -84,7 +87,7 @@
       - 使用 VBO 时, 每个顶点属性从一个 VBO 管理的内存中获得它的数据，而具体是从哪个 VBO（程序中可以有多个 VBO）获取则是通过在调用 `glVertexAttribPointer()` 时绑定到 `GL_ARRAY_BUFFER` 的 VBO 决定的。由于在调用 `glVertexAttribPointer` 之前绑定的是先前定义的 VBO 对象，顶点属性 0 现在会链接到它的顶点数据。
       - > [GLES2.0中文API-glBindBuffer](https://blog.csdn.net/flycatdeng/article/details/82664520) 
       - > When vertex array pointer state is changed by a call to glVertexAttribPointer, the current buffer object binding (GL_ARRAY_BUFFER_BINDING) is copied into the corresponding client state for the vertex attrib array being changed, one of the indexed GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDINGs. While a non-zero buffer object is bound to the GL_ARRAY_BUFFER target, the vertex array pointer parameter that is traditionally interpreted as a pointer to <u>client-side memory</u> is instead interpreted as an offset within the buffer object measured in basic machine units.
-      - > 即 `glVertexAttribPointer()` 原本的最后一个参数是顶点属性数组的指针. 但, 当绑定 VBO 后，最后一个参数就是指向所绑定的 VBO 的一个地址了. (只有 OGL-ES 中有这个特性)
+      - > 即 `glVertexAttribPointer()` 原本的最后一个参数是顶点属性数组的指针. 但, 当绑定 VBO 后，最后一个参数就是指向所绑定的 VBO 的一个地址了. (*只有 OGL-ES 中有这个特性*)
       - 具体的例子 : [demo-triangle-indexed](../code/triangle_indxed/triangle_indxed.c)
 - 并且指定其如何发送给显卡。
 - 使能服务端对该数据的访问 `glEnableVertexAttribArray()` :
@@ -94,12 +97,3 @@
   - 那么，`glEnableVertexAttribArray()` 应该在 `glVertexAttribPointer()` 之前还是之后调用？答案是都可以，只要在绘图调用（ `glDraw*` 系列函数）前调用即可。
 
 ---
-
-### <font color=#FF4500> VAO 和 IBO </font>
-
-顶点数组对象(Vertex Array Object, VAO)可以像顶点缓冲对象那样被绑定，任何随后的顶点属性调用都会储存在这个 VAO 中。这样的好处就是，当配置顶点属性指针时，你只需要将那些调用执行一次，之后再绘制物体的时候只需要绑定相应的 VAO 就行了。这使在不同顶点数据和属性配置之间切换变得非常简单，只需要绑定不同的 VAO 就行了。**刚刚设置的所有状态都将存储在 VAO 中.**
-
-在渲染顶点这一话题上我们还有最后一个需要讨论的东西——索引缓冲对象(Element Buffer Object，EBO，也叫Index Buffer Object，IBO)。要解释索引缓冲对象的工作方式最好还是举个例子：假设我们不再绘制一个三角形而是绘制一个矩形。我们可以绘制两个三角形来组成一个矩形（OpenGL主要处理三角形）。这会生成下面的顶点的集合：
-
-- 其余： 略； 参考 :
-  > [learnopengl-CN 你好，三角形](https://learnopengl-cn.github.io/01%20Getting%20started/04%20Hello%20Triangle/)
