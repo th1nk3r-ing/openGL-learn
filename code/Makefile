@@ -18,7 +18,7 @@ Include_Dir :=  -I./common/inc/ \
 
 # 编译选项
 C_Flags += -fdiagnostics-color 
-C_Flags += -g -Wall -Wno-unused -Wconversion -Wno-uninitialized -Wno-sign-conversion
+C_Flags += -g -Wall -Wunused -Wconversion -Wno-uninitialized -Wno-sign-conversion
 C_Flags += $(Include_Dir)
 C_Flags += 
 
@@ -33,6 +33,8 @@ else ifeq ($(MAKECMDGOALS), triangleIndxed)
 	C_SrcFiles += ./example/triangle_indxed/triangle_indxed.c
 else ifeq ($(MAKECMDGOALS), triangle2)
 	C_SrcFiles += ./example/triangle2/triangle2.c
+else ifeq ($(MAKECMDGOALS), shader_glsl)
+	C_SrcFiles += ./example/shader_glsl/shader_glsl.c
 endif
 
 
@@ -69,6 +71,7 @@ $(Cxx_Objs) : %.o : %.cpp
 helloTriangle: $(Target)
 triangleIndxed: $(Target)
 triangle2: $(Target)
+shader_glsl: $(Target)
 
 .PHONY : clean 
 	

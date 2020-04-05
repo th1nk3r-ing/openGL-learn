@@ -58,9 +58,14 @@ static const char *long_char_months[] = {
 static const char *long_char_week[]={
     "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
 };
+
+#ifdef SHORT_DATA_CHAR__
+
 static const char *short_char_week[]={
     "Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"
 };
+
+#endif
 
 /*--------------------------------------------------------*/
 /*                        函数定义                            */

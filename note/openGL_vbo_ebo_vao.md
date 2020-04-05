@@ -22,6 +22,7 @@
      - 每个位置数据的个数, 3 个一组? 还是 4 个一组?
      - 数据的 stride . 
      - 数据的起始地址等等;
+   - 顶点着色器的每个输入变量也叫 **顶点属性(Vertex Attribute)**. 详情参见 [GLSL.md](./GLSL.md)
    - 一个包含了属性的 VBO 可表示成下图所示 :
    ![VBO](./../image/VBO.png)
 4. 顶点数组对象：Vertex Array Object，**`VAO`**, 又是对 VBO 的一次封装 ---> **( VBO 属性指针 + 配置的 VBO 的状态 + EBO)**;
