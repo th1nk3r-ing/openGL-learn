@@ -14,7 +14,8 @@ MAKEFLAGS = -j
 Target = testDemo
 
 Include_Dir :=  -I./common/inc/ \
-				-I../file/Mali_OpenGL_ES_Emulator-v3.0.4-2-g8d905-Windows-64bit/include/
+				-I../file/Mali_OpenGL_ES_Emulator-v3.0.4-2-g8d905-Windows-64bit/include/ \
+				-I./third/inc/ 
 
 # 编译选项
 C_Flags += -fdiagnostics-color 
@@ -35,6 +36,10 @@ else ifeq ($(MAKECMDGOALS), triangle2)
 	C_SrcFiles += ./example/triangle2/triangle2.c
 else ifeq ($(MAKECMDGOALS), shader_glsl)
 	C_SrcFiles += ./example/shader_glsl/shader_glsl.c
+else ifeq ($(MAKECMDGOALS), shader_glsl2)
+	C_SrcFiles += ./example/shader_glsl2/shader_glsl2.c
+else ifeq ($(MAKECMDGOALS), textureCombined)
+	C_SrcFiles += ./example/textureCombined/textureCombined.c
 endif
 
 
@@ -72,6 +77,8 @@ helloTriangle: $(Target)
 triangleIndxed: $(Target)
 triangle2: $(Target)
 shader_glsl: $(Target)
+shader_glsl2: $(Target)
+textureCombined: $(Target)
 
 .PHONY : clean 
 	
