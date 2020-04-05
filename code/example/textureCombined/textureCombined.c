@@ -141,8 +141,25 @@ int32_t beforeDraw(EGL_Context *esContext)
 
     Cprintf_green("[%s %d]  \n", __func__, __LINE__);
 
+    // load image, create texture and generate mipmaps
+    int width, height, nrChannels;
+    // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
+    unsigned char *data = stbi_load(FileSystem::getPath("resources/textures/container.jpg").c_str(), &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
+
+
 	return OK;
 }
+
 
 /**
  * @function:   Draw

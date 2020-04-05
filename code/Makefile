@@ -45,7 +45,7 @@ else ifeq ($(MAKECMDGOALS), textureCombined)
 	rmConversionWarnFile += ./example/textureCombined/textureCombined.o
 endif
 
-# 利用模式变量和 shell 命令去除 stb_image.h 中的警告;
+# 利用模式变量和 shell 命令关闭 stb_image.h 中的警告;
 $(rmConversionWarnFile) : C_Flags:=$(shell echo $(C_Flags)|sed -s 's/-Wconversion//g')
 
 #Object File
