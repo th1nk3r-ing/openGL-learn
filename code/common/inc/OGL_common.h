@@ -103,8 +103,8 @@ struct EGL_Context
 /*----------------------------------------------*/
 /*                 函数定义                     */
 /*----------------------------------------------*/
-uint32_t GL_CreateShader(uint32_t u32Type, const GLchar *ps8Src);
 uint32_t GL_CreateProgram(const GLchar *ps8VertSrc, const GLchar *ps8FragSrc);
+uint32_t GL_CreateProgramFromFile(const char *ps8VertPath,const char *ps8FragPath);
 int32_t GL_SetupEGL(EGL_Context *pstEGL);
 void CalcFpsInfo(EGL_Context *pstEGL);
 

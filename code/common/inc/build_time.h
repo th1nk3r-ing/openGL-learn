@@ -60,6 +60,8 @@ int32_t sleep_ms(uint32_t u32Ms);
 unsigned int get_Now_Time(DATE_TIME     *pDate, ...);
 unsigned int mk_Build_Date(DATE_TIME *pDate, ...);
 
-
+uint32_t getFileSize(const char * ps8FileName, uint64_t *pFileSize);
+void * readFile(void * pMem, const char * ps8FileName, size_t fileSize);
+uint32_t writeFile(void * pMem, const char * ps8FileName, const char * ps8WiteMode, size_t fileSize);
 
 #endif

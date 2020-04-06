@@ -42,10 +42,10 @@ uint32_t u32Texture = 0;
 char vShaderStr[] =
     "#version 300 es 						  \n"
     "layout(location = 0) in vec3 vPosition;  \n"
-    "layout(location = 1) in vec3 aColor;    \n"
+    "layout(location = 1) in vec3 aColor;     \n"
     "layout(location = 2) in vec2 aTexCoord;  \n"
     "out vec2 TexCoord;                       \n"
-    "out vec3 ourColor;"
+    "out vec3 ourColor;                       \n"
     "void main() 						 	  \n"
     "{										  \n"
     "   ourColor = aColor;                    \n"
@@ -63,7 +63,7 @@ char fShaderStr[] =
     "out vec4 fragColor;                    \n"
     "void main() \
     {\
-         fragColor = texture(ourTexture, TexCoord) * vec4(ourColor, 1.0) ;\
+         fragColor = texture(ourTexture, TexCoord) * vec4(ourColor, 1.0);\
     }";
 
 
@@ -281,7 +281,10 @@ int main(int argc, char *argv[])
 	win_CreateWindow(&stEglInfo, "testWin");
 
 	GL_SetupEGL(&stEglInfo);
-	stEglInfo.u32GLSLProgram = GL_CreateProgram(vShaderStr, fShaderStr);
+//	stEglInfo.u32GLSLProgram = GL_CreateProgram(vShaderStr, fShaderStr);	
+	stEglInfo.u32GLSLProgram = 
+	    GL_CreateProgramFromFile("./example/textureCombined/vertextShader.glsl", 
+	                             "./example/textureCombined/fragementShder.glsl");
  	BASE_CHECK_TRUE_RET(0 == stEglInfo.u32GLSLProgram, -1);
 
 	stEglInfo.drawFunc = Draw;

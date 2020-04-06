@@ -50,26 +50,30 @@
  */
 static void __windowResizeCallback(EGL_Context *pstEGL, uint32_t width, uint32_t height)
 {
+    BASE_CHECK_TRUE_WARN(NULL == pstEGL);
+    BASE_CHECK_TRUE_WARN(0 == width);
+    BASE_CHECK_TRUE_WARN(0 == height);
+
     Cprintf_white("[%s %d]  original:[%d x %d] now:[%d x %d]\n", __func__, __LINE__,
         pstEGL->s32SurfaceW, pstEGL->s32SurfaceH, width, height);
 
     pstEGL->s32NewSurfaceW = width;
     pstEGL->s32NewSurfaceH = height;
     pstEGL->bBeReSizeSurface = TRUE;
-    
+
 	return;
 }
 
 
 /**
- * @function:   GL_CreateShader
+ * @function:   _GL_CreateShader
  * @brief:      创建着色器
  * @param[in]:  uint32_t u32Type
  * @param[in]:  const GLchar *ps8Src
  * @param[out]: None
  * @return:     static uint32_t
  */
-uint32_t GL_CreateShader(uint32_t u32Type, const GLchar *ps8Src)
+static uint32_t _GL_CreateShader(uint32_t u32Type, const GLchar *ps8Src)
 {
     uint32_t u32Shader = 0;
     int32_t s32Status = 0;
@@ -103,23 +107,23 @@ uint32_t GL_CreateShader(uint32_t u32Type, const GLchar *ps8Src)
  */
 uint32_t GL_CreateProgram(const GLchar *ps8VertSrc, const GLchar *ps8FragSrc)
 {
-    uint32_t u32VertShader = 0;
-    uint32_t u32FragShader = 0;
-    uint32_t u32Program = 0;
-    int32_t s32Status = 0;
+    BASE_CHECK_TRUE_RET(NULL == ps8VertSrc, -1);
+    BASE_CHECK_TRUE_RET(NULL == ps8FragSrc, -1);
 
-    u32VertShader = GL_CreateShader(GL_VERTEX_SHADER, ps8VertSrc);
- 	BASE_CHECK_TRUE_RET(0 == u32VertShader, -1);
+    uint32_t u32VertShader = _GL_CreateShader(GL_VERTEX_SHADER, ps8VertSrc);
+ 	BASE_CHECK_TRUE_RET(0 == u32VertShader, -2);
 
-    u32FragShader = GL_CreateShader(GL_FRAGMENT_SHADER, ps8FragSrc);
- 	BASE_CHECK_TRUE_RET(0 == u32FragShader, -1);
+    uint32_t u32FragShader = _GL_CreateShader(GL_FRAGMENT_SHADER, ps8FragSrc);
+ 	BASE_CHECK_TRUE_RET(0 == u32FragShader, -2);
 
-    u32Program = glCreateProgram();
- 	BASE_CHECK_TRUE_RET(0 == u32FragShader, -1);
+    uint32_t u32Program = glCreateProgram();
+ 	BASE_CHECK_TRUE_RET(0 == u32FragShader, -2);
 
-    glAttachShader(u32Program, u32VertShader);
-    glAttachShader(u32Program, u32FragShader);
+    GL_RUN_CHECK_RET(glAttachShader(u32Program, u32VertShader));
+    GL_RUN_CHECK_RET(glAttachShader(u32Program, u32FragShader));
     glLinkProgram(u32Program);
+
+    int32_t s32Status = 0;
     glGetProgramiv(u32Program, GL_LINK_STATUS, &s32Status);
     if(s32Status != GL_TRUE)
     {
@@ -137,6 +141,57 @@ uint32_t GL_CreateProgram(const GLchar *ps8VertSrc, const GLchar *ps8FragSrc)
     return u32Program;
 }
 
+
+/**
+ * @function:   GL_CreateProgram
+ * @brief:      创建 GLSL 程序
+ * @param[in]:  const GLchar *ps8VertSrc
+ * @param[in]:  const GLchar *ps8FragSrc
+ * @param[out]: None
+ * @return:     static uint32_t
+ */
+uint32_t GL_CreateProgramFromFile(const char *ps8VertPath,const char *ps8FragPath)
+{
+    BASE_CHECK_TRUE_RET(NULL == ps8VertPath, -1);
+    BASE_CHECK_TRUE_RET(NULL == ps8FragPath, -1);
+
+    GLchar *ps8VertSrc = readFile(NULL, ps8VertPath, 0);
+    uint32_t u32VertShader = _GL_CreateShader(GL_VERTEX_SHADER, ps8VertSrc);
+    free(ps8VertSrc);
+ 	BASE_CHECK_TRUE_RET(0 == u32VertShader, -2);
+
+    GLchar *ps8FragSrc = readFile(NULL, ps8FragPath, 0);
+    uint32_t u32FragShader = _GL_CreateShader(GL_FRAGMENT_SHADER, ps8FragSrc);
+    free(ps8FragSrc);
+ 	BASE_CHECK_TRUE_RET(0 == u32FragShader, -2);
+
+    uint32_t u32Program = glCreateProgram();
+ 	BASE_CHECK_TRUE_RET(0 == u32FragShader, -2);
+
+    GL_RUN_CHECK_RET(glAttachShader(u32Program, u32VertShader));
+    GL_RUN_CHECK_RET(glAttachShader(u32Program, u32FragShader));
+    glLinkProgram(u32Program);
+
+    int32_t s32Status = 0;
+    glGetProgramiv(u32Program, GL_LINK_STATUS, &s32Status);
+    if(s32Status != GL_TRUE)
+    {
+        GLchar s8ErrInfo[1024];
+        glGetProgramInfoLog(u32Program, sizeof(s8ErrInfo), NULL, s8ErrInfo);
+		Cprintf_red("[%s %d] ERR @ link. \n\t %s\n", __func__, __LINE__, s8ErrInfo);
+        return 0;
+    }
+
+    GL_RUN_CHECK_RET(glDeleteShader(u32VertShader));
+    GL_RUN_CHECK_RET(glDeleteShader(u32FragShader));
+
+    Cprintf_green( "GLSL link success!! \n\tVertextShader:[%s] \n\tFragementShader:[%s]\n",
+                    ps8VertPath, ps8FragPath);
+
+    return u32Program;
+}
+
+
 /**
  * @function:   GL_SetupEGL
  * @brief:      设置 EGL
@@ -146,7 +201,7 @@ uint32_t GL_CreateProgram(const GLchar *ps8VertSrc, const GLchar *ps8FragSrc)
  */
 int32_t GL_SetupEGL(EGL_Context *pstEGL)
 {
-    EGLConfig pvConfig = NULL;
+    BASE_CHECK_TRUE_RET(NULL == pstEGL, -1);
 
     EGL_RUN_CHECK_RET(eglBindAPI(EGL_OPENGL_ES_API));
 
@@ -177,6 +232,7 @@ int32_t GL_SetupEGL(EGL_Context *pstEGL)
         EGL_NONE
     };
     int32_t s32CfgCount = 0;
+    EGLConfig pvConfig = NULL;
     EGL_RUN_CHECK_RET(eglChooseConfig(pstEGL->eglDisplay, as32ConfigAttrs,
     						  &pvConfig, 1, &s32CfgCount));
 
@@ -219,7 +275,7 @@ int32_t GL_SetupEGL(EGL_Context *pstEGL)
 /**
  * @function:   CalcFpsInfo
  * @brief:      计算帧率
- * @param[in]:  EGL_Context *pstEGL  
+ * @param[in]:  EGL_Context *pstEGL
  * @param[out]: None
  * @return:     void
  */
@@ -231,15 +287,15 @@ void CalcFpsInfo(EGL_Context *pstEGL)
     {
         return;
     }
-    
+
     uint32_t u32NowTime = getTime_ms();
-    pstEGL->u32DrawFps = (uint32_t)(OPENGL_FPS_CALC_INTERVAL * 1000.0 / 
+    pstEGL->u32DrawFps = (uint32_t)(OPENGL_FPS_CALC_INTERVAL * 1000.0 /
                                         (float)(u32NowTime - pstEGL->u32LastFpsCalcTime) + 0.5);
     Cprintf_green("[%s %d]  disp:[%d], fps:[%d], thisT:[%d]\n",
                     __func__, __LINE__, pstEGL->u32DrawCnt++,
                     pstEGL->u32DrawFps, u32NowTime);
-    
-    pstEGL->u32LastFpsCalcTime = u32NowTime;        
+
+    pstEGL->u32LastFpsCalcTime = u32NowTime;
 
     return;
 }

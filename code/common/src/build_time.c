@@ -89,19 +89,19 @@ uint32_t getTime_ms(void)
 /**
  * @function:   sleep_ms
  * @brief:      sleep ms
- * @param[in]:  uint32_t u32Ms  
+ * @param[in]:  uint32_t u32Ms
  * @param[out]: None
  * @return:     int32_t
  */
 int32_t sleep_ms(uint32_t u32Ms)
-{    
+{
     return usleep(u32Ms * 1000);
 }
 
 /**
  * @function:   get_Now_Time (需调用库 "time.h" 中的库函数)
  * @brief:      生成程序编译时间
- * @param[in]:  DATE_TIME *pDate / NULL       
+ * @param[in]:  DATE_TIME *pDate / NULL
  * @param[out]: DATE_TIME *pDate / NULL
  * @return:     err
  */
@@ -169,10 +169,10 @@ unsigned int get_Now_Time(DATE_TIME *pDate, ...)
 
 /**
  * @function:   Calc_Week_Day
- * @brief:      计算输入年月日对应的星期               
- * @param[in]:  unsigned int year       
- * @param[in]:  unsigned int month  
- * @param[in]:  unsigned int day         
+ * @brief:      计算输入年月日对应的星期
+ * @param[in]:  unsigned int year
+ * @param[in]:  unsigned int month
+ * @param[in]:  unsigned int day
  * @param[out]: None
  * @return:     unsigned char   0:星期日, 6:星期六
  */
@@ -290,9 +290,135 @@ unsigned int mk_Build_Date(DATE_TIME *pDate, ...)
     #endif
 
     }
-    
+
     DEBUG("buildDate: %s %s\n", __DATE__, __TIME__);
 
     return OK;
+}
+
+/**
+ * @function:   getFileSize
+ * @brief:      获取文件的大侠奥
+ * @param[in]:  const char * ps8FileName
+ * @param[in]:  uint64_t *pFileSize
+ * @param[out]: None
+ * @return:     uint32_t
+ */
+uint32_t getFileSize(const char * ps8FileName, uint64_t *pFileSize)
+{
+    BASE_CHECK_TRUE_RET(NULL == ps8FileName, -1);
+    BASE_CHECK_TRUE_RET(NULL == pFileSize, -1);
+
+    FILE * pFp =  fopen(ps8FileName, "rb");
+    if(pFp != NULL)
+    {
+        fseek(pFp, 0, SEEK_END);
+        *pFileSize = ftell(pFp);
+        fclose(pFp);
+    }
+    else
+    {
+        Cprintf_red("[%s %d] ERROR! open file:[%s] failed!\n\n",
+            __func__,__LINE__, ps8FileName);
+    }
+
+    return OK;
+}
+
+/**
+ * @function:   readFile
+ * @brief:      读取文件
+ * @param[in]:  void * pMem               外部申请内存; pMem == NULL 时, 由内部申请;
+ * @param[in]:  const char * ps8FileName
+ * @param[in]:  size_t fileSize           读取大小, fileSize == 0 时, 读取全部文件;
+ * @param[out]: None
+ * @return:     void *                    指向文件数据的内存;
+ */
+void * readFile(void * pMem, const char * ps8FileName, size_t fileSize)
+{
+    BASE_CHECK_TRUE_RET(NULL == ps8FileName, NULL);
+
+    FILE * pFp =  fopen(ps8FileName, "rb");
+    if(pFp != NULL)
+    {
+        size_t readSize = 0;
+
+        /* 配置大小为 0 时, 则读取全部文件 */
+        if(0 == fileSize)
+        {
+            getFileSize(ps8FileName, &fileSize);
+        }
+
+        if(NULL == pMem)
+        {
+            pMem = malloc(fileSize);
+        }
+
+        readSize = fread(pMem, 1, fileSize, pFp);
+        if(readSize != fileSize)
+        {
+            Cprintf_red("[%s %d]  read [%s] error! readSize:[%I64u], fileSize:[%I64u]\n",
+                __func__, __LINE__, ps8FileName, readSize, fileSize);
+        }
+        else
+        {
+            Cprintf_yellow("[%s %d]  read:[%s] size:[%I64u]  OK!\n",
+                __func__, __LINE__, ps8FileName, readSize);
+        }
+
+        fclose(pFp);
+
+        return pMem;
+    }
+    else
+    {
+        Cprintf_red("[%s %d] ERROR! open file:[%s] failed!\n\n",
+            __func__,__LINE__, ps8FileName);
+        return NULL;
+    }
+}
+
+/**
+ * @function:   writeFile
+ * @brief:      写文件
+ * @param[in]:  void * pMem
+ * @param[in]:  const char * ps8FileName
+ * @param[in]:  uint32_t fileSize
+ * @param[out]: None
+ * @return:     void
+ */
+uint32_t writeFile(void * pMem, const char * ps8FileName, const char * ps8WiteMode, size_t fileSize)
+{
+    BASE_CHECK_TRUE_RET(NULL == pMem, -1);
+    BASE_CHECK_TRUE_RET(NULL == ps8FileName, -1);
+    BASE_CHECK_TRUE_RET(NULL == ps8WiteMode, -1);
+    BASE_CHECK_TRUE_RET(0 == fileSize, -1);
+
+    FILE * pFp =  fopen(ps8FileName, "wb");
+    if(pFp != NULL)
+    {
+        size_t writeSize = fwrite(pMem, 1, fileSize, pFp);
+
+        if(writeSize != fileSize)
+        {
+            Cprintf_red("[%s %d]  write [%s] error! writeSize:[%I64u], fileSize:[%I64u]\n",
+                __func__, __LINE__, ps8FileName, writeSize, fileSize);
+        }
+        else
+        {
+            Cprintf_yellow("[%s %d]  write [%s] OK!\n", __func__, __LINE__, ps8FileName);
+        }
+
+        fflush(pFp);
+        fclose(pFp);
+
+        return OK;
+    }
+    else
+    {
+        Cprintf_red("[%s %d] ERROR! open file:[%s] failed!\n\n",
+            __func__,__LINE__, ps8FileName);
+        return -2;
+    }
 }
 
