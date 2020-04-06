@@ -108,4 +108,7 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
    - 纹理初步使用 + 颜色混合(使用了 VAO);
 7. `make textureCombined`
    - 纹理 x 2 混合 + 颜色混合;
-8. `make`
+8. `make textureMode`
+   - 纹理缩放和渲染模式;
+   - <u>note: glsl 中的两个纹理, 必须放到一行, 否则会报错!</u>
+9. 
