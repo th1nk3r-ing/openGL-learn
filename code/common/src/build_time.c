@@ -352,6 +352,7 @@ void * readFile(void * pMem, const char * ps8FileName, size_t fileSize)
         if(NULL == pMem)
         {
             pMem = malloc(fileSize);
+            memset(pMem, 0x00, fileSize);
         }
 
         readSize = fread(pMem, 1, fileSize, pFp);

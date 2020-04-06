@@ -90,6 +90,19 @@ struct EGL_Context
 	void ( ESCALLBACK *keyFunc ) ( EGL_Context *, unsigned char, int, int );
 	void ( ESCALLBACK *updateFunc ) ( EGL_Context *, float deltaTime );
 };
+
+
+typedef struct _TEXTURE_INFO_
+{
+    uint32_t u32Texture;  
+    uint32_t u32TextureId;
+    uint32_t u32GLSLProgram;
+    int8_t   ps8TextureName[48];
+    int32_t  s32FilterMode;
+    int32_t  s32WarpMode;
+    bool     bBeGenMipMap;
+}TEXTURE_INFO;
+
 #endif
 
 /*----------------------------------------------*/

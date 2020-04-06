@@ -12,11 +12,12 @@
 > 8. [OpenGL-man-Page](https://www.khronos.org/registry/EGL/sdk/docs/man/)
 > 9. [OpenGL-Refpages---> github](https://github.com/KhronosGroup/OpenGL-Refpages)
 
+1. 记录 OGL 学习笔记;
+2. 参照 learnopengl demo 在 windwos 上移植的 OGL-ES;
+
 ---
 
 ## <font color=#009A000> 0x00 学习笔记 </font>
-
-主要记录自己在学习 openGL 中的一些笔记 :
 
 1. [**openGL 概述**](./note/openGL概述.md)
 
@@ -83,6 +84,8 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
 
 ## <font color=#009A000> 0x02 demo </font>
 
+~~PASS: 由于 `deInif()` 崩溃, 固暂时不对 OGL 资源做完全的释放~~
+
 1. `make helloTriangle`
    - 环境测试 && 最初入门;
 2. `make triangleIndxed`
@@ -102,5 +105,7 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
 5. `make shader_glsl2`
    - shaderToy 着色器代码移植, 炫酷的动态调色盘;
 6. `make textureCombined`
-   - 纹理初步使用, + 颜色混合(使用了 VAO);
+   - 纹理初步使用 + 颜色混合(使用了 VAO);
+7. `make textureCombined`
+   - 纹理 x 2 混合 + 颜色混合;
 8. `make`

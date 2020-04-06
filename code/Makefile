@@ -43,6 +43,8 @@ else ifeq ($(MAKECMDGOALS), shader_glsl2)
 	C_SrcFiles += ./example/shader_glsl2/shader_glsl2.c
 else ifeq ($(MAKECMDGOALS), textureCombined)
 	C_SrcFiles += ./example/textureCombined/textureCombined.c
+else ifeq ($(MAKECMDGOALS), texture2)
+	C_SrcFiles += ./example/texture2/texture2.c	
 endif
 
 
@@ -80,6 +82,7 @@ triangle2: $(Target)
 shader_glsl: $(Target)
 shader_glsl2: $(Target)
 textureCombined: $(Target)
+texture2: $(Target)
 
 .PHONY : clean 
 	
