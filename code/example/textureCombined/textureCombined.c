@@ -39,34 +39,6 @@
 uint32_t VBO = 0, VAO = 0, EBO = 0;
 uint32_t u32Texture = 0;
 
-char vShaderStr[] =
-    "#version 300 es 						  \n"
-    "layout(location = 0) in vec3 vPosition;  \n"
-    "layout(location = 1) in vec3 aColor;     \n"
-    "layout(location = 2) in vec2 aTexCoord;  \n"
-    "out vec2 TexCoord;                       \n"
-    "out vec3 ourColor;                       \n"
-    "void main() 						 	  \n"
-    "{										  \n"
-    "   ourColor = aColor;                    \n"
-    "   TexCoord = aTexCoord;                 \n"
-    "   gl_Position = vec4(vPosition.x, vPosition.y, vPosition.z, 1.0); 	 \n"
-    "}										  \n";
-
-/* shader toy 移植而来 */
-char fShaderStr[] =
-    "#version 300 es                        \n"
-    "precision mediump float;               \n"
-    "in vec3 ourColor;                      \n"
-    "in  vec2 TexCoord;                     \n"
-    "uniform sampler2D ourTexture;          \n"
-    "out vec4 fragColor;                    \n"
-    "void main() \
-    {\
-         fragColor = texture(ourTexture, TexCoord) * vec4(ourColor, 1.0);\
-    }";
-
-
 /*----------------------------------------------*/
 /*                 函数定义                     */
 /*----------------------------------------------*/
@@ -114,28 +86,36 @@ static int32_t _ConfTexture(EGL_Context *esContext)
     GL_RUN_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, 0)); /* 解绑 */
     GL_RUN_CHECK_RET(glBindVertexArray(0));
 
+  /****************************** 纹理的配置 *******************************/
+    uint32_t u32TextureId = 0;
+    /* 指定 GLSL 片段着色器中的 uniform 纹理值 */
+    GLint location = glGetUniformLocation(esContext->u32GLSLProgram, "texture_1");
+    BASE_CHECK_TRUE_RET(location < 0, -2);
+    GL_RUN_CHECK_RET(glUniform1i(location, u32TextureId));
+    
+    /* 生成并配置纹理 */
     GL_RUN_CHECK_RET(glGenTextures(1, &u32Texture));
+    GL_RUN_CHECK_RET(glActiveTexture(GL_TEXTURE0 + u32TextureId));
     GL_RUN_CHECK_RET(glBindTexture(GL_TEXTURE_2D, u32Texture));
     // 为当前绑定的纹理对象设置环绕、过滤方式
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+    GL_RUN_CHECK_RET(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+    GL_RUN_CHECK_RET(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+    GL_RUN_CHECK_RET(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+    GL_RUN_CHECK_RET(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
     int32_t s32Ret = OK;
     ImageInfo stImage = {0};
-    
     snprintf((char *)stImage.ps8FileName, sizeof(stImage.ps8FileName), "./resources/textures/container.jpg");
     s32Ret = imageLoad(&stImage);
     BASE_CHECK_TRUE_RET(OK != s32Ret, -1);
-    
+
     GL_RUN_CHECK_RET(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, stImage.s32Width, stImage.s32Height,
                                     0, GL_RGB, GL_UNSIGNED_BYTE, stImage.pu8Data));
 //    GL_RUN_CHECK_RET(glGenerateMipmap(GL_TEXTURE_2D));    /* 可省略 */
-   
+
     s32Ret = imageFree(&stImage);
     BASE_CHECK_TRUE_WARN(OK != s32Ret);
+    GL_RUN_CHECK_RET(glBindTexture(GL_TEXTURE_2D, 0));  /* unbind texture */
 
     return OK;
 }
@@ -281,9 +261,8 @@ int main(int argc, char *argv[])
 	win_CreateWindow(&stEglInfo, "testWin");
 
 	GL_SetupEGL(&stEglInfo);
-//	stEglInfo.u32GLSLProgram = GL_CreateProgram(vShaderStr, fShaderStr);	
-	stEglInfo.u32GLSLProgram = 
-	    GL_CreateProgramFromFile("./example/textureCombined/vertextShader.glsl", 
+	stEglInfo.u32GLSLProgram =
+	    GL_CreateProgramFromFile("./example/textureCombined/vertextShader.glsl",
 	                             "./example/textureCombined/fragementShder.glsl");
  	BASE_CHECK_TRUE_RET(0 == stEglInfo.u32GLSLProgram, -1);
 

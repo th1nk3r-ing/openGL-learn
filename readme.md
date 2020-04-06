@@ -97,8 +97,10 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
    - `-D ONE_VBO` 使用 <u>1 VBO + 2 EBO + 2 VAO + 2 program</u> 绘制颜色不同的四边形;
    - `-D TWO_VBO` 使用 <u>2 VBO + 2 VAO + 2 program</u> 绘制颜色不同的四边形;
 4. `make shader_glsl`
-   - `-D TWO_VERTEX_ATTRI_POINTER` 1 VBO + 1 VAO + 双顶点数组, 绘制调色板三角形;
+   - `-D TWO_VERTEX_ATTRI_POINTER` 1 VBO + 1 VAO + 双顶点数组指针, 绘制调色板三角形;
    - `-D UINFORM_TEST` 使用 GLSL 中的 uniform 绘制变色三角形;
-5. `make shader_glsl`
+5. `make shader_glsl2`
    - shaderToy 着色器代码移植, 炫酷的动态调色盘;
-6. `make texture`
+6. `make textureCombined`
+   - 纹理初步使用, + 颜色混合(使用了 VAO);
+8. `make`

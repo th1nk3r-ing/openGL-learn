@@ -25,6 +25,26 @@
 /*----------------------------------------------*/
 /*                结构体定义                    */
 /*----------------------------------------------*/
+typedef enum _IMAGE_FORMAT_
+{
+    IMAGE_ERR_YPTE = 0,
+    
+    YUV_420_I420 = 0x01,    /* [YYYYYYYY] [UU] [VV] */
+    YUV_420_YV12 = 0x02,    /* [YYYYYYYY] [VV] [UU] */
+    YUV_420_NV12 = 0x03,    /* [YYYYYYYY] [UVUV]    */
+    YUV_420_NV21 = 0x04,    /* [YYYYYYYY] [VUVU]    */
+
+    YUV_422_P422 = 0x11,    /* [YYYY] [UU] [VV] */
+    YUV_422_S422 = 0x12,    /* [YYYY] [UVUV]    */
+    YUV_422_YUYV = 0x13,    /* [UYVY UYVY]      */
+    YUV_422_UYVY = 0x14,    /* [YUYV YUYV]      */
+
+    RGB_888      = 0x20,    
+    RGBA_8888    = 0x30,
+
+    IMAGE_FORMAT_BUTT
+}IMAGE_FORMAT;
+
 typedef struct _STB_IMAGE_INFO_
 {
     /* 配置的参数 */
@@ -34,6 +54,8 @@ typedef struct _STB_IMAGE_INFO_
     int32_t s32Width;
     int32_t s32Height;
     int32_t s32Channels;    /* s32Channels表示通道数，RGBA 一共 4 个通道，有些图片只有 3 个 */
+    IMAGE_FORMAT eImageFormat;
+    
     uint8_t *pu8Data;
     bool    bBeVaild;
 }ImageInfo;
