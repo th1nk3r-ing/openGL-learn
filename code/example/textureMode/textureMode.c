@@ -36,7 +36,7 @@
 /*                 全局变量                     */
 /*----------------------------------------------*/
 uint32_t VBO = 0, VAO = 0, EBO = 0;
-uint32_t u32Texture = 0;
+TEXTURE_INFO stTexture1 = {0}, stTexture2 = {0};
 
 /*----------------------------------------------*/
 /*                 函数定义                     */
@@ -67,54 +67,97 @@ static int32_t resizeSurface(EGL_Context *esContext)
     return OK;
 }
 
+static int32_t _ConfTexture(TEXTURE_INFO *pstTexture, ImageInfo *pstImage)
+{
+    BASE_CHECK_TRUE_RET(NULL == pstTexture, -1);
+    BASE_CHECK_TRUE_RET(NULL == pstImage, -1);
+    
+    /* 指定 GLSL 片段着色器中的 uniform 纹理值 */
+    GLint location = glGetUniformLocation(pstTexture->u32GLSLProgram, 
+                                          (const GLchar *)pstTexture->ps8TextureName);
+    BASE_CHECK_TRUE_RET(location < 0, -2);
+    GL_RUN_CHECK_RET(glUniform1i(location, pstTexture->u32TextureId));
+
+    /* 生成并配置纹理 */
+    GL_RUN_CHECK_RET(glGenTextures(1, &pstTexture->u32Texture));
+    GL_RUN_CHECK_RET(glActiveTexture(GL_TEXTURE0 + pstTexture->u32TextureId));
+    GL_RUN_CHECK_RET(glBindTexture(GL_TEXTURE_2D, pstTexture->u32Texture));
+    // 为当前绑定的纹理对象设置环绕、过滤方式
+    GL_RUN_CHECK_RET(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, pstTexture->s32WarpMode));
+    GL_RUN_CHECK_RET(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, pstTexture->s32WarpMode));
+    GL_RUN_CHECK_RET(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, pstTexture->s32FilterMode));
+    GL_RUN_CHECK_RET(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, pstTexture->s32FilterMode));
+
+    int32_t s32Ret = OK;
+    s32Ret = imageLoad(pstImage);
+    BASE_CHECK_TRUE_RET(OK != s32Ret, -1);
+
+    if(pstImage->s32Channels == 3)
+    {
+        GL_RUN_CHECK_RET(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pstImage->s32Width, pstImage->s32Height,
+                                        0, GL_RGB, GL_UNSIGNED_BYTE, pstImage->pu8Data));
+    }
+    else if(pstImage->s32Channels == 4)
+    {
+        GL_RUN_CHECK_RET(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pstImage->s32Width, pstImage->s32Height,
+                                0, GL_RGBA, GL_UNSIGNED_BYTE, pstImage->pu8Data));
+    }
+
+    if(pstTexture->bBeGenMipMap)                                    
+    {
+        GL_RUN_CHECK_RET(glGenerateMipmap(GL_TEXTURE_2D));    /* 可省略 */
+    }
+
+    s32Ret = imageFree(pstImage);
+    BASE_CHECK_TRUE_WARN(OK != s32Ret);
+
+    /* unbind texture */
+    GL_RUN_CHECK_RET(glBindTexture(GL_TEXTURE_2D, 0)); 
+
+    return OK;
+}
+
 
 /**
- * @function:   _texture
+ * @function:   _ConfTextureParam
  * @brief:      纹理配置
  * @param[in]:  EGL_Context *esContext
  * @param[out]: None
  * @return:     static int32_t
  */
-static int32_t _ConfTexture(EGL_Context *esContext)
+static int32_t _ConfTextureParam(EGL_Context *esContext)
 {
     /* 纹理顶点属性绑定至 VAO */
     GL_RUN_CHECK_RET(glBindVertexArray(VAO));
     GL_RUN_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, VBO));
-    GL_RUN_CHECK_RET(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))));
+    GL_RUN_CHECK_RET(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float))));
+    GL_RUN_CHECK_RET(glEnableVertexAttribArray(1));    
+    GL_RUN_CHECK_RET(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(5 * sizeof(float))));
     GL_RUN_CHECK_RET(glEnableVertexAttribArray(2));
     GL_RUN_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, 0)); /* 解绑 */
     GL_RUN_CHECK_RET(glBindVertexArray(0));
 
   /****************************** 纹理的配置 *******************************/
-    uint32_t u32TextureId = 0;
-    /* 指定 GLSL 片段着色器中的 uniform 纹理值 */
-    GLint location = glGetUniformLocation(esContext->u32GLSLProgram, "texture_1");
-    BASE_CHECK_TRUE_RET(location < 0, -2);
-    GL_RUN_CHECK_RET(glUniform1i(location, u32TextureId));
-    
-    /* 生成并配置纹理 */
-    GL_RUN_CHECK_RET(glGenTextures(1, &u32Texture));
-    GL_RUN_CHECK_RET(glActiveTexture(GL_TEXTURE0 + u32TextureId));
-    GL_RUN_CHECK_RET(glBindTexture(GL_TEXTURE_2D, u32Texture));
-    // 为当前绑定的纹理对象设置环绕、过滤方式
-    GL_RUN_CHECK_RET(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
-    GL_RUN_CHECK_RET(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
-    GL_RUN_CHECK_RET(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-    GL_RUN_CHECK_RET(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-
-    int32_t s32Ret = OK;
     ImageInfo stImage = {0};
+
+    stTexture1.u32TextureId = 0;
+    snprintf((char *)stTexture1.ps8TextureName, sizeof(stTexture1.ps8TextureName), "texture_0");
+    stTexture1.u32GLSLProgram = esContext->u32GLSLProgram;
+    stTexture1.s32WarpMode = GL_REPEAT;
+    stTexture1.s32FilterMode = GL_LINEAR;
+    memset(&stImage, 0x00, sizeof(stImage));
     snprintf((char *)stImage.ps8FileName, sizeof(stImage.ps8FileName), "./resources/textures/container.jpg");
-    s32Ret = imageLoad(&stImage);
-    BASE_CHECK_TRUE_RET(OK != s32Ret, -1);
-
-    GL_RUN_CHECK_RET(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, stImage.s32Width, stImage.s32Height,
-                                    0, GL_RGB, GL_UNSIGNED_BYTE, stImage.pu8Data));
-//    GL_RUN_CHECK_RET(glGenerateMipmap(GL_TEXTURE_2D));    /* 可省略 */
-
-    s32Ret = imageFree(&stImage);
-    BASE_CHECK_TRUE_WARN(OK != s32Ret);
-    GL_RUN_CHECK_RET(glBindTexture(GL_TEXTURE_2D, 0));  /* unbind texture */
+    _ConfTexture(&stTexture1, &stImage);
+    
+    stTexture2.u32TextureId = 1;
+    snprintf((char *)stTexture2.ps8TextureName, sizeof(stTexture2.ps8TextureName), "texture_1");
+    stTexture2.u32GLSLProgram = esContext->u32GLSLProgram;
+    stTexture2.s32WarpMode = GL_REPEAT;
+    stTexture2.s32FilterMode = GL_LINEAR;    
+    memset(&stImage, 0x00, sizeof(stImage));
+    stImage.bBeFlipVertical = true;
+    snprintf((char *)stImage.ps8FileName, sizeof(stImage.ps8FileName), "./resources/textures/awesomeface.png");
+    _ConfTexture(&stTexture2, &stImage);
 
     return OK;
 }
@@ -137,13 +180,24 @@ int32_t beforeDraw(EGL_Context *esContext)
 	GL_RUN_CHECK_RET(glUseProgram (esContext->u32GLSLProgram));
     GL_RUN_CHECK_RET(glLineWidth(3));
 
+#if 0
     float vVertices[] = {
-   //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
-        0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 右下
-       -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
-       -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上
+   //     ---- 位置 ----       -- 纹理坐标1 --     - 纹理坐标2 -
+        0.5f,  0.5f, 0.0f,   1.0f, 0.0f,      1.0f, 1.0f,   // 右上
+        0.5f, -0.5f, 0.0f,   0.0f, 1.0f,      1.0f, 0.0f,   // 右下
+       -0.5f, -0.5f, 0.0f,   0.0f, 0.0f,      0.0f, 0.0f,   // 左下
+       -0.5f,  0.5f, 0.0f,   1.0f, 1.0f,      0.0f, 1.0f    // 左上
     };
+#else
+     float vVertices[] = {
+    //     ---- 位置 ----       -- 纹理坐标1 --     - 纹理坐标2 -
+         0.5f,  0.5f, 0.0f,   2.0f, 0.0f,      0.5f, 0.5f,   // 右上
+         0.5f, -0.5f, 0.0f,   0.0f, 2.0f,      0.5f, 0.0f,   // 右下
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f,      0.0f, 0.0f,   // 左下
+        -0.5f,  0.5f, 0.0f,   2.0f, 2.0f,      0.0f, 0.5f    // 左上
+     };
+     
+#endif
 
     unsigned int indices[] = {
        0, 1, 3, // 第一个三角形
@@ -161,17 +215,16 @@ int32_t beforeDraw(EGL_Context *esContext)
     GL_RUN_CHECK_RET(glBufferData(GL_ARRAY_BUFFER, sizeof(vVertices), vVertices, GL_STATIC_DRAW));
     GL_RUN_CHECK_RET(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
 
-    GL_RUN_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0));
+    GL_RUN_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0));
     GL_RUN_CHECK_RET(glEnableVertexAttribArray(0));
-    GL_RUN_CHECK_RET(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))));
-    GL_RUN_CHECK_RET(glEnableVertexAttribArray(1));
+
 
     GL_RUN_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, 0)); /* 解绑 */
     GL_RUN_CHECK_RET(glBindVertexArray(0));
 
     Cprintf_green("[%s %d]  \n", __func__, __LINE__);
 
-    _ConfTexture(esContext);
+    _ConfTextureParam(esContext);
 
 	return OK;
 }
@@ -200,7 +253,12 @@ int32_t Draw(EGL_Context *esContext)
 
     GL_RUN_CHECK_RET(glUseProgram(esContext->u32GLSLProgram));
 
-    GL_RUN_CHECK_RET(glBindTexture(GL_TEXTURE_2D, u32Texture));
+    GL_RUN_CHECK_RET(glActiveTexture(GL_TEXTURE0 + stTexture1.u32TextureId));
+    GL_RUN_CHECK_RET(glBindTexture(GL_TEXTURE_2D, stTexture1.u32Texture));
+
+    GL_RUN_CHECK_RET(glActiveTexture(GL_TEXTURE0 + stTexture2.u32TextureId));
+    GL_RUN_CHECK_RET(glBindTexture(GL_TEXTURE_2D, stTexture2.u32Texture));
+    
     GL_RUN_CHECK_RET(glBindVertexArrayOES(VAO));
     GL_RUN_CHECK_RET(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
 
@@ -261,8 +319,8 @@ int main(int argc, char *argv[])
 
 	GL_SetupEGL(&stEglInfo);
 	stEglInfo.u32GLSLProgram =
-	    GL_CreateProgramFromFile("./example/textureCombined/vertextShader.glsl",
-	                             "./example/textureCombined/fragementShder.glsl");
+	    GL_CreateProgramFromFile("./example/textureMode/vertextShader.glsl",
+	                             "./example/textureMode/fragementShder.glsl");
  	BASE_CHECK_TRUE_RET(0 == stEglInfo.u32GLSLProgram, -1);
 
 	stEglInfo.drawFunc = Draw;
