@@ -25,10 +25,11 @@ C_Flags += $(Include_Dir)
 # 源文件
 C_SrcFiles = ./common/src/build_time.c \
 			 ./common/src/win32_platform.c \
-			 ./common/src/OGL_common.c 
+			 ./common/src/OGL_common.c \
+			 ./common/src/my_ResourceLoader.c
 
-# 使用了 stb_image.h, 其中有大量警告, 故去除 -Wconversion
-rmConversionWarnFile :=
+# 利用模式变量和 shell 命令, 去除 -Wconversion, 以关闭 stb_image.h 中的警告;
+./common/src/my_ResourceLoader.o : C_Flags:=$(shell echo $(C_Flags)|sed -s 's/-Wconversion//g')
 
 ifeq ($(MAKECMDGOALS), helloTriangle)
 	C_SrcFiles += ./example/hello_Triangle/hello_Triangle.c
@@ -42,11 +43,9 @@ else ifeq ($(MAKECMDGOALS), shader_glsl2)
 	C_SrcFiles += ./example/shader_glsl2/shader_glsl2.c
 else ifeq ($(MAKECMDGOALS), textureCombined)
 	C_SrcFiles += ./example/textureCombined/textureCombined.c
-	rmConversionWarnFile += ./example/textureCombined/textureCombined.o
 endif
 
-# 利用模式变量和 shell 命令关闭 stb_image.h 中的警告;
-$(rmConversionWarnFile) : C_Flags:=$(shell echo $(C_Flags)|sed -s 's/-Wconversion//g')
+
 
 #Object File
 C_Objs := $(C_SrcFiles:.c=.o)

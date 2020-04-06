@@ -22,6 +22,8 @@
 #include <string.h>
 #include <stdint.h>
 #include <unistd.h>
+#include <stdbool.h>
+#include <math.h>
 
 /*----------------------------------------------*/
 /*                 宏类型定义                        */
@@ -50,7 +52,7 @@
 #define FALSE	(0)
 #endif
 
-//#if defined(BOOL_TYPE_) || defined (_DEF_WINBOOL_)
+//#if defined(BOOL_TYPE_) || defined (_DEF_WINBOOL_) || defined (WINBOOL) 
 //#else
 //#define BOOL_TYPE_
 //typedef unsigned char	BOOL;
@@ -115,10 +117,19 @@
 	do {\
 	    if(expr)\
 	    {\
-			Cprintf_red("[%s %d]  \n", __func__, __LINE__);\
+			Cprintf_red("[%s %d]  ERR!\n", __func__, __LINE__);\
 			return ret;\
 	    }\
 	}while(0)
+
+#define BASE_CHECK_TRUE_WARN(expr) \
+	do {\
+	    if(expr)\
+	    {\
+			Cprintf_yellow("[%s %d]  Warning!\n", __func__, __LINE__);\
+ 	    }\
+	}while(0)
+
 
 /*----------------------------------------------*/
 /*                结构体定                        */
