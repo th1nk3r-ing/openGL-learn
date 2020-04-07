@@ -155,12 +155,12 @@ uint32_t GL_CreateProgramFromFile(const char *ps8VertPath,const char *ps8FragPat
     BASE_CHECK_TRUE_RET(NULL == ps8VertPath, -1);
     BASE_CHECK_TRUE_RET(NULL == ps8FragPath, -1);
 
-    GLchar *ps8VertSrc = readFile(NULL, ps8VertPath, 0);
+    GLchar *ps8VertSrc = (GLchar *)readFile(NULL, ps8VertPath, 0);
     uint32_t u32VertShader = _GL_CreateShader(GL_VERTEX_SHADER, ps8VertSrc);
     free(ps8VertSrc);
  	BASE_CHECK_TRUE_RET(0 == u32VertShader, -2);
 
-    GLchar *ps8FragSrc = readFile(NULL, ps8FragPath, 0);
+    GLchar *ps8FragSrc = (GLchar *)readFile(NULL, ps8FragPath, 0);
     uint32_t u32FragShader = _GL_CreateShader(GL_FRAGMENT_SHADER, ps8FragSrc);
     free(ps8FragSrc);
  	BASE_CHECK_TRUE_RET(0 == u32FragShader, -2);

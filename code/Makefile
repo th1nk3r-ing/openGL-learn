@@ -27,6 +27,8 @@ C_SrcFiles = ./common/src/build_time.c \
 			 ./common/src/win32_platform.c \
 			 ./common/src/OGL_common.c \
 			 ./common/src/my_ResourceLoader.c
+		
+Cxx_SrcFiles = ./common/src/my_TransFormations.cpp
 
 # 利用模式变量和 shell 命令, 去除 -Wconversion, 以关闭 stb_image.h 中的警告;
 ./common/src/my_ResourceLoader.o : C_Flags:=$(shell echo $(C_Flags)|sed -s 's/-Wconversion//g')
@@ -47,7 +49,10 @@ else ifeq ($(MAKECMDGOALS), texture2)
 	C_SrcFiles += ./example/texture2/texture2.c	
 else ifeq ($(MAKECMDGOALS), textureMode)
 	C_SrcFiles += ./example/textureMode/textureMode.c		
+else ifeq ($(MAKECMDGOALS), transFormations)
+	C_SrcFiles += ./example/transFormations/transFormations.c	
 endif
+
 
 
 #Object File
@@ -75,7 +80,7 @@ $(Target) : $(Objs)
 $(C_Objs) : %.o : %.c
 	$(CC) $(C_Flags) -c $< -o $@
 $(Cxx_Objs) : %.o : %.cpp
-	$(CXX) $(C_Flags) -c $< -o $@
+	$(CC) $(C_Flags) -c $< -o $@
 
 helloTriangle: $(Target)
 triangleIndxed: $(Target)
@@ -85,6 +90,7 @@ shader_glsl2: $(Target)
 textureCombined: $(Target)
 texture2: $(Target)
 textureMode: $(Target)
+transFormations: $(Target)
 
 .PHONY : clean 
 	
