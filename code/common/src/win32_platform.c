@@ -271,6 +271,7 @@ void win_WinLoop(EGL_Context *pstEglContext)
 	MSG msg = { 0 };
 	int done = 0;
 	DWORD lastTime = GetTickCount();
+    uint32_t u32LastDrawTime = 0, u32NowTime = 0;
 
 	while( !done )
 	{
@@ -293,7 +294,16 @@ void win_WinLoop(EGL_Context *pstEglContext)
 		}
 		else
 		{
-			SendMessage(pstEglContext->eglNativeWindow, WM_PAINT, 0, 0 );
+            u32NowTime = getTime_ms();		
+		    if(u32NowTime - u32LastDrawTime > 25)
+		    {
+    			SendMessage(pstEglContext->eglNativeWindow, WM_PAINT, 0, 0 );    			
+                u32LastDrawTime = u32NowTime;
+		    }
+		    else
+		    {
+                sleep_ms(2);
+		    }
 		}
 
 		// Call update function if registered
@@ -302,7 +312,6 @@ void win_WinLoop(EGL_Context *pstEglContext)
 			pstEglContext->updateFunc( pstEglContext, deltaTime );
 		}
 
-	    sleep_ms(39);
 	}
 
 

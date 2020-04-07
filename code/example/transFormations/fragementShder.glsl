@@ -1,5 +1,5 @@
 #version 300 es 
-precision mediump float;
+precision highp float;
 in vec2 texCoord;
 uniform sampler2D texture_0;
 uniform sampler2D texture_1;

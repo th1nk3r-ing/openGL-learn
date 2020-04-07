@@ -79,6 +79,7 @@ struct EGL_Context
 	void ( ESCALLBACK *resizeWinFunc ) ( EGL_Context *, uint32_t width, uint32_t height);
 
 	uint32_t u32GLSLProgram;
+    int32_t  s32GLSLTransLoc;
 
     uint32_t u32DrawCnt;
     uint32_t u32DrawFps;

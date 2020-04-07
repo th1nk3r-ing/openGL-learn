@@ -2,7 +2,7 @@
  * @file:   my_TransFormations.cpp
  * @note:   2010-2020, <git.oschia.net/think3r>
  * @brief:  glm 变换的封装
- * @author:  
+ * @author:
  * @date:   2020/4/7
  * @note:
  * @note \n History:
@@ -17,6 +17,9 @@
 #include "common.h"
 #include "build_time.h"
 #include "my_TransFormations.h"
+//#include "glm/glm.hpp"
+//#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtc/type_ptr.hpp>
 #include "glm/vec3.hpp" // glm::vec3
 #include "glm/vec4.hpp" // glm::vec4
 #include "glm/mat4x4.hpp" // glm::mat4
@@ -45,21 +48,23 @@
 /*                 函数定义                     */
 /*----------------------------------------------*/
 
-float * getTransForm(uint32_t u32NowTime)
-{    
-    // create transformations
-    static glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+float * transFormations_get1(uint32_t u32NowTime)
+{
+    static glm::mat4 transform = glm::mat4(1.0f);
+    transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
     transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
-    transform = glm::rotate(transform, (float)u32NowTime, glm::vec3(0.0f, 0.0f, 1.0f));
+    float fTime = GET_FLOAT_TIME_S(u32NowTime);
+    transform = glm::rotate(transform, fTime, glm::vec3(0.0f, 0.0f, 1.0f));
 
-    float * pRet = (float *)(glm::value_ptr(transform));
+    float * pfRet = (float *)(glm::value_ptr(transform));
 
-    for(uint32_t i = 0; i < 16; i ++)
-    {
-        printf("[%s %d]  idx:[%d[ pRet[%.2f]\n", __func__, __LINE__, i, pRet[i]);
-    }
+//    printf("[%s %d]  [%.2f]\n", __func__, __LINE__, fTime);
+//    for(uint32_t i = 0; i < 16; i ++)
+//    {
+//        printf("[%s %d]  idx:[%d[ pfRet[%.2f]\n", __func__, __LINE__, i, pfRet[i]);
+//    }
 
-    return pRet;
+    return pfRet;
 }
 
 

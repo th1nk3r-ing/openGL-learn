@@ -36,6 +36,7 @@
 /*----------------------------------------------*/
 /*                 全局变量                     */
 /*----------------------------------------------*/
+uint32_t u32g_StartTime = 0;    /* 启动时间 */
 uint32_t VBO = 0, VAO = 0, EBO = 0;
 TEXTURE_INFO stTexture1 = {0}, stTexture2 = {0};
 
@@ -72,9 +73,9 @@ static int32_t _ConfTexture(TEXTURE_INFO *pstTexture, ImageInfo *pstImage)
 {
     BASE_CHECK_TRUE_RET(NULL == pstTexture, -1);
     BASE_CHECK_TRUE_RET(NULL == pstImage, -1);
-    
+
     /* 指定 GLSL 片段着色器中的 uniform 纹理值 */
-    GLint location = glGetUniformLocation(pstTexture->u32GLSLProgram, 
+    GLint location = glGetUniformLocation(pstTexture->u32GLSLProgram,
                                           (const GLchar *)pstTexture->ps8TextureName);
     BASE_CHECK_TRUE_RET(location < 0, -2);
     GL_RUN_CHECK_RET(glUniform1i(location, pstTexture->u32TextureId));
@@ -104,7 +105,7 @@ static int32_t _ConfTexture(TEXTURE_INFO *pstTexture, ImageInfo *pstImage)
                                 0, GL_RGBA, GL_UNSIGNED_BYTE, pstImage->pu8Data));
     }
 
-    if(pstTexture->bBeGenMipMap)                                    
+    if(pstTexture->bBeGenMipMap)
     {
         GL_RUN_CHECK_RET(glGenerateMipmap(GL_TEXTURE_2D));    /* 可省略 */
     }
@@ -113,7 +114,7 @@ static int32_t _ConfTexture(TEXTURE_INFO *pstTexture, ImageInfo *pstImage)
     BASE_CHECK_TRUE_WARN(OK != s32Ret);
 
     /* unbind texture */
-    GL_RUN_CHECK_RET(glBindTexture(GL_TEXTURE_2D, 0)); 
+    GL_RUN_CHECK_RET(glBindTexture(GL_TEXTURE_2D, 0));
 
     return OK;
 }
@@ -147,12 +148,12 @@ static int32_t _ConfTextureParam(EGL_Context *esContext)
     memset(&stImage, 0x00, sizeof(stImage));
     snprintf((char *)stImage.ps8FileName, sizeof(stImage.ps8FileName), "./resources/textures/container.jpg");
     _ConfTexture(&stTexture1, &stImage);
-    
+
     stTexture2.u32TextureId = 1;
     snprintf((char *)stTexture2.ps8TextureName, sizeof(stTexture2.ps8TextureName), "texture_1");
     stTexture2.u32GLSLProgram = esContext->u32GLSLProgram;
     stTexture2.s32WarpMode = GL_REPEAT;
-    stTexture2.s32FilterMode = GL_LINEAR;    
+    stTexture2.s32FilterMode = GL_LINEAR;
     memset(&stImage, 0x00, sizeof(stImage));
     stImage.bBeFlipVertical = true;
     snprintf((char *)stImage.ps8FileName, sizeof(stImage.ps8FileName), "./resources/textures/awesomeface.png");
@@ -185,8 +186,8 @@ int32_t beforeDraw(EGL_Context *esContext)
           0.5f,  0.5f, 0.0f,    1.0f, 1.0f, // top right
           0.5f, -0.5f, 0.0f,    1.0f, 0.0f, // bottom right
          -0.5f, -0.5f, 0.0f,    0.0f, 0.0f, // bottom left
-         -0.5f,  0.5f, 0.0f,    0.0f, 1.0f  // top left 
-     };    
+         -0.5f,  0.5f, 0.0f,    0.0f, 1.0f  // top left
+     };
 
     unsigned int indices[] = {
        0, 1, 3, // 第一个三角形
@@ -198,10 +199,11 @@ int32_t beforeDraw(EGL_Context *esContext)
     GL_RUN_CHECK_RET(glGenBuffers(1, &EBO));
 
     GL_RUN_CHECK_RET(glBindVertexArray(VAO));
+    
     GL_RUN_CHECK_RET(glBindBuffer(GL_ARRAY_BUFFER, VBO));
-    GL_RUN_CHECK_RET(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
-
     GL_RUN_CHECK_RET(glBufferData(GL_ARRAY_BUFFER, sizeof(vVertices), vVertices, GL_STATIC_DRAW));
+    
+    GL_RUN_CHECK_RET(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));    
     GL_RUN_CHECK_RET(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
 
     GL_RUN_CHECK_RET(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0));
@@ -248,13 +250,10 @@ int32_t Draw(EGL_Context *esContext)
     GL_RUN_CHECK_RET(glActiveTexture(GL_TEXTURE0 + stTexture2.u32TextureId));
     GL_RUN_CHECK_RET(glBindTexture(GL_TEXTURE_2D, stTexture2.u32Texture));
 
-    float * pfTransForm = getTransForm(getTime_ms());
-    int32_t transformLoc = glGetUniformLocation(esContext->u32GLSLProgram, "transform");
-    BASE_CHECK_TRUE_RET(transformLoc < 0, -2);    
-    GL_RUN_CHECK_RET(glUniformMatrix4fv(transformLoc, 1, GL_FALSE, pfTransForm));
-
+    float * pfTransForm = transFormations_get1((getTime_ms() - u32g_StartTime));
+    GL_RUN_CHECK_RET(glUniformMatrix4fv(esContext->s32GLSLTransLoc, 1, GL_FALSE, pfTransForm));
     GL_RUN_CHECK_RET(glBindVertexArrayOES(VAO));
-    
+
     GL_RUN_CHECK_RET(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
 
     /* swap to disp */
@@ -303,6 +302,8 @@ int main(int argc, char *argv[])
 
     mk_Build_Date(NULL);
 
+    u32g_StartTime = getTime_ms();
+
 	EGL_Context stEglInfo = {0};
 	stEglInfo.s32SurfaceW = 640;
 	stEglInfo.s32SurfaceH = 480;
@@ -316,7 +317,9 @@ int main(int argc, char *argv[])
 	stEglInfo.u32GLSLProgram =
 	    GL_CreateProgramFromFile("./example/transFormations/vertextShader.glsl",
 	                             "./example/transFormations/fragementShder.glsl");
- 	BASE_CHECK_TRUE_RET(0 == stEglInfo.u32GLSLProgram, -1);
+ 	BASE_CHECK_TRUE_RET(0 == stEglInfo.u32GLSLProgram, -2);
+    stEglInfo.s32GLSLTransLoc = glGetUniformLocation(stEglInfo.u32GLSLProgram, "transform");
+    BASE_CHECK_TRUE_RET(stEglInfo.s32GLSLTransLoc < 0, -2);
 
 	stEglInfo.drawFunc = Draw;
 	stEglInfo.shutdownFunc = NULL;
