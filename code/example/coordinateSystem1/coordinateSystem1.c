@@ -228,7 +228,7 @@ int32_t beforeDraw(EGL_Context *esContext)
     };
 
     /* global stat */
-//    GL_RUN_CHECK_RET(glEnable(GL_DEPTH_TEST));
+    GL_RUN_CHECK_RET(glEnable(GL_DEPTH_TEST));
 
     GL_RUN_CHECK_RET(glGenVertexArrays(1, &VAO));
     GL_RUN_CHECK_RET(glGenBuffers(1, &VBO));
@@ -263,16 +263,19 @@ int32_t beforeDraw(EGL_Context *esContext)
  */
 int32_t Draw(EGL_Context *esContext)
 {
+    int32_t s32Ret = OK;
+
     /* 绑定 Context 至当前线程 */
     EGL_RUN_CHECK_RET(eglMakeCurrent(esContext->eglDisplay, esContext->eglSurface,
     						 esContext->eglSurface, esContext->eglContext));
 
     /* 重配窗口大小 */
-    resizeSurface(esContext);
+    s32Ret = resizeSurface(esContext);
+    BASE_CHECK_TRUE_RET(OK != s32Ret, -2);
 
 	// Clear the color buffer
 	GL_RUN_CHECK_RET(glClearColor(0.0f, 0.0f, 0.0f, 1));
-	GL_RUN_CHECK_RET(glClear(GL_COLOR_BUFFER_BIT));
+	GL_RUN_CHECK_RET(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
     GL_RUN_CHECK_RET(glUseProgram(esContext->u32GLSLProgram));
 
@@ -284,8 +287,10 @@ int32_t Draw(EGL_Context *esContext)
 
     GL_RUN_CHECK_RET(glBindVertexArrayOES(VAO));
 
-    /* 第一个变换 */
-    coordinateSystem_get1(&stCoorSysInfo, (getTime_ms() - u32g_StartTime));
+    stCoorSysInfo.s32CurSurfaceW = esContext->s32SurfaceW;
+    stCoorSysInfo.s32CurSurfaceH = esContext->s32SurfaceH;
+    s32Ret = coordinateSystem_get1(&stCoorSysInfo, (getTime_ms() - u32g_StartTime));
+    BASE_CHECK_TRUE_RET(OK != s32Ret, -2);
 
     GL_RUN_CHECK_RET(glUniformMatrix4fv(stCoorSysInfo.s32GLSLModelLoc, 1,
                                         GL_FALSE, stCoorSysInfo.pfModelMat));
@@ -351,7 +356,7 @@ int main(int argc, char *argv[])
 	stEglInfo.s32NewSurfaceH = stEglInfo.s32SurfaceH;
 	stEglInfo.bBeReSizeSurface = TRUE;
 
-	win_CreateWindow(&stEglInfo, "testWin");
+	win_CreateWindow(&stEglInfo, __FILE__);
 
 	GL_SetupEGL(&stEglInfo);
 	stEglInfo.u32GLSLProgram =
@@ -359,8 +364,8 @@ int main(int argc, char *argv[])
 	                             "./example/coordinateSystem1/fragementShder.glsl");
  	BASE_CHECK_TRUE_RET(0 == stEglInfo.u32GLSLProgram, -2);
 
-    stCoorSysInfo.u32CurSurfaceW = stEglInfo.s32SurfaceW;
-    stCoorSysInfo.u32CurSurfaceH = stEglInfo.s32SurfaceH;
+    stCoorSysInfo.s32CurSurfaceW = stEglInfo.s32SurfaceW;
+    stCoorSysInfo.s32CurSurfaceH = stEglInfo.s32SurfaceH;
 
     stCoorSysInfo.s32GLSLModelLoc = glGetUniformLocation(stEglInfo.u32GLSLProgram, "model");
     BASE_CHECK_TRUE_RET(stCoorSysInfo.s32GLSLModelLoc < 0, -2);

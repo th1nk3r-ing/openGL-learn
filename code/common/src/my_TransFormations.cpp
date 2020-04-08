@@ -96,7 +96,7 @@ float * transFormations_get2(uint32_t u32NowTime)
 }
 
 
-uint32_t coordinateSystem_get1(CoorSysInfo * pstInfo, uint32_t u32NowTime)
+int32_t coordinateSystem_get1(CoorSysInfo * pstInfo, uint32_t u32NowTime)
 {
     // create transformations
     static glm::mat4 model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
@@ -111,7 +111,7 @@ uint32_t coordinateSystem_get1(CoorSysInfo * pstInfo, uint32_t u32NowTime)
     model = glm::rotate(model, fTime, glm::vec3(0.5f, 1.0f, 0.0f));
     view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
     projection = glm::perspective(glm::radians(45.0f), 
-                                  (float)pstInfo->u32CurSurfaceW / (float)pstInfo->u32CurSurfaceH, 
+                                  (float)pstInfo->s32CurSurfaceW / (float)pstInfo->s32CurSurfaceH, 
                                   0.1f, 
                                   100.0f);
 

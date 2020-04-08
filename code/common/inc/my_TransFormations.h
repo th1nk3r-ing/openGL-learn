@@ -32,8 +32,8 @@ extern "C"{
 /*----------------------------------------------*/
 typedef struct _coordinate_Systems_Info_
 {
-    uint32_t u32CurSurfaceW;
-    uint32_t u32CurSurfaceH;
+    int32_t s32CurSurfaceW;
+    int32_t s32CurSurfaceH;
 
     int32_t s32GLSLModelLoc;    
     float * pfModelMat;
@@ -50,7 +50,7 @@ typedef struct _coordinate_Systems_Info_
 /*----------------------------------------------*/
 float * transFormations_get1(uint32_t u32NowTime);
 float * transFormations_get2(uint32_t u32NowTime);
-uint32_t coordinateSystem_get1(CoorSysInfo * pstInfo, uint32_t u32NowTime);
+int32_t coordinateSystem_get1(CoorSysInfo * pstInfo, uint32_t u32NowTime);
 
 /*----------------------------------------------*/
 /*                 全局变量                     */

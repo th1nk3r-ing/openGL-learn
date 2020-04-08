@@ -271,6 +271,27 @@ int32_t GL_SetupEGL(EGL_Context *pstEGL)
     return OK;
 }
 
+/**
+ * @function:   GL_GetSurfaceWxH
+ * @brief:      获取窗口的实时宽高
+ * @param[in]:  EGL_Context *pstEGL
+ * @param[in]:  int32_t * ps32Width
+ * @param[in]:  int32_t * ps32Heigh
+ * @param[out]: None
+ * @return:     int32_t
+ */
+int32_t GL_GetSurfaceWxH(EGL_Context *pstEGL, int32_t * ps32Width, int32_t * ps32Heigh)
+{
+    BASE_CHECK_TRUE_RET(NULL == pstEGL, -1);
+    BASE_CHECK_TRUE_RET(NULL == ps32Width, -1);
+    BASE_CHECK_TRUE_RET(NULL == ps32Heigh, -1);
+
+    EGL_RUN_CHECK_RET(eglQuerySurface(pstEGL->eglDisplay, pstEGL->eglSurface,
+                                   EGL_WIDTH, ps32Width));
+    EGL_RUN_CHECK_RET(eglQuerySurface(pstEGL->eglDisplay, pstEGL->eglSurface,
+                                   EGL_HEIGHT, ps32Heigh));
+    return OK;
+}
 
 /**
  * @function:   CalcFpsInfo
@@ -281,21 +302,24 @@ int32_t GL_SetupEGL(EGL_Context *pstEGL)
  */
 void CalcFpsInfo(EGL_Context *pstEGL)
 {
-    pstEGL->u32DrawCnt++;
-
-    if(pstEGL->u32DrawCnt % OPENGL_FPS_CALC_INTERVAL)
+    if(NULL != pstEGL)
     {
-        return;
+        pstEGL->u32DrawCnt++;
+
+        if(pstEGL->u32DrawCnt % OPENGL_FPS_CALC_INTERVAL)
+        {
+            return;
+        }
+
+        uint32_t u32NowTime = getTime_ms();
+        pstEGL->u32DrawFps = (uint32_t)(OPENGL_FPS_CALC_INTERVAL * 1000.0 /
+                                            (float)(u32NowTime - pstEGL->u32LastFpsCalcTime) + 0.5);
+        Cprintf_green("[%s %d]  disp:[%d], fps:[%d], thisT:[%d]\n",
+                        __func__, __LINE__, pstEGL->u32DrawCnt++,
+                        pstEGL->u32DrawFps, u32NowTime);
+
+        pstEGL->u32LastFpsCalcTime = u32NowTime;
     }
-
-    uint32_t u32NowTime = getTime_ms();
-    pstEGL->u32DrawFps = (uint32_t)(OPENGL_FPS_CALC_INTERVAL * 1000.0 /
-                                        (float)(u32NowTime - pstEGL->u32LastFpsCalcTime) + 0.5);
-    Cprintf_green("[%s %d]  disp:[%d], fps:[%d], thisT:[%d]\n",
-                    __func__, __LINE__, pstEGL->u32DrawCnt++,
-                    pstEGL->u32DrawFps, u32NowTime);
-
-    pstEGL->u32LastFpsCalcTime = u32NowTime;
 
     return;
 }

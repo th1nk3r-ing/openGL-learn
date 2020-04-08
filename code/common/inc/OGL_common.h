@@ -94,7 +94,7 @@ struct EGL_Context
 
 typedef struct _TEXTURE_INFO_
 {
-    uint32_t u32Texture;  
+    uint32_t u32Texture;
     uint32_t u32TextureId;
     uint32_t u32GLSLProgram;
     int8_t   ps8TextureName[48];
@@ -119,6 +119,7 @@ typedef struct _TEXTURE_INFO_
 uint32_t GL_CreateProgram(const GLchar *ps8VertSrc, const GLchar *ps8FragSrc);
 uint32_t GL_CreateProgramFromFile(const char *ps8VertPath,const char *ps8FragPath);
 int32_t GL_SetupEGL(EGL_Context *pstEGL);
+int32_t GL_GetSurfaceWxH(EGL_Context *pstEGL, int32_t * ps32Width, int32_t * ps32Heigh);
 void CalcFpsInfo(EGL_Context *pstEGL);
 
 
