@@ -211,15 +211,15 @@ int32_t GL_SetupEGL(EGL_Context *pstEGL)
 
     int32_t s32MajorVersion = 0, s32MinorVersion = 0;
     EGL_RUN_CHECK_RET(eglInitialize(pstEGL->eglDisplay, &s32MajorVersion, &s32MinorVersion));
-    Cprintf_white( "EGL-Version:[%d.%d]\n", s32MajorVersion, s32MinorVersion);
+    Cprintf_white( "EGL-Version:[%d-%d]\n", s32MajorVersion, s32MinorVersion);
 
 	/* 查询 EGL 版本信息 */
     const char *ps8ClientApis = eglQueryString(pstEGL->eglDisplay, EGL_CLIENT_APIS);
     const char *ps8Vendor = eglQueryString(pstEGL->eglDisplay, EGL_VENDOR);
     const char *ps8Version = eglQueryString(pstEGL->eglDisplay, EGL_VERSION);
-    Cprintf_white( "EGL_CLIENT_APIS: %s\n", ps8ClientApis);
-    Cprintf_white( "EGL_VENDOR: %s\n", ps8Vendor);
-    Cprintf_white( "EGL_VERSION: %s\n\n", ps8Version);
+    Cprintf_white( "EGL_CLIENT_APIS: [%s]\n", ps8ClientApis);
+    Cprintf_white( "EGL_VENDOR: [%s]\n", ps8Vendor);
+    Cprintf_white( "EGL_VERSION: [%s]\n", ps8Version);
 
     // Get a matching config
     int32_t as32ConfigAttrs[] =
@@ -247,7 +247,7 @@ int32_t GL_SetupEGL(EGL_Context *pstEGL)
                                    EGL_WIDTH, &pstEGL->s32SurfaceW));
     EGL_RUN_CHECK_RET(eglQuerySurface(pstEGL->eglDisplay, pstEGL->eglSurface,
                                    EGL_HEIGHT, &pstEGL->s32SurfaceH));
-    Cprintf_yellow( "surface: WxH:[%d x %d]\n", pstEGL->s32SurfaceW, pstEGL->s32SurfaceH);
+    Cprintf_yellow( "surface WxH:[%d x %d]\n", pstEGL->s32SurfaceW, pstEGL->s32SurfaceH);
 
     /* 创建 Context */
     int32_t as32ContextAttrs[] =

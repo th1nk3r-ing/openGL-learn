@@ -84,8 +84,9 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
 
 ## <font color=#009A000> 0x02 demo </font>
 
-~~PASS: 由于 `deInif()` 崩溃, 固暂时不对 OGL 资源做完全的释放~~
-
+0. Note :
+   - ~~由于 `deInif()` 崩溃, 固暂时不对 OGL 资源做完全的释放~~
+   - Mali OGL-ES 模拟器 的 GLSL 编译有 bug, 相同类型的不同变量只能写在同一行, 否则会报错;
 1. `make helloTriangle`
    - 环境测试 && 最初入门;
 2. `make triangleIndxed`

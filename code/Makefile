@@ -51,8 +51,9 @@ else ifeq ($(MAKECMDGOALS), textureMode)
 	C_SrcFiles += ./example/textureMode/textureMode.c		
 else ifeq ($(MAKECMDGOALS), transFormations)
 	C_SrcFiles += ./example/transFormations/transFormations.c	
+else ifeq ($(MAKECMDGOALS), coordinateSystem1)
+	C_SrcFiles += ./example/coordinateSystem1/coordinateSystem1.c	
 endif
-
 
 
 #Object File
@@ -91,6 +92,7 @@ textureCombined: $(Target)
 texture2: $(Target)
 textureMode: $(Target)
 transFormations: $(Target)
+coordinateSystem1: $(Target)
 
 .PHONY : clean 
 	
