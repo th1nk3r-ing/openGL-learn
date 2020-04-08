@@ -87,9 +87,9 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
 0. Note :
    - ~~由于 `deInif()` 崩溃, 固暂时不对 OGL 资源做完全的释放~~
    - Mali OGL-ES 模拟器 的 GLSL 编译有 bug, 相同类型的不同变量只能写在同一行, 否则会报错;
-1. `make helloTriangle`
+1. `make 1.helloTriangle`
    - 环境测试 && 最初入门;
-2. `make triangleIndxed`
+2. `make 2.triangleIndxed`
    - 全局变量 `u32DrawMode` 绘制模式, 可为 : `GL_TRIANGLES`, `GL_POINTS`, `GL_LINE_LOOP` 等;
    - `-D USE_VAO` 使用 <u>BO + VBO + VAO + EBO</u> 绘制四边形;
      - hello_triangle_indexed
@@ -97,23 +97,23 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
    - `-D USE_EBO` 使用 <u>BO + VBO + EBO</u> 绘制四边形;
    - `-D USE_TRANGLES` 6 顶点直接绘制四边形;
    - `-D USE_TRANGLES_STRIP` 4 顶点直接绘制四边形;
-3. `make triangle2`
+3. `make 3.triangle2`
    - `-D ONE_VBO` 使用 <u>1 VBO + 2 EBO + 2 VAO + 2 program</u> 绘制颜色不同的四边形;
    - `-D TWO_VBO` 使用 <u>2 VBO + 2 VAO + 2 program</u> 绘制颜色不同的四边形;
-4. `make shader_glsl`
+4. `make 4.shader_glsl`
    - `-D TWO_VERTEX_ATTRI_POINTER` 1 VBO + 1 VAO + 双顶点数组指针, 绘制调色板三角形;
    - `-D UINFORM_TEST` 使用 GLSL 中的 uniform 绘制变色三角形;
-5. `make shader_glsl2`
+5. `make 5.shader_glsl2`
    - shaderToy 着色器代码移植, 炫酷的动态调色盘;
-6. `make textureCombined`
+6. `make 6.textureCombined`
    - 纹理初步使用 + 颜色混合(使用了 VAO);
-7. `make textureCombined`
+7. `make 7.textureCombined`
    - 纹理 x 2 混合 + 颜色混合;
-8. `make textureMode`
+8. `make 8.textureMode`
    - 纹理缩放和渲染模式;
    - <u>note: glsl 中的两个纹理, 必须放到一行, 否则会报错!</u>
-9. `make transFormations`
+9. `make 9.transFormations` 平面矩形
    - 对应 `transformations_exercise2`;
-10. `make coordinateSystem`
+10. `make 10.coordinateSystem` 立方体
     - 无宏定义, 对应 `6.2.coordinate_systems_depth`
     - `-D MULTIPLE_CUBE` 对应 `6.3.coordinate_systems_multiple`

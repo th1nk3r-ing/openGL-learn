@@ -38,6 +38,7 @@
 /*----------------------------------------------*/
 uint32_t u32g_StartTime = 0;    /* 启动时间 */
 uint32_t VBO = 0, VAO = 0, EBO = 0;
+int32_t s32GLSLTransLoc = 0;
 TEXTURE_INFO stTexture1 = {0}, stTexture2 = {0};
 
 /*----------------------------------------------*/
@@ -254,12 +255,12 @@ int32_t Draw(EGL_Context *esContext)
 
     /* 第一个变换 */
     float * pfTransForm = transFormations_get1((getTime_ms() - u32g_StartTime));
-    GL_RUN_CHECK_RET(glUniformMatrix4fv(esContext->s32GLSLTransLoc, 1, GL_FALSE, pfTransForm));
+    GL_RUN_CHECK_RET(glUniformMatrix4fv(s32GLSLTransLoc, 1, GL_FALSE, pfTransForm));
     GL_RUN_CHECK_RET(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
 
     /* 第二个变换 */
     pfTransForm = transFormations_get2((getTime_ms() - u32g_StartTime));
-    GL_RUN_CHECK_RET(glUniformMatrix4fv(esContext->s32GLSLTransLoc, 1, GL_FALSE, pfTransForm));
+    GL_RUN_CHECK_RET(glUniformMatrix4fv(s32GLSLTransLoc, 1, GL_FALSE, pfTransForm));
     GL_RUN_CHECK_RET(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
 
     /* swap to disp */
@@ -324,8 +325,8 @@ int main(int argc, char *argv[])
 	    GL_CreateProgramFromFile("./example/transFormations/vertextShader.glsl",
 	                             "./example/transFormations/fragementShder.glsl");
  	BASE_CHECK_TRUE_RET(0 == stEglInfo.u32GLSLProgram, -2);
-    stEglInfo.s32GLSLTransLoc = glGetUniformLocation(stEglInfo.u32GLSLProgram, "transform");
-    BASE_CHECK_TRUE_RET(stEglInfo.s32GLSLTransLoc < 0, -2);
+    s32GLSLTransLoc = glGetUniformLocation(stEglInfo.u32GLSLProgram, "transform");
+    BASE_CHECK_TRUE_RET(s32GLSLTransLoc < 0, -2);
 
 	stEglInfo.drawFunc = Draw;
 	stEglInfo.shutdownFunc = NULL;

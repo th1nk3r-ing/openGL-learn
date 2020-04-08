@@ -33,25 +33,25 @@ Cxx_SrcFiles = ./common/src/my_TransFormations.cpp
 # 利用模式变量和 shell 命令, 去除 -Wconversion, 以关闭 stb_image.h 中的警告;
 ./common/src/my_ResourceLoader.o : C_Flags:=$(shell echo $(C_Flags)|sed -s 's/-Wconversion//g')
 
-ifeq ($(MAKECMDGOALS), helloTriangle)
+ifeq ($(MAKECMDGOALS), 1.helloTriangle)
 	C_SrcFiles += ./example/hello_Triangle/hello_Triangle.c
-else ifeq ($(MAKECMDGOALS), triangleIndxed)
+else ifeq ($(MAKECMDGOALS), 2.triangleIndxed)
 	C_SrcFiles += ./example/triangle_indxed/triangle_indxed.c
-else ifeq ($(MAKECMDGOALS), triangle2)
+else ifeq ($(MAKECMDGOALS), 3.triangle2)
 	C_SrcFiles += ./example/triangle2/triangle2.c
-else ifeq ($(MAKECMDGOALS), shader_glsl)
+else ifeq ($(MAKECMDGOALS), 4.shader_glsl)
 	C_SrcFiles += ./example/shader_glsl/shader_glsl.c
-else ifeq ($(MAKECMDGOALS), shader_glsl2)
+else ifeq ($(MAKECMDGOALS), 5.shader_glsl2)
 	C_SrcFiles += ./example/shader_glsl2/shader_glsl2.c
-else ifeq ($(MAKECMDGOALS), textureCombined)
+else ifeq ($(MAKECMDGOALS), 6.textureCombined)
 	C_SrcFiles += ./example/textureCombined/textureCombined.c
-else ifeq ($(MAKECMDGOALS), texture2)
+else ifeq ($(MAKECMDGOALS), 7.texture2)
 	C_SrcFiles += ./example/texture2/texture2.c	
-else ifeq ($(MAKECMDGOALS), textureMode)
+else ifeq ($(MAKECMDGOALS), 8.textureMode)
 	C_SrcFiles += ./example/textureMode/textureMode.c		
-else ifeq ($(MAKECMDGOALS), transFormations)
+else ifeq ($(MAKECMDGOALS), 9.transFormations)
 	C_SrcFiles += ./example/transFormations/transFormations.c	
-else ifeq ($(MAKECMDGOALS), coordinateSystem)
+else ifeq ($(MAKECMDGOALS), 10.coordinateSystem)
 	C_SrcFiles += ./example/coordinateSystem/coordinateSystem.c	
 endif
 
@@ -83,16 +83,16 @@ $(C_Objs) : %.o : %.c
 $(Cxx_Objs) : %.o : %.cpp
 	$(CC) $(C_Flags) -c $< -o $@
 
-helloTriangle: $(Target)
-triangleIndxed: $(Target)
-triangle2: $(Target)
-shader_glsl: $(Target)
-shader_glsl2: $(Target)
-textureCombined: $(Target)
-texture2: $(Target)
-textureMode: $(Target)
-transFormations: $(Target)
-coordinateSystem: $(Target)
+1.helloTriangle: $(Target)
+2.triangleIndxed: $(Target)
+3.triangle2: $(Target)
+4.shader_glsl: $(Target)
+5.shader_glsl2: $(Target)
+6.textureCombined: $(Target)
+7.texture2: $(Target)
+8.textureMode: $(Target)
+9.transFormations: $(Target)
+10.coordinateSystem: $(Target)
 
 .PHONY : clean 
 	
