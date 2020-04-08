@@ -295,7 +295,7 @@ void win_WinLoop(EGL_Context *pstEglContext)
 		else
 		{
             u32NowTime = getTime_ms();		
-		    if(u32NowTime - u32LastDrawTime > 25)
+		    if(u32NowTime - u32LastDrawTime > 24)
 		    {
     			SendMessage(pstEglContext->eglNativeWindow, WM_PAINT, 0, 0 );    			
                 u32LastDrawTime = u32NowTime;

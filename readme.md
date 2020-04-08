@@ -111,4 +111,6 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
 8. `make textureMode`
    - 纹理缩放和渲染模式;
    - <u>note: glsl 中的两个纹理, 必须放到一行, 否则会报错!</u>
-9. 
+9. `make transFormations`
+   - 对应 `transformations_exercise2`;
+10. `make `

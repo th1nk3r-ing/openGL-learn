@@ -35,6 +35,7 @@ extern "C"{
 /*                 函数声明                     */
 /*----------------------------------------------*/
 float * transFormations_get1(uint32_t u32NowTime);
+float * transFormations_get2(uint32_t u32NowTime);
 
 /*----------------------------------------------*/
 /*                 全局变量                     */

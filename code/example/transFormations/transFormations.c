@@ -250,10 +250,16 @@ int32_t Draw(EGL_Context *esContext)
     GL_RUN_CHECK_RET(glActiveTexture(GL_TEXTURE0 + stTexture2.u32TextureId));
     GL_RUN_CHECK_RET(glBindTexture(GL_TEXTURE_2D, stTexture2.u32Texture));
 
-    float * pfTransForm = transFormations_get1((getTime_ms() - u32g_StartTime));
-    GL_RUN_CHECK_RET(glUniformMatrix4fv(esContext->s32GLSLTransLoc, 1, GL_FALSE, pfTransForm));
     GL_RUN_CHECK_RET(glBindVertexArrayOES(VAO));
 
+    /* 第一个变换 */
+    float * pfTransForm = transFormations_get1((getTime_ms() - u32g_StartTime));
+    GL_RUN_CHECK_RET(glUniformMatrix4fv(esContext->s32GLSLTransLoc, 1, GL_FALSE, pfTransForm));
+    GL_RUN_CHECK_RET(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
+
+    /* 第二个变换 */
+    pfTransForm = transFormations_get2((getTime_ms() - u32g_StartTime));
+    GL_RUN_CHECK_RET(glUniformMatrix4fv(esContext->s32GLSLTransLoc, 1, GL_FALSE, pfTransForm));
     GL_RUN_CHECK_RET(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
 
     /* swap to disp */

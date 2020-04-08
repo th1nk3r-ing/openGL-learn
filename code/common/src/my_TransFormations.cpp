@@ -51,10 +51,38 @@
 float * transFormations_get1(uint32_t u32NowTime)
 {
     static glm::mat4 transform = glm::mat4(1.0f);
+
     transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-    transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
     float fTime = GET_FLOAT_TIME_S(u32NowTime);
+
+    float fYpitch = (float)fmod(fTime * 0.1, 2.0f);
+    transform = glm::translate(transform, glm::vec3(-1.0f + fYpitch, -0.5f, 0.0f));
+
     transform = glm::rotate(transform, fTime, glm::vec3(0.0f, 0.0f, 1.0f));
+
+    float * pfRet = (float *)(glm::value_ptr(transform));
+
+//    printf("[%s %d]  [%.2f]\n", __func__, __LINE__, fTime);
+//    for(uint32_t i = 0; i < 16; i ++)
+//    {
+//        printf("[%s %d]  idx:[%d[ pfRet[%.2f]\n", __func__, __LINE__, i, pfRet[i]);
+//    }
+
+    return pfRet;
+}
+
+
+float * transFormations_get2(uint32_t u32NowTime)
+{
+    static glm::mat4 transform = glm::mat4(1.0f);
+
+    transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+    float fTime = GET_FLOAT_TIME_S(u32NowTime);
+    
+    transform = glm::translate(transform, glm::vec3(-0.5f, 0.5f, 0.0f));
+    float scaleAmount = sin(fTime);
+    transform = glm::scale(transform, glm::vec3(scaleAmount, scaleAmount, scaleAmount));
+
 
     float * pfRet = (float *)(glm::value_ptr(transform));
 
