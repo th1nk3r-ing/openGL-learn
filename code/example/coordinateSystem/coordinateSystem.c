@@ -24,7 +24,8 @@
 /*----------------------------------------------*/
 /*                 宏类型定义                   */
 /*----------------------------------------------*/
-#define MULTIPLE_CUBE
+//#define MULTIPLE_CUBE
+
 /*----------------------------------------------*/
 /*                结构体定义                    */
 /*----------------------------------------------*/
@@ -381,8 +382,8 @@ int main(int argc, char *argv[])
 
 	GL_SetupEGL(&stEglInfo);
 	stEglInfo.u32GLSLProgram =
-	    GL_CreateProgramFromFile("./example/coordinateSystem1/vertextShader.glsl",
-	                             "./example/coordinateSystem1/fragementShder.glsl");
+	    GL_CreateProgramFromFile("./example/coordinateSystem/vertextShader.glsl",
+	                             "./example/coordinateSystem/fragementShder.glsl");
  	BASE_CHECK_TRUE_RET(0 == stEglInfo.u32GLSLProgram, -2);
 
     stCoorSysInfo.s32CurSurfaceW = stEglInfo.s32SurfaceW;
