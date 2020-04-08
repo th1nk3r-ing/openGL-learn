@@ -24,7 +24,7 @@
 /*----------------------------------------------*/
 /*                 宏类型定义                   */
 /*----------------------------------------------*/
-
+#define MULTIPLE_CUBE
 /*----------------------------------------------*/
 /*                结构体定义                    */
 /*----------------------------------------------*/
@@ -227,6 +227,8 @@ int32_t beforeDraw(EGL_Context *esContext)
          -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
 
+
+
     /* global stat */
     GL_RUN_CHECK_RET(glEnable(GL_DEPTH_TEST));
 
@@ -289,8 +291,11 @@ int32_t Draw(EGL_Context *esContext)
 
     stCoorSysInfo.s32CurSurfaceW = esContext->s32SurfaceW;
     stCoorSysInfo.s32CurSurfaceH = esContext->s32SurfaceH;
-    s32Ret = coordinateSystem_get1(&stCoorSysInfo, (getTime_ms() - u32g_StartTime));
+
+    s32Ret = coordinateSystem_getMat(&stCoorSysInfo, (getTime_ms() - u32g_StartTime));
     BASE_CHECK_TRUE_RET(OK != s32Ret, -2);
+
+#ifndef MULTIPLE_CUBE
 
     GL_RUN_CHECK_RET(glUniformMatrix4fv(stCoorSysInfo.s32GLSLModelLoc, 1,
                                         GL_FALSE, stCoorSysInfo.pfModelMat));
@@ -300,6 +305,22 @@ int32_t Draw(EGL_Context *esContext)
                                         GL_FALSE, stCoorSysInfo.pfProjectionMat));
 
     GL_RUN_CHECK_RET(glDrawArrays(GL_TRIANGLES, 0, 36));
+#else
+    GL_RUN_CHECK_RET(glUniformMatrix4fv(stCoorSysInfo.s32GLSLViewLoc, 1,
+                                        GL_FALSE, stCoorSysInfo.pfViewMat));
+    GL_RUN_CHECK_RET(glUniformMatrix4fv(stCoorSysInfo.s32GLSLProjectionLoc, 1,
+                                        GL_FALSE, stCoorSysInfo.pfProjectionMat));
+
+    for(uint32_t u32Idx = 0; u32Idx < 10; u32Idx++)
+    {
+        s32Ret = coordinateSystemMuliCube_getMat(&stCoorSysInfo, u32Idx);
+        BASE_CHECK_TRUE_RET(OK != s32Ret, -2);
+        GL_RUN_CHECK_RET(glUniformMatrix4fv(stCoorSysInfo.s32GLSLModelLoc, 1,
+                                            GL_FALSE, stCoorSysInfo.pfModelMat));
+        GL_RUN_CHECK_RET(glDrawArrays(GL_TRIANGLES, 0, 36));                                            
+    }
+#endif
+
 
     /* swap to disp */
 	EGL_RUN_CHECK_RET(eglSwapBuffers(esContext->eglDisplay, esContext->eglSurface));

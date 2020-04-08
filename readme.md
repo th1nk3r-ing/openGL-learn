@@ -114,4 +114,6 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
    - <u>note: glsl 中的两个纹理, 必须放到一行, 否则会报错!</u>
 9. `make transFormations`
    - 对应 `transformations_exercise2`;
-10. `make `
+10. `make coordinateSystem`
+    - 无宏定义, 对应 `6.2.coordinate_systems_depth`
+    - `-D MULTIPLE_CUBE` 对应 `6.3.coordinate_systems_multiple`

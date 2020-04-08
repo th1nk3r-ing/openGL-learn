@@ -96,7 +96,7 @@ float * transFormations_get2(uint32_t u32NowTime)
 }
 
 
-int32_t coordinateSystem_get1(CoorSysInfo * pstInfo, uint32_t u32NowTime)
+int32_t coordinateSystem_getMat(CoorSysInfo * pstInfo, uint32_t u32NowTime)
 {
     // create transformations
     static glm::mat4 model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
@@ -109,6 +109,46 @@ int32_t coordinateSystem_get1(CoorSysInfo * pstInfo, uint32_t u32NowTime)
     float fTime = GET_FLOAT_TIME_S(u32NowTime);
     
     model = glm::rotate(model, fTime, glm::vec3(0.5f, 1.0f, 0.0f));
+    view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+    projection = glm::perspective(glm::radians(45.0f), 
+                                  (float)pstInfo->s32CurSurfaceW / (float)pstInfo->s32CurSurfaceH, 
+                                  0.1f, 
+                                  100.0f);
+
+    pstInfo->pfModelMat =  (float *)(glm::value_ptr(model));
+    pstInfo->pfViewMat =  (float *)(glm::value_ptr(view));
+    pstInfo->pfProjectionMat =  (float *)(glm::value_ptr(projection));
+
+    return OK;
+}
+
+
+int32_t coordinateSystemMuliCube_getMat(CoorSysInfo * pstInfo, uint32_t u32Idx)
+{
+    // create transformations
+    static glm::vec3 cubePositions[] = {
+        glm::vec3( 0.0f,  0.0f,  0.0f),
+        glm::vec3( 2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3( 2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3( 1.3f, -2.0f, -2.5f),
+        glm::vec3( 1.5f,  2.0f, -2.5f),
+        glm::vec3( 1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
+    };    
+    static glm::mat4 model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+    static glm::mat4 view          = glm::mat4(1.0f);
+    static glm::mat4 projection    = glm::mat4(1.0f);
+    model         = glm::mat4(1.0f); 
+    view          = glm::mat4(1.0f);
+    projection    = glm::mat4(1.0f);
+
+    model = glm::translate(model, cubePositions[u32Idx]);
+    float angle = 20.0f * (float)u32Idx;
+    model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+
     view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
     projection = glm::perspective(glm::radians(45.0f), 
                                   (float)pstInfo->s32CurSurfaceW / (float)pstInfo->s32CurSurfaceH, 

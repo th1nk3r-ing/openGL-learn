@@ -50,7 +50,8 @@ typedef struct _coordinate_Systems_Info_
 /*----------------------------------------------*/
 float * transFormations_get1(uint32_t u32NowTime);
 float * transFormations_get2(uint32_t u32NowTime);
-int32_t coordinateSystem_get1(CoorSysInfo * pstInfo, uint32_t u32NowTime);
+int32_t coordinateSystem_getMat(CoorSysInfo * pstInfo, uint32_t u32NowTime);
+int32_t coordinateSystemMuliCube_getMat(CoorSysInfo * pstInfo, uint32_t u32Idx);
 
 /*----------------------------------------------*/
 /*                 全局变量                     */
