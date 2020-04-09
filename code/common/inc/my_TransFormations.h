@@ -45,6 +45,14 @@ typedef struct _coordinate_Systems_Info_
     float * pfProjectionMat;
 }CoorSysInfo;
 
+// Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
+typedef enum _Camera_Key_ {
+    FORWARD = 1,
+    BACKWARD = 2,
+    LEFT = 3,
+    RIGHT = 4,
+}CameraKey;
+
 /*----------------------------------------------*/
 /*                 函数声明                     */
 /*----------------------------------------------*/
@@ -52,6 +60,11 @@ float * transFormations_get1(uint32_t u32NowTime);
 float * transFormations_get2(uint32_t u32NowTime);
 int32_t coordinateSystem_getMat(CoorSysInfo * pstInfo, uint32_t u32NowTime);
 int32_t coordinateSystemMuliCube_getMat(CoorSysInfo * pstInfo, uint32_t u32Idx);
+
+void * Camera_creatHandle();
+void Camera_deleteHandle( void * pHandle);
+void Camera_processKey(void *pHandle, CameraKey eKey);
+float * Camera_getViewMatrix(void * pHandle);
 
 /*----------------------------------------------*/
 /*                 全局变量                     */

@@ -101,6 +101,29 @@ void win_RestoreConsole(void)
 	return;
 }
 
+static void __CallBack_keyFunc(EGL_Context * pEGL, uint32_t u32Key)
+{
+    switch (u32Key)
+    {
+        case VK_UP :
+            pEGL->bBeKeyUp = true;
+            break;
+        case VK_DOWN :
+            pEGL->bBeKeyDown = true;
+            break;
+        case VK_LEFT :
+            pEGL->bBeKeyLeft = true;
+            break;
+        case VK_RIGHT :
+            pEGL->bBeKeyRight = true;
+            break;
+        default :
+            break;
+    }
+
+    return;
+}
+
 
 
 /**
@@ -145,19 +168,28 @@ static LRESULT CALLBACK __win_windowProcCallback
 			}
 			break;
 		}
-		case WM_CHAR:
+		case WM_KEYDOWN:    /* 相应所有按键, 且区分大小写 */
 		{
 			// printf("[%s %d]  WM_CHAR\n", __func__, __LINE__);
 			POINT      point;
 			GetCursorPos ( &point );
 			if ( pstEglContext && pstEglContext->keyFunc )
 			{
-				pstEglContext->keyFunc( pstEglContext,
-						(unsigned char)wParam,
-						(int)point.x,
-						(int)point.y );
+				pstEglContext->keyFunc( pstEglContext, (uint32_t)wParam);
 			}
 			break;
+		}
+		case WM_MOUSEWHEEL: /* 滚轮 https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-mousewheel */
+		{
+            int32_t zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
+            /* uint32_t fwKeys = GET_KEYSTATE_WPARAM(wParam);
+               Cprintf_yellow("[%s %d]  [%d %d] \n", __func__, __LINE__, fwKeys, zDelta);
+            */
+			if ( pstEglContext && pstEglContext->keyFunc )
+			{
+			    uint32_t u32Key = (zDelta > 0) ? (VK_UP) : (VK_DOWN);
+				pstEglContext->keyFunc( pstEglContext, u32Key);
+			}
 		}
 		case WM_SIZE:
 		{
@@ -273,6 +305,8 @@ void win_WinLoop(EGL_Context *pstEglContext)
 	DWORD lastTime = GetTickCount();
     uint32_t u32LastDrawTime = 0, u32NowTime = 0;
 
+    pstEglContext->keyFunc = __CallBack_keyFunc;
+
 	while( !done )
 	{
 		int gotMsg = (PeekMessage ( &msg, NULL, 0, 0, PM_REMOVE ) != 0);
@@ -294,10 +328,10 @@ void win_WinLoop(EGL_Context *pstEglContext)
 		}
 		else
 		{
-            u32NowTime = getTime_ms();		
+            u32NowTime = getTime_ms();
 		    if(u32NowTime - u32LastDrawTime > 24)
 		    {
-    			SendMessage(pstEglContext->eglNativeWindow, WM_PAINT, 0, 0 );    			
+    			SendMessage(pstEglContext->eglNativeWindow, WM_PAINT, 0, 0 );
                 u32LastDrawTime = u32NowTime;
 		    }
 		    else

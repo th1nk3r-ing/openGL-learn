@@ -113,14 +113,23 @@
 
 #endif
 
-#define BASE_CHECK_TRUE_RET(expr, ret) \
+#define BASE_CHECK_TRUE_RET(expr, retValue) \
 	do {\
 	    if(expr)\
 	    {\
 			Cprintf_red("[%s %d]  ERR!\n", __func__, __LINE__);\
-			return ret;\
+			return retValue;\
 	    }\
 	}while(0)
+
+#define BASE_CHECK_TRUE_RET_VOID(expr) \
+        do {\
+            if(expr)\
+            {\
+                Cprintf_red("[%s %d]  ERR!\n", __func__, __LINE__);\
+                return;\
+            }\
+        }while(0)
 
 #define BASE_CHECK_TRUE_WARN(expr) \
 	do {\

@@ -87,7 +87,15 @@ struct EGL_Context
 	/// Callbacks
 	int32_t( ESCALLBACK *drawFunc ) ( EGL_Context * );
 	int32_t( ESCALLBACK *shutdownFunc ) ( EGL_Context * );
-	void ( ESCALLBACK *keyFunc ) ( EGL_Context *, unsigned char, int, int );
+
+
+	bool bBeKeyUp;    
+	bool bBeKeyDown;
+	bool bBeKeyLeft;
+	bool bBeKeyRight;
+
+	float offset;
+	void ( ESCALLBACK *keyFunc ) ( EGL_Context *, uint32_t u32Key);
 	void ( ESCALLBACK *updateFunc ) ( EGL_Context *, float deltaTime );
 };
 

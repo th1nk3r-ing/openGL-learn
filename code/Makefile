@@ -53,8 +53,9 @@ else ifeq ($(MAKECMDGOALS), 9.transFormations)
 	C_SrcFiles += ./example/transFormations/transFormations.c	
 else ifeq ($(MAKECMDGOALS), 10.coordinateSystem)
 	C_SrcFiles += ./example/coordinateSystem/coordinateSystem.c	
+else ifeq ($(MAKECMDGOALS), 11.camera)
+	C_SrcFiles += ./example/camera/camera.c		
 endif
-
 
 #Object File
 C_Objs := $(C_SrcFiles:.c=.o)
@@ -74,14 +75,14 @@ ShardLibs := -lm \
 
 # 链接输出
 $(Target) : $(Objs)
-	$(CC) $(C_Flags) -o $(Target) $(Objs) $(LibPath) $(StaticLibs) $(ShardLibs) 
+	$(CXX) $(C_Flags) -o $(Target) $(Objs) $(LibPath) $(StaticLibs) $(ShardLibs) 
 	@echo -e $(prt_Green) "\n****** make OK! *****\n" $(prt_End)
 
 # 编译源文件
 $(C_Objs) : %.o : %.c
 	$(CC) $(C_Flags) -c $< -o $@
 $(Cxx_Objs) : %.o : %.cpp
-	$(CC) $(C_Flags) -c $< -o $@
+	$(CXX) $(C_Flags) -c $< -o $@
 
 1.helloTriangle: $(Target)
 2.triangleIndxed: $(Target)
@@ -93,6 +94,7 @@ $(Cxx_Objs) : %.o : %.cpp
 8.textureMode: $(Target)
 9.transFormations: $(Target)
 10.coordinateSystem: $(Target)
+11.camera: $(Target)
 
 .PHONY : clean 
 	
