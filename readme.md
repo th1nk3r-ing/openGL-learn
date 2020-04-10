@@ -13,7 +13,14 @@
 > 9. [OpenGL-Refpages---> github](https://github.com/KhronosGroup/OpenGL-Refpages)
 
 1. 记录 OGL 学习笔记;
-2. 参照 learnopengl demo 在 windwos 上移植的 OGL-ES;
+2. 参照 learnopengl, 在 windwos 上移植的 OGL-ES demo;
+
+demo 主要架构:
+
+- MFC 创建窗口与交互处理;
+- Mali OGL-ES Emulator;
+- 编译平台 MinGW64,  编译工具 WSL ;
+- ~~docker 支持?(代做)~~
 
 ---
 
@@ -72,12 +79,6 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
 而 VmWare 下的模拟器, 则只支持到 `OpenGL 3.0`; VirtualBox 更是只有 `2.0` ; <u>**因此将环境先迁移 windows 下;**</u>
 
 ### <font color=#FF4500> **Windows 下 OpenGL-Es 模拟环境的搭建** </font>
-
-主要架构:
-
-- MPC 创建窗口与交互处理;
-- mingw64 编译;
-- 编译环境 : WSL;
 
 关于 cmd 下 `printf()` 颜色的支持 :
 
