@@ -324,6 +324,16 @@ void Camera_processKey(void *pHandle, CameraKey eKey)
     return;
 }
 
+void Camera_processMouse(void * pHandle, float fXOffset, float fYOffset)
+{
+    BASE_CHECK_TRUE_RET_VOID(NULL == pHandle);
+
+    Camera * pMyCamera = (Camera *)pHandle;
+    pMyCamera->ProcessMouseMovement(fXOffset, fYOffset);
+
+    return;
+}
+
 float * Camera_getViewMatrix(void * pHandle)
 {
     BASE_CHECK_TRUE_RET(NULL == pHandle, NULL);
@@ -334,7 +344,7 @@ float * Camera_getViewMatrix(void * pHandle)
 }
 
 
-void Camera_scrollMouse(void * pHandle, double yoffset)
+void Camera_scrollMouse(void * pHandle, float yoffset)
 {
     BASE_CHECK_TRUE_RET_VOID(NULL == pHandle);
 

@@ -64,6 +64,7 @@ int32_t coordinateSystemMuliCube_getMat(CoorSysInfo * pstInfo, uint32_t u32Idx);
 void * Camera_creatHandle();
 void Camera_deleteHandle( void * pHandle);
 void Camera_processKey(void *pHandle, CameraKey eKey);
+void Camera_processMouse(void * pHandle, float fXOffset, float fYOffset);
 float * Camera_getViewMatrix(void * pHandle);
 
 /*----------------------------------------------*/

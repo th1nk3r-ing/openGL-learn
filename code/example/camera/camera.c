@@ -72,7 +72,7 @@ static int32_t resizeSurface(EGL_Context *esContext)
     return OK;
 }
 
-static int32_t keyProcess(EGL_Context *esContext, void * pCameraHandle)
+static int32_t inputProcess(EGL_Context *esContext, void * pCameraHandle)
 {
     if(esContext->bBeKeyUp)
     {
@@ -83,19 +83,28 @@ static int32_t keyProcess(EGL_Context *esContext, void * pCameraHandle)
     if(esContext->bBeKeyDown)
     {
         Camera_processKey(pCameraHandle, BACKWARD);
-        esContext->bBeKeyDown = false;        
+        esContext->bBeKeyDown = false;
     }
 
     if(esContext->bBeKeyLeft)
     {
-        Camera_processKey(pCameraHandle, LEFT);        
+        Camera_processKey(pCameraHandle, LEFT);
         esContext->bBeKeyLeft = false;
     }
 
     if(esContext->bBeKeyRight)
     {
-        Camera_processKey(pCameraHandle, RIGHT);        
+        Camera_processKey(pCameraHandle, RIGHT);
         esContext->bBeKeyRight = false;
+    }
+
+    if(esContext->bBeMouseMove)
+    {
+        float fBate = -1.0f;
+        Camera_processMouse(pCameraHandle,
+            fBate * (float)esContext->s32MouseSubX,
+            (float)esContext->s32MouseSubY);            
+        esContext->bBeMouseMove = false;
     }
 
     return OK;
@@ -306,8 +315,10 @@ int32_t Draw(EGL_Context *esContext)
     s32Ret = resizeSurface(esContext);
     BASE_CHECK_TRUE_RET(OK != s32Ret, -2);
 
-    s32Ret = keyProcess(esContext, pCameraHandle);
+    s32Ret = inputProcess(esContext, pCameraHandle);
     BASE_CHECK_TRUE_RET(OK != s32Ret, -2);
+
+//    Cprintf_green("[%s %d]  ****\n", __func__, __LINE__);
 
 	// Clear the color buffer
 	GL_RUN_CHECK_RET(glClearColor(0.0f, 0.0f, 0.0f, 1));
@@ -328,7 +339,7 @@ int32_t Draw(EGL_Context *esContext)
 
     s32Ret = coordinateSystem_getMat(&stCoorSysInfo, (getTime_ms() - u32g_StartTime));
     BASE_CHECK_TRUE_RET(OK != s32Ret, -2);
-    GL_RUN_CHECK_RET(glUniformMatrix4fv(stCoorSysInfo.s32GLSLViewLoc,  1, GL_FALSE, 
+    GL_RUN_CHECK_RET(glUniformMatrix4fv(stCoorSysInfo.s32GLSLViewLoc,  1, GL_FALSE,
                                         Camera_getViewMatrix(pCameraHandle)));
     GL_RUN_CHECK_RET(glUniformMatrix4fv(stCoorSysInfo.s32GLSLProjectionLoc, 1,
                                         GL_FALSE, stCoorSysInfo.pfProjectionMat));
@@ -339,7 +350,7 @@ int32_t Draw(EGL_Context *esContext)
         BASE_CHECK_TRUE_RET(OK != s32Ret, -2);
         GL_RUN_CHECK_RET(glUniformMatrix4fv(stCoorSysInfo.s32GLSLModelLoc, 1,
                                             GL_FALSE, stCoorSysInfo.pfModelMat));
-        GL_RUN_CHECK_RET(glDrawArrays(GL_TRIANGLES, 0, 36));                                            
+        GL_RUN_CHECK_RET(glDrawArrays(GL_TRIANGLES, 0, 36));
     }
 
 
@@ -424,6 +435,8 @@ int main(int argc, char *argv[])
     beforeDraw(&stEglInfo);
 
 	win_WinLoop(&stEglInfo);
+
+    Camera_deleteHandle(pCameraHandle);
 
 	win_RestoreConsole();
     system("pause");

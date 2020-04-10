@@ -73,7 +73,11 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
 
 ### <font color=#FF4500> **Windows 下 OpenGL-Es 模拟环境的搭建** </font>
 
-略; 同上述 Linux ;
+主要架构:
+
+- MPC 创建窗口与交互处理;
+- mingw64 编译;
+- 编译环境 : WSL;
 
 关于 cmd 下 `printf()` 颜色的支持 :
 
@@ -117,3 +121,5 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
 10. `make 10.coordinateSystem` 立方体
     - 无宏定义, 对应 `6.2.coordinate_systems_depth`
     - `-D MULTIPLE_CUBE` 对应 `6.3.coordinate_systems_multiple`
+11. `make 11.camera` 摄像机 :
+    - 增加了 MPC 鼠标支持;

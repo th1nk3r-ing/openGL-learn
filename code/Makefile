@@ -26,7 +26,7 @@ C_Flags += $(Include_Dir)
 C_SrcFiles = ./common/src/build_time.c \
 			 ./common/src/win32_platform.c \
 			 ./common/src/OGL_common.c \
-			 ./common/src/my_ResourceLoader.c
+			 ./common/src/my_ResourceLoader.c 
 		
 Cxx_SrcFiles = ./common/src/my_TransFormations.cpp
 

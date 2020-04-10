@@ -95,7 +95,13 @@ struct EGL_Context
 	bool bBeKeyRight;
 
 	float offset;
-	void ( ESCALLBACK *keyFunc ) ( EGL_Context *, uint32_t u32Key);
+	void ( ESCALLBACK *keyFunc ) ( EGL_Context *, uint32_t u32Key);	
+
+    bool bBeMouseMove;
+	int32_t s32MouseSubX;
+	int32_t s32MouseSubY;	
+	void ( ESCALLBACK *mouseFunc ) ( EGL_Context *, int32_t s32SubX, int32_t s32SubY);
+	
 	void ( ESCALLBACK *updateFunc ) ( EGL_Context *, float deltaTime );
 };
 

@@ -15,6 +15,7 @@
 /*                  头文件包含                  */
 /*----------------------------------------------*/
 #include <windows.h>
+#include <windowsx.h>
 #include "common.h"
 #include "build_time.h"
 #include "OGL_common.h"
@@ -124,7 +125,14 @@ static void __CallBack_keyFunc(EGL_Context * pEGL, uint32_t u32Key)
     return;
 }
 
-
+static void __CallBack_mouseFunc( EGL_Context *pEGL, int32_t s32SubX, int32_t s32SubY)
+{
+    pEGL->s32MouseSubX = s32SubX;
+    pEGL->s32MouseSubY = s32SubY;
+    pEGL->bBeMouseMove = true;
+    
+    return;
+}
 
 /**
  * @function:   __win_windowProcCallback
@@ -141,6 +149,8 @@ static LRESULT CALLBACK __win_windowProcCallback
 {
 	LRESULT  lRet = 1;
 	EGL_Context *pstEglContext = (EGL_Context *)(LONG_PTR)GetWindowLongPtr(hWnd, GWL_USERDATA);
+    static int32_t s32StartXPos = 400;
+    static int32_t s32StartYPos= 300;
 
 	switch (uMsg)
 	{
@@ -210,6 +220,46 @@ static LRESULT CALLBACK __win_windowProcCallback
 				}
 			}
 			break;
+		}
+#if 0    //暂时屏蔽鼠标按键
+		case WM_LBUTTONDOWN:    /* 鼠标按键 */
+		{
+		    if(MK_CONTROL & wParam)
+		    {
+                s32StartXPos = GET_X_LPARAM(lParam);
+                s32StartYPos = GET_Y_LPARAM(lParam);
+
+                Cprintf_yellow("[%s %d] Start:[%d x %d]\n",
+                    __func__, __LINE__, s32StartXPos, s32StartYPos);
+		    }
+		    break;
+		}
+#endif   /* end of (#if 0  //暂时屏蔽鼠标按键) */
+		case WM_MOUSEMOVE:
+		{
+		    if(MK_CONTROL & wParam)
+		    {		                        
+                int32_t s32NowPosX = GET_X_LPARAM(lParam);
+                int32_t s32NowPosY = GET_Y_LPARAM(lParam);
+                int32_t s32SubX = s32NowPosX - s32StartXPos;
+                int32_t s32SubY = s32NowPosY - s32StartYPos;
+
+                /* 防止跳变 */
+                s32SubX = (abs(s32SubX) > 50) ? 0 : s32SubX;
+                s32SubY = (abs(s32SubY) > 50) ? 0 : s32SubY;
+                /* Cprintf_white("[%s %d] MK_CONTROL:[%d x %d], Start:[%d x %d], sub:[%d x %d]\n",
+                    __func__, __LINE__, s32NowPosX, s32NowPosY, s32StartXPos,
+                    s32StartYPos, s32SubX, s32SubY); */
+
+    			if ( pstEglContext && pstEglContext->mouseFunc )
+    			{
+    			    pstEglContext->mouseFunc(pstEglContext, s32SubX, s32SubY);
+                    s32StartXPos = s32NowPosX;
+                    s32StartYPos = s32NowPosY;
+    			}
+
+		    }
+		    break;
 		}
 		default:
 			lRet = DefWindowProc( hWnd, uMsg, wParam, lParam );
@@ -306,6 +356,7 @@ void win_WinLoop(EGL_Context *pstEglContext)
     uint32_t u32LastDrawTime = 0, u32NowTime = 0;
 
     pstEglContext->keyFunc = __CallBack_keyFunc;
+    pstEglContext->mouseFunc =  __CallBack_mouseFunc;
 
 	while( !done )
 	{
