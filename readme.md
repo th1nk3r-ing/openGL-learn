@@ -123,7 +123,7 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
     - 无宏定义, 对应 `6.2.coordinate_systems_depth`
     - `-D MULTIPLE_CUBE` 对应 `6.3.coordinate_systems_multiple`
 11. `make 11.camera` 摄像机 :
-    - 增加了 MPC 鼠标支持 :
+    - 增加了 MFC 鼠标支持 :
       - 方向键/WASD -------> 前进, 后退, 左, 右 ;
       - 鼠标滚轮 ------------> 放大 ;
       - `ctrl` + 鼠标移动 ----> 旋转 ;
