@@ -328,6 +328,8 @@ void Camera_processMouse(void * pHandle, float fXOffset, float fYOffset)
 {
     BASE_CHECK_TRUE_RET_VOID(NULL == pHandle);
 
+    Cprintf_green("[%s %d]  \n", __func__, __LINE__);
+
     Camera * pMyCamera = (Camera *)pHandle;
     pMyCamera->ProcessMouseMovement(fXOffset, fYOffset);
 

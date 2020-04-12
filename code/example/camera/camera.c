@@ -100,7 +100,7 @@ static int32_t inputProcess(EGL_Context *esContext, void * pCameraHandle)
 
     if(esContext->bBeMouseMove)
     {
-        float fBate = -1.0f;
+        float fBate = -100.0f;
         Camera_processMouse(pCameraHandle,
             fBate * (float)esContext->s32MouseSubX,
             (float)esContext->s32MouseSubY);            

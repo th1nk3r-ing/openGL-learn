@@ -11,6 +11,7 @@
 > 7. [khronos 官网](https://www.khronos.org/registry/EGL/)
 > 8. [OpenGL-man-Page](https://www.khronos.org/registry/EGL/sdk/docs/man/)
 > 9. [OpenGL-Refpages---> github](https://github.com/KhronosGroup/OpenGL-Refpages)
+> 10. [**杀不死的 GPU 系列 --> 知乎:环太平洋**](https://zhuanlan.zhihu.com/p/43573883)
 
 1. 记录 OGL 学习笔记;
 2. 参照 learnopengl, 在 windwos 上移植的 OGL-ES demo;
@@ -32,8 +33,7 @@ demo 主要架构:
 
 3. [**EGL 之外的东西**](./note/EGL之外的东西.md)
 
-4. ~~[**OpenGL 和 OpenGL-ES**](./note/openGL和openGL-ES.md)~~
-   - <font color=#EA00DA>待修正 VAO 相关的错误</font> 
+4. [**OpenGL 和 OpenGL-ES**](./note/openGL和openGL-ES.md)
 
 5. [**GLSL**](./note/GLSL.md)
 
