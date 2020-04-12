@@ -100,7 +100,11 @@ struct EGL_Context
     bool bBeMouseMove;
 	int32_t s32MouseSubX;
 	int32_t s32MouseSubY;	
-	void ( ESCALLBACK *mouseFunc ) ( EGL_Context *, int32_t s32SubX, int32_t s32SubY);
+	void ( ESCALLBACK *mouseMoveFunc ) ( EGL_Context *, int32_t s32SubX, int32_t s32SubY);
+
+    bool bBeMouseScroll;
+	int32_t s32MouseYOffset;
+	void ( ESCALLBACK *mouseScrollFunc ) ( EGL_Context *, int32_t s32MouseYOffset);
 	
 	void ( ESCALLBACK *updateFunc ) ( EGL_Context *, float deltaTime );
 };
@@ -117,7 +121,16 @@ typedef struct _TEXTURE_INFO_
     bool     bBeGenMipMap;
 }TEXTURE_INFO;
 
-#endif
+// Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
+typedef enum _Camera_Key_ {
+    FORWARD = 1,
+    BACKWARD = 2,
+    LEFT = 3,
+    RIGHT = 4,
+    UP = 5,    // 暂时不用(3D 游戏中, 上下移动时为蹦跳等重力作用);
+    DOWN = 6,
+}CameraKey;
+
 
 /*----------------------------------------------*/
 /*                 函数声明                     */
@@ -135,6 +148,7 @@ uint32_t GL_CreateProgramFromFile(const char *ps8VertPath,const char *ps8FragPat
 int32_t GL_SetupEGL(EGL_Context *pstEGL);
 int32_t GL_GetSurfaceWxH(EGL_Context *pstEGL, int32_t * ps32Width, int32_t * ps32Heigh);
 void CalcFpsInfo(EGL_Context *pstEGL);
+int32_t GL_InputProcess(EGL_Context *pstEGL, void * pCamHandle);
 
-
+#endif
 

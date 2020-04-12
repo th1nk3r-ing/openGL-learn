@@ -36,22 +36,14 @@ typedef struct _coordinate_Systems_Info_
     int32_t s32CurSurfaceH;
 
     int32_t s32GLSLModelLoc;    
-    float * pfModelMat;
+    float * pfModelMat;             /* 模型位置矩阵 */
     
     int32_t s32GLSLViewLoc;
-    float * pfViewMat;
+    float * pfViewMat;              /* 观察矩阵 */
 
     int32_t s32GLSLProjectionLoc;
-    float * pfProjectionMat;
+    float * pfProjectionMat;        /* 投影矩阵 */
 }CoorSysInfo;
-
-// Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
-typedef enum _Camera_Key_ {
-    FORWARD = 1,
-    BACKWARD = 2,
-    LEFT = 3,
-    RIGHT = 4,
-}CameraKey;
 
 /*----------------------------------------------*/
 /*                 函数声明                     */
@@ -65,7 +57,9 @@ void * Camera_creatHandle();
 void Camera_deleteHandle( void * pHandle);
 void Camera_processKey(void *pHandle, CameraKey eKey);
 void Camera_processMouse(void * pHandle, float fXOffset, float fYOffset);
+void Camera_scrollMouse(void * pHandle, float yoffset, float fWidth, float fHeight);
 float * Camera_getViewMatrix(void * pHandle);
+float * Camera_getProjectionMatrix(void * pHandle);
 
 /*----------------------------------------------*/
 /*                 全局变量                     */

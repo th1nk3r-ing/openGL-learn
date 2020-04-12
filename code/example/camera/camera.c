@@ -72,43 +72,7 @@ static int32_t resizeSurface(EGL_Context *esContext)
     return OK;
 }
 
-static int32_t inputProcess(EGL_Context *esContext, void * pCameraHandle)
-{
-    if(esContext->bBeKeyUp)
-    {
-        Camera_processKey(pCameraHandle, FORWARD);
-        esContext->bBeKeyUp = false;
-    }
 
-    if(esContext->bBeKeyDown)
-    {
-        Camera_processKey(pCameraHandle, BACKWARD);
-        esContext->bBeKeyDown = false;
-    }
-
-    if(esContext->bBeKeyLeft)
-    {
-        Camera_processKey(pCameraHandle, LEFT);
-        esContext->bBeKeyLeft = false;
-    }
-
-    if(esContext->bBeKeyRight)
-    {
-        Camera_processKey(pCameraHandle, RIGHT);
-        esContext->bBeKeyRight = false;
-    }
-
-    if(esContext->bBeMouseMove)
-    {
-        float fBate = -100.0f;
-        Camera_processMouse(pCameraHandle,
-            fBate * (float)esContext->s32MouseSubX,
-            (float)esContext->s32MouseSubY);            
-        esContext->bBeMouseMove = false;
-    }
-
-    return OK;
-}
 
 static int32_t _ConfTexture(TEXTURE_INFO *pstTexture, ImageInfo *pstImage)
 {
@@ -315,10 +279,8 @@ int32_t Draw(EGL_Context *esContext)
     s32Ret = resizeSurface(esContext);
     BASE_CHECK_TRUE_RET(OK != s32Ret, -2);
 
-    s32Ret = inputProcess(esContext, pCameraHandle);
+    s32Ret = GL_InputProcess(esContext, pCameraHandle);
     BASE_CHECK_TRUE_RET(OK != s32Ret, -2);
-
-//    Cprintf_green("[%s %d]  ****\n", __func__, __LINE__);
 
 	// Clear the color buffer
 	GL_RUN_CHECK_RET(glClearColor(0.0f, 0.0f, 0.0f, 1));
@@ -334,16 +296,20 @@ int32_t Draw(EGL_Context *esContext)
 
     GL_RUN_CHECK_RET(glBindVertexArrayOES(VAO));
 
-    stCoorSysInfo.s32CurSurfaceW = esContext->s32SurfaceW;
+    stCoorSysInfo.s32CurSurfaceW = esContext->s32SurfaceW;  /* 可省略 */
     stCoorSysInfo.s32CurSurfaceH = esContext->s32SurfaceH;
 
-    s32Ret = coordinateSystem_getMat(&stCoorSysInfo, (getTime_ms() - u32g_StartTime));
-    BASE_CHECK_TRUE_RET(OK != s32Ret, -2);
+    /* 配置观察矩阵 */
+    stCoorSysInfo.pfViewMat = Camera_getViewMatrix(pCameraHandle);
     GL_RUN_CHECK_RET(glUniformMatrix4fv(stCoorSysInfo.s32GLSLViewLoc,  1, GL_FALSE,
-                                        Camera_getViewMatrix(pCameraHandle)));
+                                        stCoorSysInfo.pfViewMat));
+
+    /* 配置投影矩阵 */
+    stCoorSysInfo.pfProjectionMat= Camera_getProjectionMatrix(pCameraHandle);
     GL_RUN_CHECK_RET(glUniformMatrix4fv(stCoorSysInfo.s32GLSLProjectionLoc, 1,
                                         GL_FALSE, stCoorSysInfo.pfProjectionMat));
 
+    /* 绘制不同的箱子 */
     for(uint32_t u32Idx = 0; u32Idx < 10; u32Idx++)
     {
         s32Ret = coordinateSystemMuliCube_getMat(&stCoorSysInfo, u32Idx);

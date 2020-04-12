@@ -106,15 +106,19 @@ static void __CallBack_keyFunc(EGL_Context * pEGL, uint32_t u32Key)
 {
     switch (u32Key)
     {
+        case 'W' :
         case VK_UP :
             pEGL->bBeKeyUp = true;
             break;
+        case 'S' :
         case VK_DOWN :
             pEGL->bBeKeyDown = true;
             break;
+        case 'A' :
         case VK_LEFT :
             pEGL->bBeKeyLeft = true;
             break;
+        case 'D' :
         case VK_RIGHT :
             pEGL->bBeKeyRight = true;
             break;
@@ -125,12 +129,20 @@ static void __CallBack_keyFunc(EGL_Context * pEGL, uint32_t u32Key)
     return;
 }
 
-static void __CallBack_mouseFunc( EGL_Context *pEGL, int32_t s32SubX, int32_t s32SubY)
+static void __CallBack_mouseScrollFunc( EGL_Context *pEGL, int32_t s32MouseYOffset)
+{
+    pEGL->s32MouseYOffset = s32MouseYOffset;
+    pEGL->bBeMouseScroll = true;
+
+    return;
+}
+
+static void __CallBack_mouseMoveFunc( EGL_Context *pEGL, int32_t s32SubX, int32_t s32SubY)
 {
     pEGL->s32MouseSubX = s32SubX;
     pEGL->s32MouseSubY = s32SubY;
     pEGL->bBeMouseMove = true;
-    
+
     return;
 }
 
@@ -178,29 +190,6 @@ static LRESULT CALLBACK __win_windowProcCallback
 			}
 			break;
 		}
-		case WM_KEYDOWN:    /* 相应所有按键, 且区分大小写 */
-		{
-			// printf("[%s %d]  WM_CHAR\n", __func__, __LINE__);
-			POINT      point;
-			GetCursorPos ( &point );
-			if ( pstEglContext && pstEglContext->keyFunc )
-			{
-				pstEglContext->keyFunc( pstEglContext, (uint32_t)wParam);
-			}
-			break;
-		}
-		case WM_MOUSEWHEEL: /* 滚轮 https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-mousewheel */
-		{
-            int32_t zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
-            /* uint32_t fwKeys = GET_KEYSTATE_WPARAM(wParam);
-               Cprintf_yellow("[%s %d]  [%d %d] \n", __func__, __LINE__, fwKeys, zDelta);
-            */
-			if ( pstEglContext && pstEglContext->keyFunc )
-			{
-			    uint32_t u32Key = (zDelta > 0) ? (VK_UP) : (VK_DOWN);
-				pstEglContext->keyFunc( pstEglContext, u32Key);
-			}
-		}
 		case WM_SIZE:
 		{
 		    if((SIZE_RESTORED == wParam)
@@ -221,6 +210,17 @@ static LRESULT CALLBACK __win_windowProcCallback
 			}
 			break;
 		}
+		case WM_KEYDOWN:    /* 相应所有按键, 且区分大小写 */
+		{
+			// printf("[%s %d]  WM_CHAR\n", __func__, __LINE__);
+			POINT      point;
+			GetCursorPos ( &point );
+			if ( pstEglContext && pstEglContext->keyFunc )
+			{
+				pstEglContext->keyFunc( pstEglContext, (uint32_t)wParam);
+			}
+			break;
+		}
 #if 0    //暂时屏蔽鼠标按键
 		case WM_LBUTTONDOWN:    /* 鼠标按键 */
 		{
@@ -235,10 +235,22 @@ static LRESULT CALLBACK __win_windowProcCallback
 		    break;
 		}
 #endif   /* end of (#if 0  //暂时屏蔽鼠标按键) */
+		case WM_MOUSEWHEEL: /* 滚轮 https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-mousewheel */
+		{
+            int32_t zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
+            /*  uint32_t fwKeys = GET_KEYSTATE_WPARAM(wParam);
+                Cprintf_yellow("[%s %d]  [%d %d] \n", __func__, __LINE__, fwKeys, zDelta);
+            */
+
+			if ( pstEglContext && pstEglContext->mouseMoveFunc )
+			{
+				pstEglContext->mouseScrollFunc( pstEglContext, zDelta);
+			}
+		}
 		case WM_MOUSEMOVE:
 		{
-		    if(MK_CONTROL & wParam)
-		    {		                        
+		    if(MK_LBUTTON & wParam)
+		    {
                 int32_t s32NowPosX = GET_X_LPARAM(lParam);
                 int32_t s32NowPosY = GET_Y_LPARAM(lParam);
                 int32_t s32SubX = s32NowPosX - s32StartXPos;
@@ -251,9 +263,9 @@ static LRESULT CALLBACK __win_windowProcCallback
                     __func__, __LINE__, s32NowPosX, s32NowPosY, s32StartXPos,
                     s32StartYPos, s32SubX, s32SubY); */
 
-    			if ( pstEglContext && pstEglContext->mouseFunc )
+    			if ( pstEglContext && pstEglContext->mouseMoveFunc )
     			{
-    			    pstEglContext->mouseFunc(pstEglContext, s32SubX, s32SubY);
+    			    pstEglContext->mouseMoveFunc(pstEglContext, s32SubX, s32SubY);
                     s32StartXPos = s32NowPosX;
                     s32StartYPos = s32NowPosY;
     			}
@@ -356,7 +368,8 @@ void win_WinLoop(EGL_Context *pstEglContext)
     uint32_t u32LastDrawTime = 0, u32NowTime = 0;
 
     pstEglContext->keyFunc = __CallBack_keyFunc;
-    pstEglContext->mouseFunc =  __CallBack_mouseFunc;
+    pstEglContext->mouseMoveFunc =  __CallBack_mouseMoveFunc;
+    pstEglContext->mouseScrollFunc = __CallBack_mouseScrollFunc;
 
 	while( !done )
 	{

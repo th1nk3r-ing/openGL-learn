@@ -16,6 +16,7 @@
 /*----------------------------------------------*/
 #include "common.h"
 #include "build_time.h"
+#include "OGL_common.h"
 #include "my_TransFormations.h"
 //#include "glm/glm.hpp"
 //#include <glm/gtc/matrix_transform.hpp>
@@ -65,7 +66,7 @@ public:
     glm::vec3 Up;
     glm::vec3 Right;
     glm::vec3 WorldUp;
-    glm::mat4 mat4LooaAt;
+    glm::mat4 mat4LooaAt;   /* 观察矩阵 */
     // Euler Angles
     float Yaw;
     float Pitch;
@@ -73,6 +74,9 @@ public:
     float MovementSpeed;
     float MouseSensitivity;
     float Zoom;
+    float fWidth = 800.0f;
+    float fHeight = 600.0f;
+    glm::mat4 mat4Projection = glm::mat4(1.0f);  /* 投影矩阵 */
 
     Camera():Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
     {
@@ -104,7 +108,7 @@ public:
 
     // Returns the view matrix calculated using Euler Angles and the LookAt Matrix
     float * GetViewMatrix()
-    {   
+    {
         mat4LooaAt = glm::lookAt(Position, Position + Front, Up);
         return (float *)(glm::value_ptr(mat4LooaAt));
     }
@@ -114,13 +118,17 @@ public:
     {
         float velocity = MovementSpeed * deltaTime;
         if (direction == FORWARD)
-            Position += Front * velocity;
+            Position += Front * (velocity * 0.8f);
         if (direction == BACKWARD)
-            Position -= Front * velocity;
+            Position -= Front * (velocity * 0.8f);
         if (direction == LEFT)
             Position -= Right * velocity;
         if (direction == RIGHT)
             Position += Right * velocity;
+        if(direction == UP)
+            Position += Up * velocity;
+        if(direction == DOWN)
+            Position -= Up * velocity;
     }
 
     // Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
@@ -146,7 +154,7 @@ public:
     }
 
     // Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
-    void ProcessMouseScroll(float yoffset)
+    void ProcessMouseScroll(float yoffset, float fInWidth, float fInHeight)
     {
         if (Zoom >= 1.0f && Zoom <= 45.0f)
             Zoom -= yoffset;
@@ -154,6 +162,15 @@ public:
             Zoom = 1.0f;
         if (Zoom >= 45.0f)
             Zoom = 45.0f;
+
+        fWidth = (float)fabs(fInWidth);
+        fHeight = (float)fabs(fInHeight);
+    }
+
+    float * GetProjectionMatrix()
+    {
+        mat4Projection = glm::perspective(glm::radians(Zoom), fWidth / fHeight, 0.1f, 100.0f);
+        return (float *)(glm::value_ptr(mat4Projection));
     }
 
 private:
@@ -194,7 +211,7 @@ float * transFormations_get1(uint32_t u32NowTime)
 //    printf("[%s %d]  [%.2f]\n", __func__, __LINE__, fTime);
 //    for(uint32_t i = 0; i < 16; i ++)
 //    {
-//        printf("[%s %d]  idx:[%d[ pfRet[%.2f]\n", __func__, __LINE__, i, pfRet[i]);
+//        printf("[%s %d]  idx:[%d] pfRet[%.2f]\n", __func__, __LINE__, i, pfRet[i]);
 //    }
 
     return pfRet;
@@ -207,19 +224,12 @@ float * transFormations_get2(uint32_t u32NowTime)
 
     transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
     float fTime = GET_FLOAT_TIME_S(u32NowTime);
-    
+
     transform = glm::translate(transform, glm::vec3(-0.5f, 0.5f, 0.0f));
     float scaleAmount = sin(fTime);
     transform = glm::scale(transform, glm::vec3(scaleAmount, scaleAmount, scaleAmount));
 
-
     float * pfRet = (float *)(glm::value_ptr(transform));
-
-//    printf("[%s %d]  [%.2f]\n", __func__, __LINE__, fTime);
-//    for(uint32_t i = 0; i < 16; i ++)
-//    {
-//        printf("[%s %d]  idx:[%d[ pfRet[%.2f]\n", __func__, __LINE__, i, pfRet[i]);
-//    }
 
     return pfRet;
 }
@@ -231,17 +241,17 @@ int32_t coordinateSystem_getMat(CoorSysInfo * pstInfo, uint32_t u32NowTime)
     static glm::mat4 model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
     static glm::mat4 view          = glm::mat4(1.0f);
     static glm::mat4 projection    = glm::mat4(1.0f);
-    model         = glm::mat4(1.0f); 
+    model         = glm::mat4(1.0f);
     view          = glm::mat4(1.0f);
     projection    = glm::mat4(1.0f);
 
     float fTime = GET_FLOAT_TIME_S(u32NowTime);
-    
+
     model = glm::rotate(model, fTime, glm::vec3(0.5f, 1.0f, 0.0f));
     view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-    projection = glm::perspective(glm::radians(45.0f), 
-                                  (float)pstInfo->s32CurSurfaceW / (float)pstInfo->s32CurSurfaceH, 
-                                  0.1f, 
+    projection = glm::perspective(glm::radians(45.0f),
+                                  (float)pstInfo->s32CurSurfaceW / (float)pstInfo->s32CurSurfaceH,
+                                  0.1f,
                                   100.0f);
 
     pstInfo->pfModelMat =  (float *)(glm::value_ptr(model));
@@ -266,11 +276,11 @@ int32_t coordinateSystemMuliCube_getMat(CoorSysInfo * pstInfo, uint32_t u32Idx)
         glm::vec3( 1.5f,  2.0f, -2.5f),
         glm::vec3( 1.5f,  0.2f, -1.5f),
         glm::vec3(-1.3f,  1.0f, -1.5f)
-    };    
+    };
     static glm::mat4 model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
     static glm::mat4 view          = glm::mat4(1.0f);
     static glm::mat4 projection    = glm::mat4(1.0f);
-    model         = glm::mat4(1.0f); 
+    model         = glm::mat4(1.0f);
     view          = glm::mat4(1.0f);
     projection    = glm::mat4(1.0f);
 
@@ -279,9 +289,9 @@ int32_t coordinateSystemMuliCube_getMat(CoorSysInfo * pstInfo, uint32_t u32Idx)
     model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 
     view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-    projection = glm::perspective(glm::radians(45.0f), 
-                                  (float)pstInfo->s32CurSurfaceW / (float)pstInfo->s32CurSurfaceH, 
-                                  0.1f, 
+    projection = glm::perspective(glm::radians(45.0f),
+                                  (float)pstInfo->s32CurSurfaceW / (float)pstInfo->s32CurSurfaceH,
+                                  0.1f,
                                   100.0f);
 
     pstInfo->pfModelMat =  (float *)(glm::value_ptr(model));
@@ -304,7 +314,7 @@ void Camera_deleteHandle( void * pHandle)
 
     Camera * pMyCamera = (Camera *)pHandle;
     delete pMyCamera;
-    
+
     return;
 }
 
@@ -315,7 +325,6 @@ void Camera_processKey(void *pHandle, CameraKey eKey)
 //        glfwSetWindowShouldClose(window, true);
 
     BASE_CHECK_TRUE_RET_VOID(NULL == pHandle);
-
     Camera * pMyCamera = (Camera *)pHandle;
 
     //  TODO deltaTime 变量
@@ -327,31 +336,40 @@ void Camera_processKey(void *pHandle, CameraKey eKey)
 void Camera_processMouse(void * pHandle, float fXOffset, float fYOffset)
 {
     BASE_CHECK_TRUE_RET_VOID(NULL == pHandle);
-
-    Cprintf_green("[%s %d]  \n", __func__, __LINE__);
-
     Camera * pMyCamera = (Camera *)pHandle;
     pMyCamera->ProcessMouseMovement(fXOffset, fYOffset);
 
     return;
 }
 
+
+void Camera_scrollMouse(void * pHandle, float yoffset, float fWidth, float fHeight)
+{
+    BASE_CHECK_TRUE_RET_VOID(NULL == pHandle);
+    Camera * pMyCamera = (Camera *)pHandle;
+
+    /*printf("[%s %d]  [%.2f] [%.2f x %.2f]\n",
+        __func__, __LINE__, yoffset, fWidth, fHeight);*/
+
+    pMyCamera->ProcessMouseScroll(yoffset, fWidth, fHeight);
+}
+
+
 float * Camera_getViewMatrix(void * pHandle)
 {
     BASE_CHECK_TRUE_RET(NULL == pHandle, NULL);
-    
+
     Camera * pMyCamera = (Camera *)pHandle;
 
     return pMyCamera->GetViewMatrix();
 }
 
 
-void Camera_scrollMouse(void * pHandle, float yoffset)
+float * Camera_getProjectionMatrix(void * pHandle)
 {
-    BASE_CHECK_TRUE_RET_VOID(NULL == pHandle);
-
+    BASE_CHECK_TRUE_RET(NULL == pHandle, NULL);
     Camera * pMyCamera = (Camera *)pHandle;
 
-    pMyCamera->ProcessMouseScroll(yoffset);
+    return pMyCamera->GetProjectionMatrix();
 }
 

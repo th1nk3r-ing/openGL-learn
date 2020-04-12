@@ -123,4 +123,9 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
     - 无宏定义, 对应 `6.2.coordinate_systems_depth`
     - `-D MULTIPLE_CUBE` 对应 `6.3.coordinate_systems_multiple`
 11. `make 11.camera` 摄像机 :
-    - 增加了 MPC 鼠标支持;
+    - 增加了 MPC 鼠标支持 :
+      - 方向键/WASD -------> 前进, 后退, 左, 右 ;
+      - 鼠标滚轮 ------------> 放大 ;
+      - `ctrl` + 鼠标移动 ----> 旋转 ;
+    - [WASD -- 百度百科](https://baike.baidu.com/item/WASD/105282)
+      - WASD ，位于键盘的左手面。这四个按键在第一人称射击游戏上通常作为控制玩家角色的移动。W 和 S 键用来控制角色向前或向后移动， A 和 D 键则用来控制角色左右转身。这组按键还有另一个变化 W-A-X-D，用以迁就一些习惯使用数字键盘的方向按键（8-4-6-2）的使用者。

@@ -17,6 +17,7 @@
 #include "common.h"
 #include "build_time.h"
 #include "OGL_common.h"
+#include "my_TransFormations.h"
 
 /*----------------------------------------------*/
 /*                 宏类型定义                   */
@@ -302,27 +303,85 @@ int32_t GL_GetSurfaceWxH(EGL_Context *pstEGL, int32_t * ps32Width, int32_t * ps3
  */
 void CalcFpsInfo(EGL_Context *pstEGL)
 {
-    if(NULL != pstEGL)
+    BASE_CHECK_TRUE_RET_VOID(NULL == pstEGL);
+
+    pstEGL->u32DrawCnt++;
+
+    if(pstEGL->u32DrawCnt % OPENGL_FPS_CALC_INTERVAL)
     {
-        pstEGL->u32DrawCnt++;
-
-        if(pstEGL->u32DrawCnt % OPENGL_FPS_CALC_INTERVAL)
-        {
-            return;
-        }
-
-        uint32_t u32NowTime = getTime_ms();
-        pstEGL->u32DrawFps = (uint32_t)(OPENGL_FPS_CALC_INTERVAL * 1000.0 /
-                                            (float)(u32NowTime - pstEGL->u32LastFpsCalcTime) + 0.5);
-        Cprintf_green("[%s %d]  disp:[%d], fps:[%d], thisT:[%d]\n",
-                        __func__, __LINE__, pstEGL->u32DrawCnt++,
-                        pstEGL->u32DrawFps, u32NowTime);
-
-        pstEGL->u32LastFpsCalcTime = u32NowTime;
+        return;
     }
+
+    uint32_t u32NowTime = getTime_ms();
+    pstEGL->u32DrawFps = (uint32_t)(OPENGL_FPS_CALC_INTERVAL * 1000.0 /
+                                        (float)(u32NowTime - pstEGL->u32LastFpsCalcTime) + 0.5);
+    Cprintf_green("[%s %d]  disp:[%d], fps:[%d], thisT:[%d]\n",
+                    __func__, __LINE__, pstEGL->u32DrawCnt++,
+                    pstEGL->u32DrawFps, u32NowTime);
+
+    pstEGL->u32LastFpsCalcTime = u32NowTime;
 
     return;
 }
 
 
+/**
+ * @function:   GL_InputProcess
+ * @brief:      输入处理函数(用于交互控制)
+ * @param[in]:  EGL_Context *pstEGL
+ * @param[in]:  void * pCamHandle
+ * @param[out]: None
+ * @return:     int32_t
+ */
+int32_t GL_InputProcess(EGL_Context *pstEGL, void * pCamHandle)
+{
+    BASE_CHECK_TRUE_RET(NULL == pstEGL, -1);
+    BASE_CHECK_TRUE_RET(NULL == pCamHandle, -1);
+
+    if(pstEGL->bBeKeyUp)
+    {
+        Camera_processKey(pCamHandle, FORWARD);
+        pstEGL->bBeKeyUp = false;
+    }
+
+    if(pstEGL->bBeKeyDown)
+    {
+        Camera_processKey(pCamHandle, BACKWARD);
+        pstEGL->bBeKeyDown = false;
+    }
+
+    if(pstEGL->bBeKeyLeft)
+    {
+        Camera_processKey(pCamHandle, LEFT);
+        pstEGL->bBeKeyLeft = false;
+    }
+
+    if(pstEGL->bBeKeyRight)
+    {
+        Camera_processKey(pCamHandle, RIGHT);
+        pstEGL->bBeKeyRight = false;
+    }
+
+    if(pstEGL->bBeMouseMove)
+    {
+        float fRatio = -5.0f;
+        Camera_processMouse(pCamHandle,
+                            fRatio * (float)pstEGL->s32MouseSubX,
+                            (float)pstEGL->s32MouseSubY);
+        pstEGL->bBeMouseMove = false;
+    }
+
+    /* 缩放 */
+    if(pstEGL->bBeMouseScroll)
+    {
+       float fRatio = 0.015f;
+       Camera_scrollMouse(pCamHandle,
+                          fRatio * (float)pstEGL->s32MouseYOffset,
+                          (float)pstEGL->s32SurfaceW,
+                          (float)pstEGL->s32SurfaceH);
+       pstEGL->bBeMouseScroll = false;
+    }
+
+    return OK;
+}
 
