@@ -25,7 +25,7 @@
 
 那么问题来了, 如果我需要在 hisi 上面直接显示的话, 我还需要什么? 经测试, 需要将 surface 及以后的通路全部打通 ! 包括:
 
-1. 初始化 `MIP_SYS` 和 VB 等.
+1. 初始化 `MIP_SYS` 和 `VB` 等.
 2. VO :
    - 配置 VO 参数 ;
    - start VO ;
@@ -132,4 +132,4 @@ typedef EGLNativeWindowType  NativeWindowType;
 */
 ```
 
-如向深入查看实现, 可参考 [EGL之外的东西](./EGL之外的东西.h)
+如向深入查看实现, 可参考 [EGL之外的东.h`](./EGL之外的东西.h)

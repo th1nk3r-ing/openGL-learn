@@ -28,14 +28,13 @@ demo 主要架构:
 ## <font color=#009A000> 0x00 学习笔记 </font>
 
 1. [**openGL 概述**](./note/openGL概述.md)
-
 2. [**EGL**](./note/EGL.md)
-
 3. [**EGL 之外的东西**](./note/EGL之外的东西.md)
-
 4. [**OpenGL 和 OpenGL-ES**](./note/openGL和openGL-ES.md)
-
+   - [VO, VBO, EBO, VAO概念梳理](./note/openGL_vbo_ebo_vao.md)
+   - [纹理](./note/纹理.md)
 5. [**GLSL**](./note/GLSL.md)
+6. ~~[**坐标变换**](./note/坐标变换.md)~~
 
 ---
 
@@ -91,7 +90,7 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
 
 0. Note :
    - ~~由于 `deInif()` 崩溃, 固暂时不对 OGL 资源做完全的释放~~
-   - Mali OGL-ES 模拟器 的 GLSL 编译有 bug, 相同类型的不同变量只能写在同一行, 否则会报错;
+   - Mali OGL-ES 模拟器的 GLSL 编译有 bug, 相同类型的不同变量只能写在同一行, 否则会报错;
 1. `make 1.helloTriangle`
    - 环境测试 && 最初入门;
 2. `make 2.triangleIndxed`
