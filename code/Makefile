@@ -4,7 +4,7 @@ prt_Red="\e[1;31m"
 prt_End="\e[0m"
 
 # 编译器 
-#ToolChains_PreFix=/mnt/c/MinGw64/bin/
+#ToolChains_PreFix=/mnt/c/Program_Files_My/mingw64_x86_64-8.1.0-release-posix-sjlj-rt_v6-rev0/bin/
 CC=$(ToolChains_PreFix)gcc.exe
 CXX=$(ToolChains_PreFix)g++.exe
 
@@ -64,18 +64,28 @@ Cxx_Objs := $(Cxx_SrcFiles:%.cpp=%.o)
 Objs = $(C_Objs) $(Cxx_Objs)
 
 #Lib
-StaticLibs := -L../file/Mali_OpenGL_ES_Emulator-v3.0.4-2-g8d905-Windows-64bit/
-			 
-#LibPath := ../SDL/lib
-ShardLibs := -lm \
-			 -lpthread \
-			 -lEGL \
-			 -lGLESv2 \
-			 -lgdi32
+# -L 要在 -l 之前
+LibPath := -L../file/Mali_OpenGL_ES_Emulator-v3.0.4-2-g8d905-Windows-64bit/
+
+# mingw 静态库链接一直有问题....
+# StaticLibs := -Wl,-Bstatic \
+			 # -lEGL \
+			 # -lGLESv2
+# ShardLibs := -Wl,-Bdynamic \
+			  # -lm \
+			 # -lpthread \
+			 # -lgdi32			
+
+ShardLibs := -Wl,-Bdynamic \
+			-lEGL \
+			-lGLESv2 \
+			-lm \
+			-lpthread \
+			-lgdi32
 
 # 链接输出
 $(Target) : $(Objs)
-	$(CXX) $(C_Flags) -o $(Target) $(Objs) $(LibPath) $(StaticLibs) $(ShardLibs) 
+	$(CXX) $(C_Flags) -o $(Target)  $(Objs)  $(LibPath)  $(ShardLibs) $(StaticLibs)
 	@echo -e $(prt_Green) "\n****** make OK! *****\n" $(prt_End)
 
 # 编译源文件

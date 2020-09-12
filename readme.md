@@ -54,7 +54,11 @@ demo 主要架构:
     - EGL 后续可能使用 Java 实现, 固将 EGL 和 GL 分别封装成两个库;
     - 预留键盘/鼠标操作的统一接口;
 3. 开发环境 : source Insight + make;
-    - wsl 远程时执行窗口相关的命令时, 容易出现 `GFW` 等相关的错误, 可使用 `export DISPLAY=:1` 来搞定;
+    - ~~wsl 远程时执行窗口相关的命令时, 容易出现 `GFW` 等相关的错误, 可使用 `export DISPLAY=:1` 来搞定;~~ (在 1903 下的 wsl 中 wsl 以不能直接运行...)
+    - 需在 windows 环境变量 `Path` 中添加 `../file/Mali_OpenGL_ES_Emulator-v3.0.4-2-g8d905-Windows-64bit` 或者直接拷贝输出成果物至上述路径下;
+      - 至于 `-Wl,-rpath=` 则因为 mingw 不支持而作罢, 可参考链接 : [MinGW-w64 - for 32 and 64 bit Windows -- A complete runtime environment for gcc](https://sourceforge.net/p/mingw-w64/support-requests/153/)
+      > rpath is not used on windows. DLLs are loaded as described https://docs.microsoft.com/en-us/windows/win32/dlls/dynamic-link-library-search-order 
+   - 而静态库链接一直有问题... 暂且停滞...
 
 ---
 

@@ -110,8 +110,8 @@ unsigned int get_Now_Time(DATE_TIME *pDate, ...)
     time_t local_time_s = 0;
     TM *pTblock = NULL;
 
-  //time(&local_time_s);		//得到从标准计时点（一般是1970年1月1日午夜）到当前时间的秒数。
-	local_time_s = time(NULL);  //得到从标准计时点（一般是1970年1月1日午夜）到当前时间的秒数。
+  //time(&local_time_s);        //得到从标准计时点（一般是1970年1月1日午夜）到当前时间的秒数。
+    local_time_s = time(NULL);  //得到从标准计时点（一般是1970年1月1日午夜）到当前时间的秒数。
 
     pTblock = (TM *)localtime(&local_time_s);
 
@@ -232,7 +232,7 @@ unsigned char __Calc_Week_Day( DATE_TIME *pDate)
  */
 unsigned int mk_Build_Date(DATE_TIME *pDate, ...)
 {
-    int	year = 0, month = 0, day = 0;
+    int year = 0, month = 0, day = 0;
     int hour = 0, minute = 0, seconds = 0;
     char m[4] = {0};
 
