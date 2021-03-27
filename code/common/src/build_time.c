@@ -100,7 +100,7 @@ int32_t sleep_ms(uint32_t u32Ms)
 
 /**
  * @function:   get_Now_Time (需调用库 "time.h" 中的库函数)
- * @brief:      生成程序编译时间
+ * @brief:      获取当前时间到 pDate 中, pDate 可为 NULL
  * @param[in]:  DATE_TIME *pDate / NULL
  * @param[out]: DATE_TIME *pDate / NULL
  * @return:     err
@@ -110,10 +110,11 @@ unsigned int get_Now_Time(DATE_TIME *pDate, ...)
     time_t local_time_s = 0;
     TM *pTblock = NULL;
 
-  //time(&local_time_s);        //得到从标准计时点（一般是1970年1月1日午夜）到当前时间的秒数。
+    // time(&local_time_s);     //得到从标准计时点（一般是1970年1月1日午夜）到当前时间的秒数。
     local_time_s = time(NULL);  //得到从标准计时点（一般是1970年1月1日午夜）到当前时间的秒数。
 
     pTblock = (TM *)localtime(&local_time_s);
+    // LOGI("[%s %d]  %s\n", __func__, __LINE__, asctime(pTblock));
 
     {
         DEBUG("date and time is total_sec:[%d] \n", local_time_s);
@@ -128,7 +129,7 @@ unsigned int get_Now_Time(DATE_TIME *pDate, ...)
     if (pDate)
     {
         pDate->year = (unsigned int)pTblock->tm_year + 1900u;
-        pDate->month =(unsigned int)pTblock->tm_mon;
+        pDate->month =(unsigned int)pTblock->tm_mon + 1;
         pDate->day = (unsigned int)pTblock->tm_mday;
         pDate->hour = (unsigned int)pTblock->tm_hour;
         pDate->minute = (unsigned int)pTblock->tm_min;
@@ -151,13 +152,13 @@ unsigned int get_Now_Time(DATE_TIME *pDate, ...)
     {
 
     #ifdef SHORT_DATA_CHAR__
-        printf("[null] now Time:\t%4u-%u-%u_%s %02u:%02u:%02u\n",
-                    pTblock->tm_year + 1900, pTblock->tm_mon, pTblock->tm_mday, short_char_week[pTblock->tm_wday],
+        Cprintf_white("[null] now Time:\t%4u-%u-%u_%s %02u:%02u:%02u\n",
+                    pTblock->tm_year + 1900, pTblock->tm_mon + 1, pTblock->tm_mday, short_char_week[pTblock->tm_wday],
                     pTblock->tm_hour, pTblock->tm_min, pTblock->tm_sec);
     #else
-        printf("[null] now Time:\t%4u-%u-%u_%s %02u:%02u:%02u\n",
-                    pTblock->tm_year + 1900, pTblock->tm_mon, pTblock->tm_mday, long_char_week[pTblock->tm_wday],
-                    pTblock->tm_hour, pTblock->tm_min, pTblock->tm_sec);
+        Cprintf_white("[null] now Time:\t%4u-%u-%u_%s %02u:%02u:%02u\n",
+                    pTblock->tm_year + 1900, pTblock->tm_mon + 1, pTblock->tm_mday, long_char_week[pTblock->tm_wday],
+                    pTblock->tm_hour, pTblock->tm_min, pTblock->tm_sec);        
     #endif
 
     }
