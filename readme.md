@@ -13,6 +13,10 @@
 > 9. [OpenGL-Refpages---> github](https://github.com/KhronosGroup/OpenGL-Refpages)
 > 10. [**杀不死的 GPU 系列 --> 知乎:环太平洋**](https://zhuanlan.zhihu.com/p/43573883)
 
+- ## <u>**现已不再维护此项目中的代码, 仅更新 OpenGL 笔记, 具体代码及 demo 正在移植到 Android 平台, 参考 [https://gitee.com/think3r/Android_openGLES](https://gitee.com/think3r/Android_openGLES)**</u>
+  - ### 该项目采用 Android studio + NDK 来开发, 相应的 OGL-ES demo 渲染均在 native 层, 采用 C++ 编写;
+
+
 1. 记录 OGL 学习笔记;
 2. 参照 learnopengl, 在 windwos 上移植的 OGL-ES demo;
 
@@ -40,7 +44,7 @@ demo 主要架构:
 
 ## <font color=#009A000> 0x01 学习环境搭建 </font>
 
-### <font color=#FF4500> **windwos 下 OpenGL 环境搭建** </font>
+### <font color=#FF4500> ~~**windwos 下 OpenGL-ES 模拟环境的搭建**~~(已不在维护) </font>
 
 > 参考链接:
 > 1. [vs2017下搭建opengl es 3.0开发环境](https://blog.csdn.net/brahmsjiang/article/details/78572141)
@@ -49,16 +53,19 @@ demo 主要架构:
 
 1. 打算使用 OpenGL Es 实现一遍 learnopengl 之中的例程(仅仅实现最简单的和最复杂的两个).
 2. 环境则使用 ~~Ubuntu~~ windows mingw 和 Arm 的 OpenGL-ES 模拟器来搭建;
-    - 预留 Android 下的 surface 传递接口, 以 so 的形式来调用.
-    - 预留 surface 配置的接口.
-    - EGL 后续可能使用 Java 实现, 固将 EGL 和 GL 分别封装成两个库;
-    - 预留键盘/鼠标操作的统一接口;
+   - 预留 Android 下的 surface 传递接口, 以 so 的形式来调用.
+   - 预留 surface 配置的接口.
+   - EGL 后续可能使用 Java 实现, 固将 EGL 和 GL 分别封装成两个库;
+   - 预留键盘/鼠标操作的统一接口;
 3. 开发环境 : source Insight + make;
-    - ~~wsl 远程时执行窗口相关的命令时, 容易出现 `GFW` 等相关的错误, 可使用 `export DISPLAY=:1` 来搞定;~~ (在 1903 下的 wsl 中 wsl 以不能直接运行...)
-    - 需在 windows 环境变量 `Path` 中添加 `../file/Mali_OpenGL_ES_Emulator-v3.0.4-2-g8d905-Windows-64bit` 或者直接拷贝输出成果物至上述路径下;
-      - 至于 `-Wl,-rpath=` 则因为 mingw 不支持而作罢, 可参考链接 : [MinGW-w64 - for 32 and 64 bit Windows -- A complete runtime environment for gcc](https://sourceforge.net/p/mingw-w64/support-requests/153/)
-      > rpath is not used on windows. DLLs are loaded as described https://docs.microsoft.com/en-us/windows/win32/dlls/dynamic-link-library-search-order 
+   - ~~wsl 远程时执行窗口相关的命令时, 容易出现 `GFW` 等相关的错误, 可使用 `export DISPLAY=:1` 来搞定;~~ (在 1903 下的 wsl 中 wsl 以不能直接运行...)
+   - 需在 windows 环境变量 `Path` 中添加 `../file/Mali_OpenGL_ES_Emulator-v3.0.4-2-g8d905-Windows-64bit` 或者直接拷贝输出成果物至上述路径下;
+     - 至于 `-Wl,-rpath=` 则因为 mingw 不支持而作罢, 可参考链接 : [MinGW-w64 - for 32 and 64 bit Windows -- A complete runtime environment for gcc](https://sourceforge.net/p/mingw-w64/support-requests/153/)
+     > rpath is not used on windows. DLLs are loaded as described https://docs.microsoft.com/en-us/windows/win32/dlls/dynamic-link-library-search-order 
    - 而静态库链接一直有问题... 暂且停滞...
+4. 关于 cmd 下 `printf()` 颜色的支持 :
+   - [C Programming - using ANSI escape codes on Windows, macOS and Linux terminals](https://solarianprogrammer.com/2019/04/08/c-programming-ansi-escape-codes-windows-macos-linux-terminals/)
+   - [ANSI escape code](https://en.wikipedia.org/wiki/ANSI_escape_code#DOS_and_Windows)
 
 ---
 
@@ -81,16 +88,12 @@ In general, the Mali OpenGL ES Emulator will work on any system that supports at
 >The emulator requires a graphics card that supports at least OpenGL `4.3`.
 而 VmWare 下的模拟器, 则只支持到 `OpenGL 3.0`; VirtualBox 更是只有 `2.0` ; <u>**因此将环境先迁移 windows 下;**</u>
 
-### <font color=#FF4500> **Windows 下 OpenGL-Es 模拟环境的搭建** </font>
+## <font color=#FF4500> **Windows 下 OpenGL-Es 模拟环境的搭建** </font>
 
-关于 cmd 下 `printf()` 颜色的支持 :
-
-- [C Programming - using ANSI escape codes on Windows, macOS and Linux terminals](https://solarianprogrammer.com/2019/04/08/c-programming-ansi-escape-codes-windows-macos-linux-terminals/)
-- [ANSI escape code](https://en.wikipedia.org/wiki/ANSI_escape_code#DOS_and_Windows)
 
 ---
 
-## <font color=#009A000> 0x02 demo </font>
+## <font color=#009A000> 0x02 demo on Windows-OpenGL-ES </font>
 
 0. Note :
    - ~~由于 `deInif()` 崩溃, 固暂时不对 OGL 资源做完全的释放~~
