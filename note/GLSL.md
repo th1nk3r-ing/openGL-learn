@@ -5,13 +5,44 @@
 > 1. [learnopengl-CN 你好，三角形](https://learnopengl-cn.github.io/01%20Getting%20started/04%20Hello%20Triangle/) 
 > 2. [Getting started with glsl](https://riptutorial.com/glsl)
 > 3. [GLSL Versions和GLSL ES Versions 对比](https://www.cnblogs.com/beeasy/p/6339313.html)
-> 4. [GLSL 详解（基础篇）](https://colin1994.github.io/2017/11/11/OpenGLES-Lesson04/)
-> 5. [GLSL 详解（高级篇）](https://colin1994.github.io/2017/11/12/OpenGLES-Lesson05/#7-_%E9%A2%84%E5%A4%84%E7%90%86)
+> 4. [GLSL 中文手册](https://github.com/wshxbqq/GLSL-Card)
+> 5. [GLSL 详解（基础篇）](https://colin1994.github.io/2017/11/11/OpenGLES-Lesson04/)
+> 6. [GLSL 详解（高级篇）](https://colin1994.github.io/2017/11/12/OpenGLES-Lesson05/#7-_%E9%A2%84%E5%A4%84%E7%90%86)
+> 7. [OpenGL ES 2.0升级到3.0配置win32环境以及编译所遇bug](https://blog.csdn.net/lb377463323/article/details/77047221)
 
 ---
 <br />
 
 ![../image/GLSL_version](../image/GLSL_version.bmp)
+
+## <font color=#009A000> ES-GLSL 版本区别 </font>
+
+- 对于 `GLSL` :
+  > As of GLSL `130+`, `in` and `out` are used instead of `attribute` and `varying`. GLSL `330+` includes other features like `layout` qualifiers and changes `texture2D` to `texture`.
+- 对于 `ES-GLSL` :
+  - `1.00 ES-GLSL` 中的 `attribute` 和 `varying` 同样在 `3.00 ES-GLSL` 被 `in` 和 `out` 取代, 同样增加了 `layout` ;
+  - `1.00 ES GLSL` 中的 `texture2D, texture3D` 在 `3.00 ES GLSL` 中被 `texture` 取代;
+  - `1.00 ES GLSL` 的 `gl_FragColor` 和 `gl_FragData` 在 `3.00 ES GLSL` 中取消掉了，需要自己定义 out 变量作为片段着色器的输出颜色，如 `out vec4 fragColor` ;
+  - 参考 `opengles20-reference-card.pdf` 和 `opengles3-quick-reference-card.pdf`;
+- 变量名不能以 `gl_` 作为前缀;
+- 切记 OpenGL 的矩阵是**主列存储**的，和 DirectX 以及大学线代学习的行存储矩阵有本质不同！
+  - > 使用矩阵构造器时, 参数按列填充矩阵. By <<OpenGL ES 3.0 编程指南>>
+
+| 限定符 ES-GLSL 1.00 | 描述 |
+| --- | --- |
+| < `none`: default > | 局部可读写变量，或者函数的参数 |
+| `const` | 编译时常量，或只读的函数参数 |
+| `attribute` |	由应用程序传输给顶点着色器的逐顶点的数据 |
+| `uniform` | 在图元处理过程中其值保持不变，由应用程序传输给着色器 |
+| `varying` | 由顶点着色器传输给片段着色器中的插值数据 |
+
+| 限定符 GL-GLSL 3.00 | 描述 |
+| --- | --- |
+| `none` | (默认)本地读写内存, 或者输入参数 |
+| `const` | 编译时的产量, 或者只读函数参数 |
+| `in` / `centroid in` | 从前一阶段链接到一个着色器 |
+| `out` / `centroid out` | 从着色器连接到下一个阶段 |
+| `uniform` | 在图元处理中值不改变, 统一变量组成了着色器、 OpenGL ES 和应用程序的链接 |
 
 ## <font color=#009A000> shader 概述 </font>
 
@@ -54,30 +85,6 @@
     - *注意 :* 查询 uniform 地址不要求你之前使用过着色器程序，但是更新一个 uniform 之前你必须先使用程序（调用 `glUseProgram` )，因为它是在当前激活的着色器程序中设置 uniform 的。
 - `vecn.xyzw`
 - 向量重组: `vec4 differentVec = someVec.wxyx;`
-
-## <font color=#009A000> ES-GLSL 版本区别 </font>
-
-- 对于 `GLSL` :
-  > As of GLSL `130+`, `in` and `out` are used instead of `attribute` and `varying`. GLSL `330+` includes other features like `layout` qualifiers and changes `texture2D` to `texture`.
-- 对于 `ES-GLSL` :
-  - `1.00 ES-GLSL` 中的 `attribute` 和 `varying` 同样在 `3.00 ES-GLSL` 被 `in` 和 `out` 取代, 同样增加了 `layout` ;
-  - 参考 `opengles20-reference-card.pdf` 和 `opengles3-quick-reference-card.pdf`;
-
-| 限定符 ES-GLSL 1.00 | 描述 |
-| --- | --- |
-| < `none`: default > | 局部可读写变量，或者函数的参数 |
-| `const` | 编译时常量，或只读的函数参数 |
-| `attribute` |	由应用程序传输给顶点着色器的逐顶点的数据 |
-| `uniform` | 在图元处理过程中其值保持不变，由应用程序传输给着色器 |
-| `varying` | 由顶点着色器传输给片段着色器中的插值数据 |
-
-| 限定符 GL-GLSL 3.00 | 描述 |
-| --- | --- |
-| `none` | (默认)本地读写内存, 或者输入参数 |
-| `const` | 编译时的产量, 或者只读函数参数 |
-| `in` / `centroid in` | 从前一阶段链接到一个着色器 |
-| `out` / `centroid out` | 从着色器连接到下一个阶段 |
-| `uniform` | 在图元处理中值不改变, 统一变量组成了着色器、 OpenGL ES 和应用程序的链接 |
 
 ## <font color=#009A000> GLSL 源码编译问题 </font>
 
