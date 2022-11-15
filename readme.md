@@ -38,6 +38,7 @@ demo 主要架构:
    - [VO, VBO, EBO, VAO概念梳理](./note/openGL_vbo_ebo_vao.md)
    - [纹理](./note/纹理.md)
 5. [**GLSL**](./note/GLSL.md)
+   - [shader-加密处理](./note/shader%E5%8A%A0%E5%AF%86%E5%A4%84%E7%90%86.md) 
 6. ~~[**坐标变换**](./note/坐标变换.md)~~
 
 ---

@@ -22,8 +22,9 @@
 - 对于 `ES-GLSL` :
   - `1.00 ES-GLSL` 中的 `attribute` 和 `varying` 同样在 `3.00 ES-GLSL` 被 `in` 和 `out` 取代, 同样增加了 `layout` ;
   - `1.00 ES GLSL` 中的 `texture2D, texture3D` 在 `3.00 ES GLSL` 中被 `texture` 取代;
+    - opengl-ES 中是没有 `texture1D` 的, 请使用高度为 1 的 `texture2D`
   - `1.00 ES GLSL` 的 `gl_FragColor` 和 `gl_FragData` 在 `3.00 ES GLSL` 中取消掉了，需要自己定义 out 变量作为片段着色器的输出颜色，如 `out vec4 fragColor` ;
-  - 参考 `opengles20-reference-card.pdf` 和 `opengles3-quick-reference-card.pdf`;
+  - 参考 `opengles20-reference-card.pdf` 和 `opengles32-quick-reference-card.pdf`;
 - 变量名不能以 `gl_` 作为前缀;
 - 切记 OpenGL 的矩阵是**主列存储**的，和 DirectX 以及大学线代学习的行存储矩阵有本质不同！
   - > 使用矩阵构造器时, 参数按列填充矩阵. By <<OpenGL ES 3.0 编程指南>>
@@ -39,7 +40,7 @@
 | 限定符 GL-GLSL 3.00 | 描述 |
 | --- | --- |
 | `none` | (默认)本地读写内存, 或者输入参数 |
-| `const` | 编译时的产量, 或者只读函数参数 |
+| `const` | 编译时的常量, 或者只读函数参数 |
 | `in` / `centroid in` | 从前一阶段链接到一个着色器 |
 | `out` / `centroid out` | 从着色器连接到下一个阶段 |
 | `uniform` | 在图元处理中值不改变, 统一变量组成了着色器、 OpenGL ES 和应用程序的链接 |
@@ -86,87 +87,4 @@
 - `vecn.xyzw`
 - 向量重组: `vec4 differentVec = someVec.wxyx;`
 
-## <font color=#009A000> GLSL 源码编译问题 </font>
-
-> 参考链接 :
-> 1. [objcopy命令介绍](https://blog.csdn.net/weixin_34236497/article/details/91508488)
-> 2. [GNU Objcopy语法和使用](https://blog.csdn.net/linux12121/article/details/82932535)
-> 3. [如何利用objcopy选项来填充生成的bin文件](https://my.oschina.net/hechunc/blog/3020177)
-> 4. [GNU 工具 nm](http://blog.sina.com.cn/s/blog_5ec5eb330101d5k5.html)
-> 5. [objcopy-gnu-doc](https://sourceware.org/binutils/docs/binutils/objcopy.html)
-
-- 由于 GLSL 代码是在运行时编译的, 而输入编译器的是一个 GLSL 字符串源码 那么通常就有如下两种方式来完成:
-  1. 将 GLSL 源码放置到单独的文件中, 使用时 `fread()` 读入内存中再编译,  
-      - 优点: GLSL 源码可以进行高亮的操作, 便于编程;
-      - 缺点: GLSL 源码会随着程序一块打包发布, 容易泄露程序逻辑;
-  2. 将 GLSL 直接以字符串的方式放置到源码中, 可直接进行编译;
-      - 优点: GLSL 源码不进行单独发布, 泄露风险稍小;
-      - 缺点: GLSL 源码因为是字符串, 开发可能不大方便(高亮啥的没有);
-
-- 于是我就想能不能将上述两个方法的优点都结合起来? 后来发现, GNU 的 `objcopy` 工具就能很好的解决这点;
-  - 下方 `makefile` 中的三个选项可生成平台对应的 `.o` 文件;
-    - `-I` 表示输入文件的格式;
-    - `-O` 表示输出文件的格式, 这个执行 `objcopy` 查看其支持的格式;
-    - `-B` --binary-architecture `<arch>`
-  - `--rename-section .data=.rodata,alloc,load,readonly,data,contents` 将 GLSL 代码配置为只读;
-    - 当加入上述只读选项时, 建议配合 `const` 修饰来保证安全, 否则 GLSL 代码被放置到了只读段, 而使用的指针地址则直接指向了只读段, 修改只读段中的数据会造成程序崩溃. 加入 const 后, 编译器可额外检查代码中静态的修改错误;
-    - linux 中，gnu 工具 `nm` 用来列出目标文件的符号清单, 
-      - `A` 该符号的值是绝对的，在以后的链接过程中，不允许进行改变。这样的符号值，常常出现在中断向量表中，例如用符号来表示各个中断向量函数在中断向量表中的位置;
-      - `D` 该符号位于初始话数据段中。一般来说，分配到 data section 中。
-      - `R` 该符号位于只读数据区。~~例如定义全局 `const int test[] = {123, 123}` ;则 `test` 就是一个只读数据区的符号。(存疑)~~
-    - 当未加入上述配置选项时, nm 如下:
-
-    ```log
-    000000000000015f D _binary_src_vertShader_txt_end
-    000000000000015f A _binary_src_vertShader_txt_size
-    0000000000000000 D _binary_src_vertShader_txt_start
-    ```
-
-    - 当加入时, nm 如下:
-
-    ```log
-    000000000000015f R _binary_src_vertShader_txt_end
-    000000000000015f A _binary_src_vertShader_txt_size
-    0000000000000000 R _binary_src_vertShader_txt_start
-    ```
-
-  - `--pad-to` 和 `--gap-fill` 则分别表示对齐和对齐的填充
-    - **GLSL 代码因为是字符串, 所以将对齐放大到了 `文件大小+1`, 且将最后一个字符填充 0, 来拟合字符串.** 否则会出现 fragShader 和 vertShader 混合到一个字符串的情况, 切记!
-  - 注意: arm 平台下的 size 可能不能使用(引起崩溃), 但可用 `start - end` 来替代;
-
-- `makefile` 局部:
-
-```Makefile
-OBJCOPY=objcopy
-
-GLSL_Files = ./src/fragShader.txt  ./src/vertShader.txt
-GLSL_Objs := $(GLSL_Files:.txt=.o)
-
-GLSL_Flags := -I binary -O elf64-littleaarch64 -B aarch64
-GLSL_Flags += --rename-section .data=.rodata,alloc,load,readonly,data,contents
-
-# expr \( `stat --format=%s $<` + 4 \) / 4 \* 4 是为了计算文件大小, 并向上 4 对齐;
-
-$(GLSL_Objs) : %o : %txt
-	#echo size is $(shell expr `stat --format=%s $<`)
-	$(OBJCOPY) $(GLSL_Flags) --pad-to=$(shell expr \( `stat --format=%s $<` + 4 \) / 4 \* 4 ) --gap-fill=0x00 $< $@
-
-$(Target) : $(Objs) $(GLSL_Objs)
-	$(CC) $(C_Flags) -o $(Target) $(Objs) $(GLSL_Objs) $(LIBS_WithPath)
-```
-
-- 程序中的使用:
-
-```c
-extern const char const _binary_src_vertShader_txt_start[];
-extern const char const _binary_src_vertShader_txt_end[];
-extern const char const _binary_src_fragShader_txt_start[];
-extern const char const _binary_src_fragShader_txt_end[];
-
-uint32_t size = _binary_src_fragShader_txt_end -_binary_src_vertShader_txt_start;
-for(uint32_t i = 0; i < size; i++)
-{
-    printf("[%d] ", _binary_src_fragShader_txt_start[i]);
-}
-printf("\n");
-```
+## <font color=#009A000> [shader 加密混淆处理](./shader%E5%8A%A0%E5%AF%86%E5%A4%84%E7%90%86.md) </font>
