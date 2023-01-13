@@ -84,6 +84,8 @@
     - 首先需要找到 `着色器中` uniform 属性的 `索引/位置值` 。
     - 当我们得到 uniform 的索引/位置值后，我们就可以更新它的值了。
     - *注意 :* 查询 uniform 地址不要求你之前使用过着色器程序，但是更新一个 uniform 之前你必须先使用程序（调用 `glUseProgram` )，因为它是在当前激活的着色器程序中设置 uniform 的。
+  - [统一变量缓冲对象](https://zhuanlan.zhihu.com/p/33093968)
+    - > 统一变量缓冲对象 -- Uniform buffer object
 - `vecn.xyzw`
 - 向量重组: `vec4 differentVec = someVec.wxyx;`
 
