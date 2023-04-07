@@ -120,7 +120,9 @@ typedef enum{
 	GL_DEPTH_STENCIL_ATTACHMENT,
 }AttachmentType;
 
-/* RenderBuffer Object */
+/* RenderBuffer Object 在纹理之后引入
+ * 相较于 Texture, 以 OpenGL 原生渲染格式储存它的数据，速度较快
+ */
 struct RBO {
 	uint32_t id;
 	uint32_t width, height, format;

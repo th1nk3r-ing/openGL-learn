@@ -13,9 +13,8 @@
 > 9. [OpenGL-Refpages---> github](https://github.com/KhronosGroup/OpenGL-Refpages)
 > 10. [**杀不死的 GPU 系列 --> 知乎:环太平洋**](https://zhuanlan.zhihu.com/p/43573883)
 
-- ## <u>**现已不再维护此项目中的代码, 仅更新 OpenGL 笔记, 具体代码及 demo 正在移植到 Android 平台, 参考 [https://gitee.com/think3r/Android_openGLES](https://gitee.com/think3r/Android_openGLES)**</u>
-  - ### 该项目采用 Android studio + NDK 来开发, 相应的 OGL-ES demo 渲染均在 native 层, 采用 C++ 编写;
-
+## <u>**现已不再维护此项目中的代码, 仅更新 OpenGL 笔记, 具体代码及 demo 正在移植到 Android 平台, 参考 [https://gitee.com/think3r/Android_openGLES](https://gitee.com/think3r/Android_openGLES)**</u>
+   - 该项目采用 Android studio + NDK 来开发, 相应的 OGL-ES demo 渲染均在 native 层, 采用 C++ 编写;
 
 1. 记录 OGL 学习笔记;
 2. 参照 learnopengl, 在 windwos 上移植的 OGL-ES demo;
