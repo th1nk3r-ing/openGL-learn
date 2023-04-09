@@ -102,7 +102,7 @@ struct VAP {
 struct VAO {
 	uint32_t   u32VaildCnt;		/* 启用的个数, 待核对 */
 	uint32_t   pu32GLSLVertexLocation[16];	/* GLSL 中顶点的 layOut / 位置 */
-	struct VAP pstVAP[16];  	/* 一系列的 VAP ; 例如 :
+	struct VAP pstVAP[16];  	/* 一系列的 VAP (要求 VAP.u32GLSL_vertexLocation 各不相同); 例如 :
 									pstVAP[0] 图元的顶点属性
 									pstVAP[1] 通过顶点着色器传递的颜色值
 									pstVAP[2] 与图元顶点对应的纹理顶点属性 */

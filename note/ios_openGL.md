@@ -67,6 +67,7 @@
     CAEAGLLayer *eaglLayer = (CAEAGLLayer *) [self layer];
     @end
     ```
+
 ### <font color=#FF4500> 2. `GLKView` </font>
 
 - GLKView 类为渲染提供了一个显示视图，
